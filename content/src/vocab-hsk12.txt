@@ -1,0 +1,507 @@
+# HSK 1–2 foundation pool (provisional; compiled without an official list).
+# Format: hanzi|pinyin (space between syllables)|pos|gloss
+# Tier T1 -> HSK 1 (diagnostic bands 1-3), T2 -> HSK 2 (bands 4-6), T3 -> HSK 2 extended (bands 7-10).
+# A trailing @id overrides the generated id (needed for homographs).
+@T1
+爱|ài|v|love
+八|bā|num|eight
+爸爸|bà ba|n|dad
+杯子|bēi zi|n|cup, glass
+北京|běi jīng|n|Beijing
+本|běn|mw|measure word for books
+不|bù|adv|not, no
+不客气|bú kè qi|intj|you're welcome
+菜|cài|n|dish (of food); vegetable
+茶|chá|n|tea
+吃|chī|v|eat
+出租车|chū zū chē|n|taxi
+打电话|dǎ diàn huà|v|make a phone call
+大|dà|adj|big, large
+的|de|part|possessive / attributive particle
+点|diǎn|mw|o'clock; a little
+电脑|diàn nǎo|n|computer
+电视|diàn shì|n|television
+电影|diàn yǐng|n|film, movie
+东西|dōng xi|n|thing, stuff
+都|dōu|adv|all, both
+读|dú|v|read (aloud); study
+对不起|duì bu qǐ|intj|sorry
+多|duō|adj|many, much
+多少|duō shao|pron|how many, how much
+儿子|ér zi|n|son
+二|èr|num|two
+饭店|fàn diàn|n|restaurant; hotel
+飞机|fēi jī|n|aeroplane
+分钟|fēn zhōng|n|minute
+高兴|gāo xìng|adj|happy, glad
+个|gè|mw|general measure word
+工作|gōng zuò|v|work; job
+狗|gǒu|n|dog
+汉语|hàn yǔ|n|Chinese language
+好|hǎo|adj|good, well
+号|hào|n|date (day of month); number
+喝|hē|v|drink
+和|hé|conj|and, with
+很|hěn|adv|very
+后面|hòu miàn|loc|behind, at the back
+回|huí|v|return, go back
+会|huì|aux|can (learned skill); will
+几|jǐ|pron|how many (small number); a few
+家|jiā|n|home, family
+叫|jiào|v|be called; call
+今天|jīn tiān|n|today
+九|jiǔ|num|nine
+开|kāi|v|open; turn on; drive
+看|kàn|v|look, watch, read
+看见|kàn jiàn|v|see
+块|kuài|mw|yuan (money); piece
+来|lái|v|come
+老师|lǎo shī|n|teacher
+了|le|part|aspect / change-of-state particle
+冷|lěng|adj|cold
+里|lǐ|loc|inside
+六|liù|num|six
+吗|ma|part|question particle
+妈妈|mā ma|n|mum
+买|mǎi|v|buy
+猫|māo|n|cat
+没关系|méi guān xi|intj|it doesn't matter
+没有|méi yǒu|v|not have; did not
+米饭|mǐ fàn|n|cooked rice
+名字|míng zi|n|name
+明天|míng tiān|n|tomorrow
+哪|nǎ|pron|which
+哪儿|nǎr|pron|where
+那|nà|pron|that
+呢|ne|part|particle (follow-up question; ongoing)
+能|néng|aux|can, be able to (circumstance)
+你|nǐ|pron|you
+你们|nǐ men|pron|you (plural)
+年|nián|n|year
+女儿|nǚ ér|n|daughter
+朋友|péng you|n|friend
+漂亮|piào liang|adj|pretty, beautiful
+苹果|píng guǒ|n|apple
+七|qī|num|seven
+前面|qián miàn|loc|in front, ahead
+钱|qián|n|money
+请|qǐng|v|please; invite
+去|qù|v|go
+热|rè|adj|hot
+人|rén|n|person, people
+认识|rèn shi|v|know (a person), recognise
+三|sān|num|three
+商店|shāng diàn|n|shop
+上|shàng|loc|on, above; previous
+上午|shàng wǔ|n|morning (before noon)
+少|shǎo|adj|few, little
+谁|shéi|pron|who
+什么|shén me|pron|what
+十|shí|num|ten
+时候|shí hou|n|time, moment (…的时候 = when)
+是|shì|v|be
+书|shū|n|book
+水|shuǐ|n|water
+水果|shuǐ guǒ|n|fruit
+睡觉|shuì jiào|vsep|sleep, go to bed
+说|shuō|v|say, speak
+四|sì|num|four
+岁|suì|mw|years old
+他|tā|pron|he, him
+她|tā|pron|she, her
+他们|tā men|pron|they
+太|tài|adv|too, extremely
+天气|tiān qì|n|weather
+听|tīng|v|listen
+同学|tóng xué|n|classmate
+喂|wèi|intj|hello (on the phone)
+我|wǒ|pron|I, me
+我们|wǒ men|pron|we, us
+五|wǔ|num|five
+喜欢|xǐ huan|v|like
+下|xià|loc|below; next
+下午|xià wǔ|n|afternoon
+下雨|xià yǔ|v|rain
+先生|xiān sheng|n|Mr; husband
+现在|xiàn zài|n|now
+想|xiǎng|v|want to; think; miss
+小|xiǎo|adj|small, little
+小姐|xiǎo jiě|n|Miss; young lady
+些|xiē|mw|some
+写|xiě|v|write
+谢谢|xiè xie|v|thank
+星期|xīng qī|n|week
+学生|xué sheng|n|student
+学习|xué xí|v|study, learn
+学校|xué xiào|n|school
+一|yī|num|one
+一点儿|yì diǎnr|mw|a little
+衣服|yī fu|n|clothes
+医生|yī shēng|n|doctor
+医院|yī yuàn|n|hospital
+椅子|yǐ zi|n|chair
+有|yǒu|v|have; there is
+月|yuè|n|month; moon
+在|zài|prep|at, in; be at; (progressive)
+再见|zài jiàn|intj|goodbye
+怎么|zěn me|pron|how; why
+怎么样|zěn me yàng|pron|how is it
+这|zhè|pron|this
+这儿|zhèr|pron|here
+那儿|nàr|pron|there
+中国|zhōng guó|n|China
+中午|zhōng wǔ|n|noon
+住|zhù|v|live, stay
+桌子|zhuō zi|n|table, desk
+字|zì|n|character, word
+昨天|zuó tiān|n|yesterday
+坐|zuò|v|sit; travel by
+做|zuò|v|do, make
+手|shǒu|n|hand
+饭|fàn|n|meal; cooked rice
+打|dǎ|v|hit; play (ball); make (a call)
+学|xué|v|learn, study
+家里|jiā lǐ|n|at home, in the family
+没|méi|adv|not (did not; have not)
+杯|bēi|mw|cup (of), glass (of)
+@T2
+吧|ba|part|suggestion particle
+白|bái|adj|white
+百|bǎi|num|hundred
+帮助|bāng zhù|v|help
+报纸|bào zhǐ|n|newspaper
+比|bǐ|prep|than (comparison)
+别|bié|adv|don't
+长|cháng|adj|long@w_chang2
+唱歌|chàng gē|v|sing
+出|chū|v|go out, exit
+穿|chuān|v|wear, put on (clothes)
+次|cì|mw|time(s), occurrence
+从|cóng|prep|from
+错|cuò|adj|wrong
+打篮球|dǎ lán qiú|v|play basketball
+大家|dà jiā|pron|everybody
+到|dào|v|arrive; to
+得|de|part|complement particle (V得…)@w_de_comp
+等|děng|v|wait
+弟弟|dì di|n|younger brother
+第一|dì yī|num|first
+懂|dǒng|v|understand
+对|duì|adj|correct; towards
+房间|fáng jiān|n|room
+非常|fēi cháng|adv|very, extremely
+服务员|fú wù yuán|n|waiter, attendant
+高|gāo|adj|tall, high
+告诉|gào su|v|tell
+哥哥|gē ge|n|older brother
+给|gěi|v|give; for, to
+公共汽车|gōng gòng qì chē|n|bus
+公司|gōng sī|n|company
+贵|guì|adj|expensive
+过|guo|part|(experience aspect particle)@w_guo_asp
+还|hái|adv|still; also@w_hai2
+孩子|hái zi|n|child
+好吃|hǎo chī|adj|tasty
+黑|hēi|adj|black
+红|hóng|adj|red
+欢迎|huān yíng|v|welcome
+回答|huí dá|v|answer
+机场|jī chǎng|n|airport
+鸡蛋|jī dàn|n|egg
+件|jiàn|mw|measure word for clothes, matters
+教室|jiào shì|n|classroom
+姐姐|jiě jie|n|older sister
+介绍|jiè shào|v|introduce
+进|jìn|v|enter
+近|jìn|adj|near
+就|jiù|adv|then; just; (earlier than expected)
+觉得|jué de|v|feel, think
+咖啡|kā fēi|n|coffee
+开始|kāi shǐ|v|begin
+考试|kǎo shì|n|exam
+可能|kě néng|adv|maybe, possibly
+可以|kě yǐ|aux|may, can (permission)
+课|kè|n|class, lesson
+快|kuài|adj|fast; soon
+快乐|kuài lè|adj|happy
+累|lèi|adj|tired
+离|lí|prep|from (distance)
+两|liǎng|num|two (with measure words)
+零|líng|num|zero
+路|lù|n|road
+旅游|lǚ yóu|v|travel, tour
+卖|mài|v|sell
+慢|màn|adj|slow
+忙|máng|adj|busy
+每|měi|pron|every
+妹妹|mèi mei|n|younger sister
+门|mén|n|door
+面条|miàn tiáo|n|noodles
+男|nán|adj|male
+您|nín|pron|you (polite)
+牛奶|niú nǎi|n|milk
+女|nǚ|adj|female
+旁边|páng biān|loc|beside
+跑步|pǎo bù|v|run, jog
+便宜|pián yi|adj|cheap
+票|piào|n|ticket
+妻子|qī zi|n|wife
+起床|qǐ chuáng|v|get up
+千|qiān|num|thousand
+铅笔|qiān bǐ|n|pencil
+晴|qíng|adj|sunny
+去年|qù nián|n|last year
+让|ràng|v|let, make (someone do)
+日|rì|n|day; sun
+上班|shàng bān|v|go to work
+身体|shēn tǐ|n|body; health
+生病|shēng bìng|v|fall ill
+生日|shēng rì|n|birthday
+时间|shí jiān|n|time
+事情|shì qing|n|matter, thing
+手表|shǒu biǎo|n|wristwatch
+手机|shǒu jī|n|mobile phone
+说话|shuō huà|v|talk
+送|sòng|v|give (as a gift); see off
+虽然|suī rán|conj|although
+但是|dàn shì|conj|but
+它|tā|pron|it
+踢足球|tī zú qiú|v|play football
+题|tí|n|question, problem (exercise)
+跳舞|tiào wǔ|v|dance
+外|wài|loc|outside
+完|wán|v|finish
+玩|wán|v|play, have fun
+晚上|wǎn shang|n|evening
+往|wǎng|prep|towards
+为什么|wèi shén me|pron|why
+问|wèn|v|ask
+问题|wèn tí|n|question, problem
+西瓜|xī guā|n|watermelon
+希望|xī wàng|v|hope
+洗|xǐ|v|wash
+小时|xiǎo shí|n|hour
+笑|xiào|v|laugh, smile
+新|xīn|adj|new
+姓|xìng|v|be surnamed
+休息|xiū xi|v|rest
+雪|xuě|n|snow
+颜色|yán sè|n|colour
+眼睛|yǎn jing|n|eye
+羊肉|yáng ròu|n|mutton
+药|yào|n|medicine
+要|yào|aux|want; will; need
+也|yě|adv|also
+一起|yì qǐ|adv|together
+一下|yí xià|mw|(do) briefly, a bit
+已经|yǐ jīng|adv|already
+意思|yì si|n|meaning
+因为|yīn wèi|conj|because
+所以|suǒ yǐ|conj|so, therefore
+阴|yīn|adj|cloudy, overcast
+游泳|yóu yǒng|v|swim
+右边|yòu bian|loc|right side
+鱼|yú|n|fish
+远|yuǎn|adj|far
+运动|yùn dòng|v|exercise, sport
+再|zài|adv|again (future)
+早上|zǎo shang|n|early morning
+丈夫|zhàng fu|n|husband
+找|zhǎo|v|look for
+着|zhe|part|(durative aspect particle)@w_zhe_asp
+真|zhēn|adv|really
+正在|zhèng zài|adv|in the middle of (doing)
+知道|zhī dào|v|know (a fact)
+准备|zhǔn bèi|v|prepare
+走|zǒu|v|walk; leave
+最|zuì|adv|most
+左边|zuǒ bian|loc|left side
+@T3
+啊|a|part|exclamation particle
+爱好|ài hào|n|hobby
+班|bān|n|class (group of students)
+搬|bān|v|move (house); carry
+办法|bàn fǎ|n|way, method
+包|bāo|n|bag
+饱|bǎo|adj|full (after eating)
+比赛|bǐ sài|n|match, competition
+别人|bié rén|pron|other people
+冰箱|bīng xiāng|n|fridge
+参加|cān jiā|v|take part in
+超市|chāo shì|n|supermarket
+衬衫|chèn shān|n|shirt
+成绩|chéng jì|n|grade, result
+城市|chéng shì|n|city
+春|chūn|n|spring
+词典|cí diǎn|n|dictionary
+聪明|cōng ming|adj|clever
+带|dài|v|bring, take along
+担心|dān xīn|v|worry
+地图|dì tú|n|map
+灯|dēng|n|light, lamp
+地方|dì fang|n|place
+东|dōng|n|east
+冬|dōng|n|winter
+动物|dòng wù|n|animal
+短|duǎn|adj|short (length)
+发烧|fā shāo|v|have a fever
+放|fàng|v|put, place
+放心|fàng xīn|v|feel relieved, not worry
+分|fēn|mw|minute; cent; point
+复习|fù xí|v|review (lessons)
+干净|gān jìng|adj|clean
+感冒|gǎn mào|v|catch a cold
+个子|gè zi|n|height, build
+跟|gēn|prep|with, and
+公斤|gōng jīn|mw|kilogram
+公园|gōng yuán|n|park
+故事|gù shi|n|story
+关|guān|v|close, turn off
+关心|guān xīn|v|care about
+国家|guó jiā|n|country
+害怕|hài pà|v|be afraid
+花|huā|n|flower
+画|huà|v|draw, paint
+坏|huài|adj|bad; broken
+简单|jiǎn dān|adj|simple
+见面|jiàn miàn|vsep|meet (each other)
+讲|jiǎng|v|speak, explain
+教|jiāo|v|teach
+接|jiē|v|pick up (someone); receive
+节日|jié rì|n|festival, holiday
+节目|jié mù|n|programme, show
+借|jiè|v|borrow; lend
+经常|jīng cháng|adv|often
+久|jiǔ|adj|long (time)
+句子|jù zi|n|sentence
+可爱|kě ài|adj|cute, lovely
+渴|kě|adj|thirsty
+客人|kè rén|n|guest
+空调|kōng tiáo|n|air conditioner
+口|kǒu|n|mouth
+哭|kū|v|cry
+裤子|kù zi|n|trousers
+筷子|kuài zi|n|chopsticks
+蓝|lán|adj|blue
+老|lǎo|adj|old (age)
+离开|lí kāi|v|leave
+礼物|lǐ wù|n|gift
+历史|lì shǐ|n|history
+脸|liǎn|n|face
+练习|liàn xí|v|practise
+辆|liàng|mw|measure word for vehicles
+邻居|lín jū|n|neighbour
+楼|lóu|n|building; floor
+绿|lǜ|adj|green
+马|mǎ|n|horse
+帽子|mào zi|n|hat
+米|mǐ|mw|metre
+面包|miàn bāo|n|bread
+明白|míng bai|v|understand
+拿|ná|v|take, hold
+奶奶|nǎi nai|n|grandma (paternal)
+南|nán|n|south
+难|nán|adj|difficult
+难过|nán guò|adj|sad
+年级|nián jí|n|grade, year (at school)
+年轻|nián qīng|adj|young
+鸟|niǎo|n|bird
+啤酒|pí jiǔ|n|beer
+其他|qí tā|pron|other
+骑|qí|v|ride (bike, horse)
+起飞|qǐ fēi|v|take off
+清楚|qīng chu|adj|clear
+秋|qiū|n|autumn
+裙子|qún zi|n|skirt, dress
+热情|rè qíng|adj|warm, enthusiastic
+容易|róng yì|adj|easy
+伞|sǎn|n|umbrella
+上网|shàng wǎng|v|go online
+生气|shēng qì|vsep|get angry
+声音|shēng yīn|n|sound, voice
+试|shì|v|try
+舒服|shū fu|adj|comfortable
+特别|tè bié|adv|especially
+提高|tí gāo|v|raise, improve
+甜|tián|adj|sweet
+条|tiáo|mw|measure word for long thin things
+同事|tóng shì|n|colleague
+同意|tóng yì|v|agree
+头发|tóu fa|n|hair
+图书馆|tú shū guǎn|n|library
+碗|wǎn|n|bowl
+万|wàn|num|ten thousand
+位|wèi|mw|polite measure word for people
+西|xī|n|west
+洗手间|xǐ shǒu jiān|n|toilet, washroom
+夏|xià|n|summer
+先|xiān|adv|first
+相信|xiāng xìn|v|believe
+香蕉|xiāng jiāo|n|banana
+向|xiàng|prep|towards
+小心|xiǎo xīn|v|be careful
+鞋|xié|n|shoe
+新鲜|xīn xiān|adj|fresh
+信|xìn|n|letter
+兴趣|xìng qù|n|interest
+爷爷|yé ye|n|grandpa (paternal)
+一共|yí gòng|adv|altogether
+一样|yí yàng|adj|the same
+以后|yǐ hòu|n|after; later
+音乐|yīn yuè|n|music
+用|yòng|v|use
+游戏|yóu xì|n|game
+有名|yǒu míng|adj|famous
+元|yuán|mw|yuan
+站|zhàn|v|stand; station
+张|zhāng|mw|measure word for flat things
+照片|zhào piàn|n|photo
+照相机|zhào xiàng jī|n|camera
+中间|zhōng jiān|loc|middle
+种|zhǒng|mw|kind, type
+重要|zhòng yào|adj|important
+祝|zhù|v|wish
+注意|zhù yì|v|pay attention
+自己|zì jǐ|pron|oneself
+作业|zuò yè|n|homework
+蛋糕|dàn gāo|n|cake
+菜单|cài dān|n|menu
+洗澡|xǐ zǎo|vsep|take a bath/shower
+帮忙|bāng máng|vsep|help, do a favour
+车站|chē zhàn|n|station, stop
+火车|huǒ chē|n|train
+自行车|zì xíng chē|n|bicycle
+早饭|zǎo fàn|n|breakfast
+晚饭|wǎn fàn|n|dinner
+中文|zhōng wén|n|Chinese (language, esp. written)
+汉字|hàn zì|n|Chinese character
+英语|yīng yǔ|n|English
+外国|wài guó|n|foreign country
+大学|dà xué|n|university
+房子|fáng zi|n|house
+电话|diàn huà|n|telephone
+号码|hào mǎ|n|number
+歌|gē|n|song
+好看|hǎo kàn|adj|good-looking; interesting
+好听|hǎo tīng|adj|pleasant to hear
+下班|xià bān|v|finish work
+上课|shàng kè|v|attend class
+下课|xià kè|v|finish class
+生活|shēng huó|n|life
+天|tiān|n|day; sky
+早|zǎo|adj|early
+晚|wǎn|adj|late
+见|jiàn|v|see; meet
+可是|kě shì|conj|but
+外面|wài miàn|loc|outside
+这里|zhè lǐ|pron|here
+那里|nà lǐ|pron|there
+开会|kāi huì|v|have a meeting
+词|cí|n|word
+有意思|yǒu yì si|adj|interesting
+后来|hòu lái|n|afterwards
+雨|yǔ|n|rain
+风|fēng|n|wind
+山|shān|n|mountain
+要是|yào shi|conj|if
+不错|bú cuò|adj|not bad, pretty good

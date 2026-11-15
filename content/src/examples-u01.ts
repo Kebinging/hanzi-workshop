@@ -1,0 +1,28 @@
+// Vocabulary example sentences for Unit 1 words that the grammar banks don't use yet.
+// The target word is marked *x*. Only HSK 1–2 + Unit 1 vocabulary allowed.
+export const examplesU01: [string, string][] = [
+  ['我 *一般* 七 点 起床 。', 'I usually get up at seven.'],
+  ['这 个 *周末* 你 想 做 什么 ？', 'What do you want to do this weekend?'],
+  ['你 *最近* 忙 吗 ？', 'Have you been busy lately?'],
+  ['*过去* 的 事情 ， 别 想 了 。', "Don't dwell on the past."],
+  ['现在 三 点 一 *刻* 。', "It's a quarter past three."],
+  ['请 等 *一会儿* 。', 'Please wait a moment.'],
+  ['别 *着急* ， 我们 有 时间 。', "Don't worry, we have time."],
+  ['你 *需要* 帮助 吗 ？', 'Do you need help?'],
+  ['图书馆 里 很 *安静* 。', "It's very quiet in the library."],
+  ['你 还 *记得* 我 吗 ？', 'Do you still remember me?'],
+  ['我 每 天 坐 *地铁* 上班 。', 'I take the metro to work every day.'],
+  ['我 家 *附近* 有 一 个 公园 。', "There's a park near my home."],
+  ['他 学习 很 *认真* 。', 'He studies very conscientiously.'],
+  ['她 工作 非常 *努力* 。', 'She works very hard.'],
+  ['我们 坐 *电梯* 吧 。', "Let's take the lift."],
+  ['我 的 办公室 在 十 *层* 。', 'My office is on the tenth floor.'],
+  ['我 早上 喜欢 *锻炼* 身体 。', 'I like to work out in the morning.'],
+  ['祝 你 身体 *健康* ！', 'Wishing you good health!'],
+  ['你 周末 *打算* 做 什么 ？', 'What are you planning to do at the weekend?'],
+  ['我 *发现* 他 不 在 家 。', 'I found that he was not at home.'],
+  ['*其实* 我 不 喜欢 喝 咖啡 。', "Actually, I don't like coffee."],
+  ['*当然* 可以 ！', 'Of course!'],
+  ['明天 你 *一定* 要 来 。', 'You must come tomorrow.'],
+  ['坐 地铁 很 *方便* 。', 'Taking the metro is convenient.'],
+];
