@@ -9,6 +9,7 @@
     "content": "tsx scripts/build-content.ts && tsx scripts/validate-content.ts",
     "typecheck": "tsc --noEmit -p .",
     "preview": "vite preview",
+    "pretest": "tsx scripts/build-content.ts",
     "test": "vitest run",
     "check-offline": "tsx scripts/check-offline.ts"
   },
