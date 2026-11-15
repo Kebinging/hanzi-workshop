@@ -28,8 +28,6 @@ export interface LookalikeExercise {
   instanceId: string;
 }
 
-export type Exercise = RecognitionExercise | LookalikeExercise;
-
 /** A context sentence that passes the coverage gate with the tested word exempt, avoiding recent instances. */
 export function pickContext(
   word: VocabItem, card: FSRSCardState, content: Content, pool: ReadonlySet<string>, r: Rng,

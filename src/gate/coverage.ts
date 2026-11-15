@@ -7,7 +7,7 @@ export interface CoverageResult {
 }
 
 /** Token kinds exempt from coverage (spec 1.1.1). 'gloss' is counted but always pre-glossed, so treated as known. */
-const EXEMPT = new Set<Token['kind']>(['target', 'name', 'num', 'punct']);
+const EXEMPT = new Set<Token['kind']>(['target', 'name', 'num', 'punct', 'gap']);
 
 export function checkCoverage(
   tokens: Token[], pool: ReadonlySet<string>, alsoExempt: ReadonlySet<string> = new Set(),

@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { content } from '../content';
-import type { VocabItem } from '../content/types';
+import type { GrammarPattern, VocabItem } from '../content/types';
 import {
-  advance, buildCurrent, endSession, logFreePeek, presented, startSession, submitLookalike, submitRecognition,
-  type LiveSession, type Outcome, type PeekRecord,
+  advance, buildCurrent, endSession, logFreePeek, presented, startSession, submitGrammar, submitLookalike, submitRecognition,
+  type Exercise, type GrammarAttempt, type LiveSession, type Outcome, type PeekRecord,
 } from '../srs/controller';
-import type { Exercise, LookalikeExercise, RecognitionExercise } from '../exercises/build';
+import type { LookalikeExercise, RecognitionExercise } from '../exercises/build';
+import { GrammarExerciseView } from './GrammarExerciseView';
+import { RuleCard, RuleSheet } from '../ui/grammarKit';
 import { PeekSheet, WordDetail, CharBreakdown } from '../ui/PeekSheet';
 import { PinyinText, SentenceView, type TokenTap } from '../ui/Hanzi';
 import { Bar, Button, Card, Page, TopBar } from '../ui/kit';
@@ -20,6 +22,7 @@ export function SessionView({ mode, onExit }: Props) {
   const [outcome, setOutcome] = useState<(Outcome & { choice: number | 'dk' }) | null>(null);
   const [done, setDone] = useState(false);
   const [peek, setPeek] = useState<Peek>(null);
+  const [rule, setRule] = useState<GrammarPattern | null>(null);
   const [, force] = useState(0);
   const peeks = useRef<PeekRecord[]>([]);
   const shownAt = useRef(0);
@@ -82,6 +85,13 @@ export function SessionView({ mode, onExit }: Props) {
     setOutcome({ ...res, choice });
   };
 
+  const answerGrammar = async (a: Omit<GrammarAttempt, 'latencyMs'>) => {
+    if (outcome || ex.kind === 'recognition' || ex.kind === 'lookalike') return;
+    const latency = performance.now() - shownAt.current;
+    const res = await submitGrammar(s, ex, { ...a, latencyMs: latency }, peeks.current);
+    setOutcome({ ...res, choice: 0 });
+  };
+
   const total = s.queue.length;
   return (
     <div className="flex min-h-dvh flex-col">
@@ -96,7 +106,10 @@ export function SessionView({ mode, onExit }: Props) {
           ? <Presentation ex={ex} s={s} now={now} onTap={onTap} />
           : ex.kind === 'recognition'
             ? <Recognition ex={ex} s={s} now={now} outcome={outcome} onAnswer={answerRecognition} onTap={onTap} />
-            : <Lookalike ex={ex} outcome={outcome} onAnswer={answerLookalike} />}
+            : ex.kind === 'lookalike'
+              ? <Lookalike ex={ex} outcome={outcome} onAnswer={answerLookalike} />
+              : <GrammarExerciseView key={`${s.index}:${ex.instanceId}`} ex={ex} cards={s.cards} pool={s.pool} now={now}
+                  onTap={onTap} onDone={(a) => void answerGrammar(a)} onRule={setRule} resolved={!!outcome} />}
       </Page>
       {(isPresentation || outcome) && (
         <div className="fixed inset-x-0 bottom-0 border-t border-line bg-bg/95 p-4 backdrop-blur">
@@ -105,6 +118,7 @@ export function SessionView({ mode, onExit }: Props) {
           </div>
         </div>
       )}
+      {rule && <RuleSheet pattern={rule} onClose={() => setRule(null)} />}
       {peek && (
         <PeekSheet word={peek.word} name={peek.name} card={peek.word ? s.cards.get(`word.recog:${peek.word.id}`) : undefined}
           now={now} onClose={() => setPeek(null)} />
@@ -130,6 +144,15 @@ function Presentation({ ex, s, now, onTap }: { ex: Exercise; s: LiveSession; now
             <div key={c} className="rounded-xl bg-surface-2 p-3"><span className="han text-4xl">{c}</span> <span className="text-sm text-ink-2">{ex.set.hints[c]}</span></div>
           );
         })}
+      </div>
+    );
+  }
+  if (ex.kind !== 'recognition') {
+    if (ex.kind === 'judgement') return null;
+    return (
+      <div className="space-y-3">
+        <Tag tone="new">New grammar point</Tag>
+        <RuleCard pattern={ex.pattern} />
       </div>
     );
   }

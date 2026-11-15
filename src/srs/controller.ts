@@ -6,12 +6,23 @@ import { buildExposurePool } from '../gate/pool';
 import { rng } from '../lib/rng';
 import { DAY, review } from './fsrs';
 import { adaptiveBounds, rateAttempt, type LatencyBounds } from './rating';
-import { missingCards, planSession, requeueOffset, type QueueItem, type SessionPlan } from './session';
+import { missingCards, planSession, requeueOffset, unlockedUnits, type QueueItem, type SessionPlan } from './session';
 import {
-  buildLookalike, buildRecognition, lookalikeErrorCode, type Exercise, type LookalikeExercise, type RecognitionExercise,
+  buildLookalike, buildRecognition, lookalikeErrorCode, type LookalikeExercise, type RecognitionExercise,
 } from '../exercises/build';
+import { buildGrammar, grammarPlayable, hasUseItems, type GrammarExercise } from '../exercises/grammar';
 
-export const CURRENT_UNIT = 1;
+export type Exercise = RecognitionExercise | LookalikeExercise | GrammarExercise;
+
+/** Exercise kind recorded in review logs / latency bounds for each exercise. */
+export function kindOf(ex: Exercise): ExerciseKind {
+  switch (ex.kind) {
+    case 'slot': return 'slot_builder';
+    case 'pair': return 'minimal_pair';
+    case 'judgement': return 'minimal_pair';
+    default: return ex.kind;
+  }
+}
 
 export interface LiveSession {
   sessionId: number;
@@ -41,7 +52,8 @@ export function startOfDay(now: number): number {
 /** Create any missing curriculum / look-alike cards (idempotent). */
 export async function ensureCards(content: Content, now = Date.now(), d: WorkshopDB = db): Promise<number> {
   const cards = await d.cards.toArray();
-  const created = missingCards(cards, content, CURRENT_UNIT, buildExposurePool(cards, now), now);
+  const pool = buildExposurePool(cards, now);
+  const created = missingCards(cards, content, unlockedUnits(cards, content, pool), pool, now, (id) => hasUseItems(content, id));
   if (created.length) await d.cards.bulkPut(created);
   return created.length;
 }
@@ -51,7 +63,7 @@ export async function startSession(content: Content, mode: 'normal' | 'flight', 
   let cards = await d.cards.toArray();
   let pool = buildExposurePool(cards, now);
 
-  const created = missingCards(cards, content, CURRENT_UNIT, pool, now);
+  const created = missingCards(cards, content, unlockedUnits(cards, content, pool), pool, now, (id) => hasUseItems(content, id));
   if (created.length) {
     await d.cards.bulkPut(created);
     cards = [...cards, ...created];
@@ -76,13 +88,24 @@ export async function startSession(content: Content, mode: 'normal' | 'flight', 
   const introducedToday = {
     words: cards.filter((c) => c.facet === 'word.recog' && (c.introducedAt ?? 0) >= dayStart).length,
     chars: cards.filter((c) => c.facet === 'char.form' && (c.introducedAt ?? 0) >= dayStart).length,
+    grammar: cards.filter((c) => c.facet === 'gram.form' && !c.itemId.startsWith('G12-') && (c.introducedAt ?? 0) >= dayStart).length,
+    bridgeGrammar: cards.filter((c) => c.facet === 'gram.form' && c.itemId.startsWith('G12-') && (c.introducedAt ?? 0) >= dayStart).length,
+    grammarUse: cards.filter((c) => c.facet === 'gram.use' && (c.introducedAt ?? 0) >= dayStart).length,
   };
   const week = await d.reviews.where('ts').above(now - 7 * DAY).toArray();
   const againRate7d = week.length >= 20 ? week.filter((r) => r.rating === 1).length / week.length : 0;
 
-  const plan = planSession({ cards, now, settings, introducedToday, againRate7d, mode, content });
+  const playable = (c: FSRSCardState) => (c.facet.startsWith('gram.') ? grammarPlayable(c, content, pool) : true);
+  const plan = planSession({ cards, now, settings, introducedToday, againRate7d, mode, content, playable });
+  // Gate G4: a due grammar card with no gated sentence today is deferred by a day.
+  if (plan.deferred.length) {
+    const moved = plan.deferred.map((id) => ({ ...cards.find((c) => c.id === id)!, due: now + DAY }));
+    await d.cards.bulkPut(moved);
+    const m = new Map(moved.map((c) => [c.id, c]));
+    cards = cards.map((c) => m.get(c.id) ?? c);
+  }
   const bounds: LiveSession['bounds'] = {};
-  for (const kind of ['recognition', 'lookalike'] as const) {
+  for (const kind of ['recognition', 'lookalike', 'slot_builder', 'transform', 'minimal_pair', 'cloze'] as const) {
     const recent = week.filter((r) => r.exerciseKind === kind).slice(-50).map((r) => r.latencyMs);
     bounds[kind] = adaptiveBounds(kind, recent);
   }
@@ -108,8 +131,13 @@ export function buildCurrent(s: LiveSession, content: Content): Exercise | null 
     const r = rng(`${item.cardId}:${card?.reps ?? 0}:${s.index}`);
     if (card) {
       if (item.exercise === 'recognition') return buildRecognition(card, content, s.pool, item.mode === 'new' || card.state === 0, r);
-      const la = buildLookalike(card, content, s.pool, r);
-      if (la) return la;
+      if (item.exercise === 'grammar') {
+        const g = buildGrammar(card, content, s.pool, r);
+        if (g) return g;
+      } else {
+        const la = buildLookalike(card, content, s.pool, r);
+        if (la) return la;
+      }
     }
     s.index++;
   }
@@ -194,6 +222,39 @@ export async function submitLookalike(
   await applyRating(s, card, rating, now, 'lookalike', ex.instanceId, latencyMs, 0, d);
   (rating === 1 ? s.weakened : s.strengthened).push(ex.char);
   return { correct, rating, codes };
+}
+
+export interface GrammarAttempt {
+  correct: boolean;
+  wrongTries: number;
+  codes: string[];
+  learnerAnswer: string;
+  expected: string;
+  latencyMs: number;
+  itemIds?: string[];
+}
+
+/** Grade a grammar exercise (all five types) and schedule its card. */
+export async function submitGrammar(
+  s: LiveSession, ex: GrammarExercise, a: GrammarAttempt, peeks: PeekRecord[] = [], now = Date.now(), d: WorkshopDB = db,
+): Promise<Outcome> {
+  const card = s.cards.get(ex.cardId)!;
+  const kind = kindOf(ex);
+  const rating = rateAttempt(
+    { correct: a.correct, wrongTries: a.wrongTries, latencyMs: a.latencyMs, reps: card.reps },
+    s.bounds[kind] ?? adaptiveBounds(kind, []),
+  );
+  if (a.codes.length) {
+    await logError({
+      attemptId: `${s.sessionId}:${s.index}`, exerciseKind: kind, instanceId: ex.instanceId, codes: a.codes,
+      itemIds: [card.itemId, ...(a.itemIds ?? [])], learnerAnswer: a.learnerAnswer, expected: a.expected,
+    }, now, d);
+  }
+  await applyRating(s, card, rating, now, kind, ex.instanceId, a.latencyMs, peeks.length, d);
+  const label = ex.kind === 'judgement' ? ex.cluster.title : ex.pattern.titleZh;
+  (rating === 1 ? s.weakened : s.strengthened).push(label);
+  await handlePeeks(s, peeks, now, d);
+  return { correct: a.correct, rating, codes: a.codes };
 }
 
 /** Peek rule 1 (spec 1.3.3): peeking a bare word whose card is due within 3 days rates it Again now. */

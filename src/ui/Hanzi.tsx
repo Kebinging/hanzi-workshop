@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import type { AnnotatedSentence, Token, VocabItem } from '../content/types';
 import type { DisplayLevel, FSRSCardState } from '../state/types';
 import { displayLevelFor } from './displayLevel';
@@ -22,10 +23,10 @@ export function WordRuby({ hanzi, pinyin, showPinyin }: { hanzi: string; pinyin?
   return (
     <ruby>
       {[...hanzi].map((c, i) => (
-        <span key={i}>
+        <Fragment key={i}>
           {c}
           <rt className={sylls[i] ? `tone${toneOf(sylls[i])}` : ''}>{sylls[i] ?? ''}</rt>
-        </span>
+        </Fragment>
       ))}
     </ruby>
   );

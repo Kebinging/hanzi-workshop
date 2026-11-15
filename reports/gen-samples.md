@@ -1,0 +1,138 @@
+# Generated sentence samples
+
+Every sentence the generators can produce. Review for naturalness before shipping (spec 5.5).
+
+## gen_le_quantified → G3-01 (60)
+
+- 我买了三本书 — I bought three books.
+- 我喝了两杯茶 — I drank two cups of tea.
+- 我吃了一个苹果 — I ate an apple.
+- 我写了二十个汉字 — I wrote twenty characters.
+- 我借了两本词典 — I borrowed two dictionaries.
+- 我看了一个电影 — I watched a film.
+- 我买了一些水果 — I bought some fruit.
+- 我打了两个电话 — I made two phone calls.
+- 我复习了十个句子 — I reviewed ten sentences.
+- 我买了一件衬衫 — I bought a shirt.
+- 妈妈买了三本书 — Mum bought three books.
+- 妈妈喝了两杯茶 — Mum drank two cups of tea.
+- 妈妈吃了一个苹果 — Mum ate an apple.
+- 妈妈写了二十个汉字 — Mum wrote twenty characters.
+- 妈妈借了两本词典 — Mum borrowed two dictionaries.
+- 妈妈看了一个电影 — Mum watched a film.
+- 妈妈买了一些水果 — Mum bought some fruit.
+- 妈妈打了两个电话 — Mum made two phone calls.
+- 妈妈复习了十个句子 — Mum reviewed ten sentences.
+- 妈妈买了一件衬衫 — Mum bought a shirt.
+- 我哥哥买了三本书 — My older brother bought three books.
+- 我哥哥喝了两杯茶 — My older brother drank two cups of tea.
+- 我哥哥吃了一个苹果 — My older brother ate an apple.
+- 我哥哥写了二十个汉字 — My older brother wrote twenty characters.
+- 我哥哥借了两本词典 — My older brother borrowed two dictionaries.
+- 我哥哥看了一个电影 — My older brother watched a film.
+- 我哥哥买了一些水果 — My older brother bought some fruit.
+- 我哥哥打了两个电话 — My older brother made two phone calls.
+- 我哥哥复习了十个句子 — My older brother reviewed ten sentences.
+- 我哥哥买了一件衬衫 — My older brother bought a shirt.
+- 她买了三本书 — She bought three books.
+- 她喝了两杯茶 — She drank two cups of tea.
+- 她吃了一个苹果 — She ate an apple.
+- 她写了二十个汉字 — She wrote twenty characters.
+- 她借了两本词典 — She borrowed two dictionaries.
+- 她看了一个电影 — She watched a film.
+- 她买了一些水果 — She bought some fruit.
+- 她打了两个电话 — She made two phone calls.
+- 她复习了十个句子 — She reviewed ten sentences.
+- 她买了一件衬衫 — She bought a shirt.
+- 我们买了三本书 — We bought three books.
+- 我们喝了两杯茶 — We drank two cups of tea.
+- 我们吃了一个苹果 — We ate an apple.
+- 我们写了二十个汉字 — We wrote twenty characters.
+- 我们借了两本词典 — We borrowed two dictionaries.
+- 我们看了一个电影 — We watched a film.
+- 我们买了一些水果 — We bought some fruit.
+- 我们打了两个电话 — We made two phone calls.
+- 我们复习了十个句子 — We reviewed ten sentences.
+- 我们买了一件衬衫 — We bought a shirt.
+- 老师买了三本书 — The teacher bought three books.
+- 老师喝了两杯茶 — The teacher drank two cups of tea.
+- 老师吃了一个苹果 — The teacher ate an apple.
+- 老师写了二十个汉字 — The teacher wrote twenty characters.
+- 老师借了两本词典 — The teacher borrowed two dictionaries.
+- 老师看了一个电影 — The teacher watched a film.
+- 老师买了一些水果 — The teacher bought some fruit.
+- 老师打了两个电话 — The teacher made two phone calls.
+- 老师复习了十个句子 — The teacher reviewed ten sentences.
+- 老师买了一件衬衫 — The teacher bought a shirt.
+
+## gen_progressive → G3-05 (48)
+
+- 妈妈正在打扫房间 — Mum is cleaning the room right now.
+- 妈妈正在准备晚饭 — Mum is making dinner right now.
+- 妈妈正在看电视 — Mum is watching TV right now.
+- 妈妈正在复习生词 — Mum is reviewing new words right now.
+- 妈妈正在找手机 — Mum is looking for a phone right now.
+- 妈妈正在洗衣服 — Mum is washing clothes right now.
+- 妈妈正在预习课文 — Mum is preparing the text right now.
+- 妈妈正在吃午饭 — Mum is having lunch right now.
+- 我正在打扫房间 — I am cleaning the room right now.
+- 我正在准备晚饭 — I am making dinner right now.
+- 我正在看电视 — I am watching TV right now.
+- 我正在复习生词 — I am reviewing new words right now.
+- 我正在找手机 — I am looking for a phone right now.
+- 我正在洗衣服 — I am washing clothes right now.
+- 我正在预习课文 — I am preparing the text right now.
+- 我正在吃午饭 — I am having lunch right now.
+- 他们正在打扫房间 — They are cleaning the room right now.
+- 他们正在准备晚饭 — They are making dinner right now.
+- 他们正在看电视 — They are watching TV right now.
+- 他们正在复习生词 — They are reviewing new words right now.
+- 他们正在找手机 — They are looking for a phone right now.
+- 他们正在洗衣服 — They are washing clothes right now.
+- 他们正在预习课文 — They are preparing the text right now.
+- 他们正在吃午饭 — They are having lunch right now.
+- 爸爸正在打扫房间 — Dad is cleaning the room right now.
+- 爸爸正在准备晚饭 — Dad is making dinner right now.
+- 爸爸正在看电视 — Dad is watching TV right now.
+- 爸爸正在复习生词 — Dad is reviewing new words right now.
+- 爸爸正在找手机 — Dad is looking for a phone right now.
+- 爸爸正在洗衣服 — Dad is washing clothes right now.
+- 爸爸正在预习课文 — Dad is preparing the text right now.
+- 爸爸正在吃午饭 — Dad is having lunch right now.
+- 我妹妹正在打扫房间 — My younger sister is cleaning the room right now.
+- 我妹妹正在准备晚饭 — My younger sister is making dinner right now.
+- 我妹妹正在看电视 — My younger sister is watching TV right now.
+- 我妹妹正在复习生词 — My younger sister is reviewing new words right now.
+- 我妹妹正在找手机 — My younger sister is looking for a phone right now.
+- 我妹妹正在洗衣服 — My younger sister is washing clothes right now.
+- 我妹妹正在预习课文 — My younger sister is preparing the text right now.
+- 我妹妹正在吃午饭 — My younger sister is having lunch right now.
+- 我们正在打扫房间 — We are cleaning the room right now.
+- 我们正在准备晚饭 — We are making dinner right now.
+- 我们正在看电视 — We are watching TV right now.
+- 我们正在复习生词 — We are reviewing new words right now.
+- 我们正在找手机 — We are looking for a phone right now.
+- 我们正在洗衣服 — We are washing clothes right now.
+- 我们正在预习课文 — We are preparing the text right now.
+- 我们正在吃午饭 — We are having lunch right now.
+
+## gen_bi_degree → G3-17 (18)
+
+- 今天比昨天冷多了 — Today is much colder than yesterday.
+- 今天比昨天热一点儿 — Today is a bit hotter than yesterday.
+- 今天比昨天暖和一点儿 — Today is a bit warmer than yesterday.
+- 这里比北京冷多了 — It is much colder here than in Beijing.
+- 这里比北京热一点儿 — It is a bit hotter here than in Beijing.
+- 这里比北京暖和一点儿 — It is a bit warmer here than in Beijing.
+- 我哥哥比我高多了 — My older brother is much taller than me.
+- 我哥哥比我忙一点儿 — My older brother is a bit busier than me.
+- 我哥哥比我瘦一点儿 — My older brother is a bit thinner than me.
+- 他比他妹妹高多了 — He is much taller than his younger sister.
+- 他比他妹妹忙一点儿 — He is a bit busier than his younger sister.
+- 他比他妹妹瘦一点儿 — He is a bit thinner than his younger sister.
+- 这件衣服比那件贵多了 — This piece of clothing is much more expensive than that one.
+- 这件衣服比那件便宜一点儿 — This piece of clothing is a bit cheaper than that one.
+- 这件衣服比那件旧一点儿 — This piece of clothing is a bit older than that one.
+- 这本书比那本贵多了 — This book is much more expensive than that one.
+- 这本书比那本便宜一点儿 — This book is a bit cheaper than that one.
+- 这本书比那本旧一点儿 — This book is a bit older than that one.

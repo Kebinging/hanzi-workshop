@@ -4,7 +4,14 @@ A personal, fully offline PWA for learning Mandarin from HSK 3 onward — readin
 
 The full design lives in [docs/SPEC.md](docs/SPEC.md).
 
-## Status — Milestone 1
+## Status — Milestone 2
+
+- Grammar track live for Units 1–3 (24 HSK 3 patterns): Slot Builder, transformations, minimal pairs, cloze, plus sentence-judgement drills for weak HSK 1–2 grammar
+- Constraint-based order grader that names the mistake (time word after verb, adverb position, 了 placement, 比 order, …)
+- Rule cards with slot-coloured examples; units unlock as the previous unit's grammar and words are learned
+- Build-time sentence generators with a review report in `reports/gen-samples.md`
+
+## Milestone 1
 
 - Offline PWA shell (service worker precache, CSP `connect-src 'self'`, persistent storage request)
 - Dual-track FSRS engine (`ts-fsrs`), automatic ratings from correctness and response time

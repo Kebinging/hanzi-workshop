@@ -208,7 +208,7 @@ Session(start)
 
 ### 1.6 What "progress" means (only these metrics)
 - **Words known** (count in exposure pool) / 1,000; **characters recognised** / 587 (a character is recognised when ≥ 2 known words contain it, or its `char.form` card is in Review).
-- **Grammar mastered**: patterns whose `gram.form` *and* `gram.use` stability ≥ 21 d / 96.
+- **Grammar mastered**: patterns whose `gram.form` *and* `gram.use` stability ≥ 21 d / 96. (A pattern that has no minimal-pair or cloze items yet has no `gram.use` card; its form alone counts.)
 - **Reading readiness**: % of all unit passages that pass the coverage gate today.
 - **Retention**: true retention per track over 30 days (actual vs target).
 - **Weakness map**: top error categories with trend (§4).
@@ -396,8 +396,9 @@ All five types share: an `ExerciseTemplate` (§5.3), a gated instance, a grader 
 - Top: English or Chinese *meaning prompt* (choose per card: English prompt early, Chinese-paraphrase prompt once `gram.form` stability ≥ 14d).
 - Middle: a **slot rail** — coloured, labelled drop zones in canonical order. Slots appear only if the target sentence uses them (no giveaway of *what* goes where, but the rail shows the frame).
 - Bottom: shuffled **tiles** (words or fixed chunks) + **1–2 decoy tiles** (e.g. 了 when 过 is correct; 就 when 才 is correct; 不 when 没 is correct).
-- Tap a tile → it flies to the first free slot that accepts its category; tap a placed tile → returns it. Drag also supported. Tiles ≥ 44 px tall.
-- "Check" button. Advanced mode (≥ stability 30d) hides slot labels ("free rail") — tiles go into an unlabelled line.
+- Tap a tile → it fills the next empty position on the rail; tap a placed tile → it returns to the bank and leaves a gap that the next tap fills. Tiles in the bank are uncoloured (colour would give the answer away) and get their slot colour once checked. Tiles ≥ 44 px tall. *(As built in M2: tap only — no drag.)*
+- "Check" button. A wrong first check shows the main error's explanation and marks the tiles involved; the learner gets **one retry**. Correct on the retry → rating Hard; wrong again → the natural order is revealed and the card is rated Again.
+- Advanced mode (≥ stability 30d) hides slot labels ("free rail") — positions become plain unlabelled boxes.
 
 **Slot taxonomy & colours** (Tailwind tokens; colour-blind-safe pairs + text labels always visible)
 | Slot | Code | Colour | Holds |
@@ -939,6 +940,8 @@ Attribution for CC-CEDICT and Make Me a Hanzi appears in Settings → About.
 
 **Policy:** *authored instances are primary*; generation adds variety only for patterns flagged safe. This avoids grammatical-but-unnatural output (a real risk with naive slot filling).
 
+**As built (M2):** generators use an *explicit lexicon* — each entry is a whole phrase (e.g. 买了三本书 / "bought three books"), optionally tagged so only compatible entries combine (weather ↔ 冷/热, person ↔ 高/忙). Every combination is expanded **at build time** into `GrammarPattern.generated`, listed in `reports/gen-samples.md` for review, and gated at runtime like authored sentences. Nothing is generated on the device. The semantic-tag/valency design below remains the plan for patterns where explicit lists get too large.
+
 ```ts
 export interface GeneratorSpec {
   id: string;                         // "gen_ba_place"
@@ -1074,3 +1077,7 @@ Same as M5 for HSK 5; longer passages (250–500 chars) and multi-paragraph X-ra
 | 2026-11-15 | Public GitHub repo + GitHub Pages for install. |
 | 2026-11-15 | English explanations. Default budgets (12 words + 1 grammar point/day) kept. |
 | 2026-11-15 | M1 approved. |
+| 2026-11-15 | M1 shipped; M2 approved. |
+| 2026-11-15 | M2: Slot Builder is tap-only (no drag); one retry after a hinted wrong check. |
+| 2026-11-15 | M2: generators expand at build time from explicit lexicons (no on-device generation). |
+| 2026-11-15 | M2: `gram.use` cards exist only for patterns with minimal-pair or cloze items (G3-14 and G3-18 are form-only for now). HSK 1–2 weak clusters are drilled with the sentence-judgement items, one per day. |

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { rateAttempt, adaptiveBounds, DEFAULT_LATENCY } from './rating';
 import { DAY, forgettingCurve, newCard, retrievability, review, seededReviewCard } from './fsrs';
-import { interleave, missingCards, planSession, requeueOffset } from './session';
+import { interleave, missingCards, planSession, requeueOffset, unlockedUnits } from './session';
 import { content } from '../content';
 import { DEFAULT_SETTINGS, type FSRSCardState } from '../state/types';
 import { buildExposurePool } from '../gate/pool';
@@ -68,7 +68,7 @@ describe('exposure pool (spec 1.1.2)', () => {
 
 describe('session planning (spec 1.5)', () => {
   const settings = { ...DEFAULT_SETTINGS };
-  const base = { now: NOW, settings, introducedToday: { words: 0, chars: 0 }, againRate7d: 0, mode: 'normal' as const, content };
+  const base = { now: NOW, settings, introducedToday: { words: 0, chars: 0, grammar: 0, bridgeGrammar: 0, grammarUse: 0 }, againRate7d: 0, mode: 'normal' as const, content };
 
   it('interleaves one new item after every 3 reviews', () => {
     expect(interleave<number | string>([1, 2, 3, 4, 5, 6, 7], ['a', 'b'], 3)).toEqual([1, 2, 3, 'a', 4, 5, 6, 'b', 7]);
@@ -94,19 +94,41 @@ describe('session planning (spec 1.5)', () => {
     expect(planSession({ ...base, cards: cards.slice(0, 2), againRate7d: 0.3 }).withheldNew).toBe(true);
   });
 
-  it('orders due reviews by lowest retrievability and skips grammar facets', () => {
+  it('orders due reviews by lowest retrievability, grammar included, and defers unplayable cards', () => {
     const weak = seededReviewCard('word.recog', 'weak', 'diagnostic', NOW - 30 * DAY, 2, -1);
     const strong = seededReviewCard('word.recog', 'strong', 'diagnostic', NOW - 10 * DAY, 30, -1);
     const gram = seededReviewCard('gram.form', 'G12-01', 'diagnostic', NOW - 40 * DAY, 2, -1);
     const plan = planSession({ ...base, cards: [strong, gram, weak] });
-    expect(plan.items.map((q) => q.cardId)).toEqual(['word.recog:weak', 'word.recog:strong']);
+    expect(plan.items.map((q) => q.cardId)).toEqual(['gram.form:G12-01', 'word.recog:weak', 'word.recog:strong']);
+    const gated = planSession({ ...base, cards: [strong, gram, weak], playable: (c) => !c.facet.startsWith('gram.') });
+    expect(gated.deferred).toEqual(['gram.form:G12-01']);
   });
 
-  it('creates Unit 1 word cards and look-alike char cards once a word is known', () => {
+  it('creates unit word + grammar cards and look-alike char cards once a word is known', () => {
     const pool = new Set(content.vocab.filter((w) => w.hanzi === '自己').map((w) => w.id));
-    const created = missingCards([], content, 1, pool, NOW);
+    const created = missingCards([], content, [1], pool, NOW, (id) => id !== 'G3-07');
     expect(created.filter((c) => c.facet === 'word.recog').length).toBe(content.unitWords(1).length);
+    expect(created.filter((c) => c.facet === 'gram.form').length).toBe(8);
+    expect(created.filter((c) => c.facet === 'gram.use').length).toBe(7);
     expect(created.some((c) => c.id === 'char.form:己')).toBe(true);
+  });
+
+  it('introduces one new grammar point a day, in order, only when prerequisites are in Review', () => {
+    const forms = ['G3-01', 'G3-02', 'G3-03'].map((id) => newCard('gram.form', id, 'curriculum', NOW));
+    const none = planSession({ ...base, cards: forms });
+    expect(none.items.filter((q) => q.exercise === 'grammar')).toEqual([]); // G12 prerequisites missing
+    const reqs = ['G12-02', 'G12-07', 'G12-03'].map((id) => seededReviewCard('gram.form', id, 'diagnostic', NOW, 30, 20));
+    const plan = planSession({ ...base, cards: [...forms, ...reqs] });
+    expect(plan.items.filter((q) => q.mode === 'new').map((q) => q.cardId)).toEqual(['gram.form:G3-01']);
+    const done = planSession({ ...base, cards: [...forms, ...reqs], introducedToday: { ...base.introducedToday, grammar: 1 } });
+    expect(done.items.filter((q) => q.mode === 'new')).toEqual([]);
+  });
+
+  it('unlocks unit 2 once unit 1 grammar and words are mostly learned', () => {
+    expect(unlockedUnits([], content, new Set())).toEqual([1]);
+    const learned = content.unitPatterns(1).map((g) => seededReviewCard('gram.form', g.id, 'curriculum', NOW, 30, 20));
+    const pool = new Set(content.unitWords(1).map((w) => w.id));
+    expect(unlockedUnits(learned, content, pool)).toEqual([1, 2]);
   });
 
   it('re-queues cards due again within 20 minutes', () => {

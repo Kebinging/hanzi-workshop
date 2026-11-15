@@ -32,8 +32,12 @@ export function computeStats(cards: FSRSCardState[], reviews: ReviewLog[], c: Co
     if (known >= Math.min(2, words.length) || form?.state === 2) charsRecognised++;
   }
 
-  const gramStable = (itemId: string) =>
-    ['gram.form', 'gram.use'].every((f) => (byId.get(`${f}:${itemId}`)?.stability ?? 0) >= 21);
+  // Mastered = form stable for 21+ days, and use too where the pattern has a use card.
+  const gramStable = (itemId: string) => {
+    const form = byId.get(`gram.form:${itemId}`);
+    const use = byId.get(`gram.use:${itemId}`);
+    return form?.state === 2 && form.stability >= 21 && (!use || (use.state === 2 && use.stability >= 21));
+  };
   const grammarMastered = c.bundle.grammar.filter((g) => gramStable(g.id)).length;
 
   const since = now - 30 * DAY;
@@ -42,7 +46,8 @@ export function computeStats(cards: FSRSCardState[], reviews: ReviewLog[], c: Co
     return rs.length < 10 ? null : rs.filter((r) => r.rating > 1).length / rs.length;
   };
 
-  const units = c.bundle.syllabus.units.filter((u) => u.available).map((u) => {
+  const started = new Set(cards.filter((x) => x.facet === 'word.recog').map((x) => c.vocabById.get(x.itemId)?.unit).filter(Boolean));
+  const units = c.bundle.syllabus.units.filter((u) => u.available && started.has(u.unit)).map((u) => {
     const words = c.unitWords(u.unit);
     return { unit: u.unit, known: words.filter((w) => pool.has(w.id)).length, total: words.length };
   });

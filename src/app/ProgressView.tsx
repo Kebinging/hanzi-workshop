@@ -4,6 +4,7 @@ import { content } from '../content';
 import { computeStats } from './stats';
 import { DAY } from '../srs/fsrs';
 import { Bar, Card, Page, TopBar } from '../ui/kit';
+import { errorInfo } from '../ui/grammarKit';
 
 const CODE_LABEL: Record<string, string> = {
   'ORTHO.LOOKALIKE': 'Look-alike characters',
@@ -36,7 +37,7 @@ export function ProgressView({ onBack }: { onBack: () => void }) {
             <Row label="Words known" value={stats.wordsKnown} max={stats.wordsTarget} />
             <Row label="Characters recognised" value={stats.charsRecognised} max={stats.charsTarget} />
             <Row label="Grammar points mastered" value={stats.grammarMastered} max={stats.grammarTarget} />
-            <p className="mt-2 text-xs text-ink-3">Counts only what your review history says you'd recall today. Grammar mastery needs both form and use stable for 21+ days (grammar drills arrive in the next update).</p>
+            <p className="mt-2 text-xs text-ink-3">Counts only what your review history says you'd recall today. Grammar mastery needs both building (form) and choosing (use) stable for 21+ days.</p>
           </Card>
           <Card>
             <h2 className="mb-2 font-semibold">True retention (30 days)</h2>
@@ -51,7 +52,7 @@ export function ProgressView({ onBack }: { onBack: () => void }) {
             {counts.size === 0 ? <p className="text-sm text-ink-3">No mistakes logged yet.</p> : (
               <ul className="space-y-1">
                 {[...counts.entries()].sort((a, b) => b[1] - a[1]).map(([code, n]) => (
-                  <li key={code} className="flex justify-between text-sm"><span>{CODE_LABEL[code] ?? code}</span><span className="tabular-nums text-ink-3">{n}</span></li>
+                  <li key={code} className="flex justify-between text-sm"><span>{CODE_LABEL[code] ?? errorInfo(code)?.title ?? code}</span><span className="tabular-nums text-ink-3">{n}</span></li>
                 ))}
               </ul>
             )}

@@ -76,6 +76,20 @@ for (const g of bundle.grammar) {
   else if (g.instanceBank.length < 15) warnings.push(`${g.id}: ${g.instanceBank.length} instances (target 15)`);
 }
 
+// ---- Gate for pairs / transformations / cloze at their pattern's unit ----
+const unitPool = (unit: number) => new Set(bundle.vocab.filter((w) => w.hsk <= 2 || (w.unit ?? 99) <= unit).map((w) => w.id));
+const unitOf = (pid: string) => bundle.grammar.find((g) => g.id === pid)?.unit ?? 0;
+for (const p of bundle.pairs) {
+  const unit = Math.max(...p.patternIds.map(unitOf));
+  if (!sentencePasses(p.context.tokens, unitPool(unit))) errors.push(`${p.id}: fails coverage gate at unit ${unit}`);
+}
+for (const t of bundle.transforms) {
+  const pool = unitPool(unitOf(t.patternId));
+  for (const s of [t.answer, ...t.inputs]) if (!sentencePasses(s.tokens, pool)) errors.push(`${s.id}: fails coverage gate`);
+}
+const patternsWithUse = new Set([...bundle.pairs.flatMap((p) => p.patternIds), ...bundle.cloze.map((c) => c.patternId)]);
+for (const g of bundle.grammar) if (!patternsWithUse.has(g.id)) warnings.push(`${g.id}: no minimal-pair or cloze items (form-only for now)`);
+
 // ---- Diagnostic clusters ----
 for (const c of bundle.clusters) {
   if (c.items.length < 3) errors.push(`${c.id}: needs 3 items (2 probes + confirmation)`);

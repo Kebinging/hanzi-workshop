@@ -150,3 +150,54 @@ rt {
 @media (prefers-reduced-motion: reduce) {
   .sheet-in { animation: none; }
 }
+
+/* ---- Grammar slot colours (spec 3.1). Text labels always accompany colour. ---- */
+.slot-S { --slot: #2f62c4; }
+.slot-T { --slot: #7c4dbd; }
+.slot-ADV { --slot: #a86a12; }
+.slot-MOD { --slot: #c2561a; }
+.slot-PP { --slot: #138a83; }
+.slot-BA { --slot: #c0395b; }
+.slot-V { --slot: #b4232c; }
+.slot-ASP { --slot: #b8357f; }
+.slot-C { --slot: #2f8a4e; }
+.slot-O { --slot: #1d7fb8; }
+.slot-SF { --slot: #6b6459; }
+.slot-TOP { --slot: #4a5568; }
+.slot-CONJ1, .slot-CONJ2 { --slot: #8a5a2b; }
+.slot-P { --slot: #8c8478; }
+
+:root[data-theme='dark'] .slot-S, :root[data-theme='dark'] .slot-O { --slot: #7ea8f5; }
+:root[data-theme='dark'] .slot-T { --slot: #b18ef0; }
+:root[data-theme='dark'] .slot-ADV { --slot: #e8b453; }
+:root[data-theme='dark'] .slot-MOD { --slot: #f0965a; }
+:root[data-theme='dark'] .slot-PP { --slot: #4fd1c5; }
+:root[data-theme='dark'] .slot-V, :root[data-theme='dark'] .slot-BA { --slot: #f07a7d; }
+:root[data-theme='dark'] .slot-ASP { --slot: #f08ac4; }
+:root[data-theme='dark'] .slot-C { --slot: #6fcf8f; }
+:root[data-theme='dark'] .slot-SF, :root[data-theme='dark'] .slot-P { --slot: #a39b8e; }
+:root[data-theme='dark'] .slot-TOP { --slot: #a0aec0; }
+:root[data-theme='dark'] .slot-CONJ1, :root[data-theme='dark'] .slot-CONJ2 { --slot: #d6a571; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .slot-S, :root:not([data-theme='light']) .slot-O { --slot: #7ea8f5; }
+  :root:not([data-theme='light']) .slot-T { --slot: #b18ef0; }
+  :root:not([data-theme='light']) .slot-ADV { --slot: #e8b453; }
+  :root:not([data-theme='light']) .slot-MOD { --slot: #f0965a; }
+  :root:not([data-theme='light']) .slot-PP { --slot: #4fd1c5; }
+  :root:not([data-theme='light']) .slot-V, :root:not([data-theme='light']) .slot-BA { --slot: #f07a7d; }
+  :root:not([data-theme='light']) .slot-ASP { --slot: #f08ac4; }
+  :root:not([data-theme='light']) .slot-C { --slot: #6fcf8f; }
+  :root:not([data-theme='light']) .slot-SF, :root:not([data-theme='light']) .slot-P { --slot: #a39b8e; }
+  :root:not([data-theme='light']) .slot-TOP { --slot: #a0aec0; }
+  :root:not([data-theme='light']) .slot-CONJ1, :root:not([data-theme='light']) .slot-CONJ2 { --slot: #d6a571; }
+}
+
+.slot-chip {
+  background: color-mix(in srgb, var(--slot) 14%, var(--surface));
+  border: 1.5px solid color-mix(in srgb, var(--slot) 60%, transparent);
+}
+.slot-label { color: var(--slot); }
+.slot-frame {
+  border: 1.5px dashed color-mix(in srgb, var(--slot) 55%, transparent);
+  background: color-mix(in srgb, var(--slot) 6%, transparent);
+}

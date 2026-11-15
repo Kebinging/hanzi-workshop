@@ -6,7 +6,7 @@ export type POS =
   | 'num' | 'part' | 'aux' | 'loc' | 'intj' | 'vsep';
 export type SlotCode =
   | 'TOP' | 'S' | 'T' | 'ADV' | 'MOD' | 'PP' | 'BA'
-  | 'V' | 'ASP' | 'C' | 'O' | 'SF' | 'CONJ1' | 'CONJ2';
+  | 'V' | 'ASP' | 'C' | 'O' | 'SF' | 'CONJ1' | 'CONJ2' | 'P';
 
 export interface Sense {
   id: string;
@@ -50,7 +50,7 @@ export type OrderConstraint =
   | { kind: 'forbidden'; slot: SlotCode; when?: string; code: string }
   | { kind: 'pair'; a: string; b: string; code: string };
 
-export type TokenKind = 'word' | 'target' | 'name' | 'num' | 'punct' | 'gloss';
+export type TokenKind = 'word' | 'target' | 'name' | 'num' | 'punct' | 'gloss' | 'gap';
 
 export interface Token {
   t: string;
@@ -79,6 +79,7 @@ export interface AnnotatedSentence {
   chunks?: ChunkAnnotation[];
   patternIds: string[];
   source: 'authored' | 'generated';
+  alts?: string[];       // other accepted orders (plain text, no spaces)
 }
 
 export interface GrammarPattern {
@@ -96,7 +97,58 @@ export interface GrammarPattern {
   errorCodes: string[];
   examples: AnnotatedSentence[];
   instanceBank: AnnotatedSentence[];
+  decoys: Decoy[];         // wrong tiles offered in Slot Builder / Transformation
+  generated?: AnnotatedSentence[]; // build-time expansion of explicit-lexicon generators
   provisional?: boolean;
+}
+
+export interface Decoy { t: string; ref?: string; code: string; why: string }
+
+export interface ClozeOption { t: string; correct: boolean; code?: string; why: string }
+
+/** Cloze item derived from a pattern sentence (spec 3.4). `blank` = token index replaced by the gap. */
+export interface ClozeItem {
+  id: string;
+  patternId: string;
+  sentence: AnnotatedSentence;
+  blank: number;
+  options: ClozeOption[];
+}
+
+/** Contrastive minimal-pair item (spec 3.2). Options fill every gap token in order. */
+export interface MinimalPairItem {
+  id: string;
+  contrast: string;
+  patternIds: string[];
+  context: AnnotatedSentence;
+  options: { parts: string[]; correct: boolean; why: string; code?: string }[];
+}
+
+export type TransformSubtype = 'combine' | 'rewrite' | 'voice' | 'complement' | 'condition';
+
+/** Sentence transformation (spec 3.3): source clause(s) + chip -> answer assembled from tiles. */
+export interface TransformItem {
+  id: string;
+  patternId: string;
+  subtype: TransformSubtype;
+  inputs: AnnotatedSentence[];
+  chip: string;
+  answer: AnnotatedSentence;
+  decoys: Decoy[];
+}
+
+export interface ErrorInfo { code: string; title: string; explanation: string; patternId?: string }
+
+/** Explicit-lexicon generator for safe patterns (spec 5.5). */
+export interface GeneratorSpec {
+  id: string;
+  patternId: string;
+  /** Token template: "{S} 买/V 了/ASP {NUM} {OBJ}" — {X} draws from slots[X]. */
+  template: string;
+  en: string;           // "{S.en} bought {NUM.en} {OBJ.en}."
+  slots: Record<string, { zh: string; en: string; slot?: SlotCode; tags?: string[] }[]>;
+  /** Pairs of slot-option zh values that must agree (e.g. NUM+OBJ measure words), keyed "A|B". */
+  agree?: Record<string, string[]>;
 }
 
 /** HSK 1–2 grammar diagnostic cluster with sentence-judgement items (M1 format). */
@@ -136,6 +188,11 @@ export interface ContentBundle {
   chars: CharItem[];
   grammar: GrammarPattern[];
   vocabExamples: AnnotatedSentence[];
+  cloze: ClozeItem[];
+  pairs: MinimalPairItem[];
+  transforms: TransformItem[];
+  errors: ErrorInfo[];
+  generators: GeneratorSpec[];
   clusters: GrammarCluster[];
   confusables: ConfusableSet[];
 }

@@ -3,7 +3,7 @@ import type { Content } from '../content';
 import type { FSRSCardState, Settings } from '../state/types';
 import { DAY, newCard, retrievability } from './fsrs';
 
-export type ExerciseFor = 'recognition' | 'lookalike';
+export type ExerciseFor = 'recognition' | 'lookalike' | 'grammar';
 
 export interface QueueItem {
   cardId: string;
@@ -17,65 +17,112 @@ export interface SessionPlan {
   newCount: number;
   withheldNew: boolean;
   withheldReason?: string;
+  deferred: string[];   // due cards with no gated instance right now (G4)
 }
 
 export interface PlanInput {
   cards: FSRSCardState[];
   now: number;
   settings: Settings;
-  introducedToday: { words: number; chars: number };
+  introducedToday: { words: number; chars: number; grammar: number; bridgeGrammar: number; grammarUse: number };
   againRate7d: number;
   mode: 'normal' | 'flight';
   content: Content;
+  /** Whether a card has a gated exercise available now (defaults to true). */
+  playable?: (c: FSRSCardState) => boolean;
 }
 
 export const MAX_BRIDGE_PER_DAY = 8;
 export const MAX_NEW_CHARS_PER_DAY = 3;
+export const MAX_BRIDGE_GRAMMAR_PER_DAY = 1;
+export const MAX_NEW_USE_PER_DAY = 2;
 const OVERLOAD_DUE = 150;
 const OVERLOAD_AGAIN = 0.25;
 const REVIEW_CAP = { normal: 100, flight: 400 };
 
-/** Facets that have an exercise type in this build. */
 export function exerciseFor(c: FSRSCardState): ExerciseFor | null {
   if (c.facet === 'word.recog') return 'recognition';
   if (c.facet === 'char.form') return 'lookalike';
+  if (c.facet === 'gram.form' || c.facet === 'gram.use') return 'grammar';
   return null;
 }
 
+const patternOrder = (id: string) => {
+  const m = /^G(\d+)-(\d+)$/.exec(id);
+  return m ? Number(m[1]) * 1000 + Number(m[2]) : 99_999;
+};
+
+/** Prerequisites satisfied: every required pattern/cluster has gram.form in Review (spec 1.5.2). */
+export function requiresMet(patternId: string, byId: Map<string, FSRSCardState>, content: Content): boolean {
+  const reqs = content.grammarById.get(patternId)?.requires ?? [];
+  return reqs.every((r) => byId.get(`gram.form:${r}`)?.state === 2);
+}
+
 export function planSession(p: PlanInput): SessionPlan {
-  const { cards, now, settings, mode } = p;
+  const { cards, now, settings, mode, content } = p;
+  const playable = p.playable ?? (() => true);
+  const byId = new Map(cards.map((c) => [c.id, c]));
   const horizon = mode === 'flight' ? now + 3 * DAY : now;
-  const due = cards
-    .filter((c) => !c.suspended && c.state !== 0 && c.due <= horizon && exerciseFor(c))
+  const dueAll = cards.filter((c) => !c.suspended && c.state !== 0 && c.due <= horizon && exerciseFor(c));
+  const deferred = dueAll.filter((c) => !playable(c)).map((c) => c.id);
+  const due = dueAll
+    .filter((c) => playable(c))
     .sort((a, b) => retrievability(a, now) - retrievability(b, now) || a.due - b.due)
     .slice(0, REVIEW_CAP[mode]);
 
   let withheldReason: string | undefined;
-  const allDue = cards.filter((c) => !c.suspended && c.state !== 0 && c.due <= now && exerciseFor(c)).length;
-  if (allDue > OVERLOAD_DUE) withheldReason = `${allDue} reviews are due — clearing those first.`;
+  const dueNow = cards.filter((c) => !c.suspended && c.state !== 0 && c.due <= now && exerciseFor(c)).length;
+  if (dueNow > OVERLOAD_DUE) withheldReason = `${dueNow} reviews are due — clearing those first.`;
   else if (p.againRate7d > OVERLOAD_AGAIN) withheldReason = `You've missed ${Math.round(p.againRate7d * 100)}% of reviews this week — consolidating before adding more.`;
 
-  const fresh: FSRSCardState[] = [];
+  const fresh: QueueItem[] = [];
   if (!withheldReason) {
+    const isNew = (c: FSRSCardState) => c.state === 0 && !c.suspended;
+    // Words: bridge first (max 8), then curriculum.
     let budget = Math.max(0, settings.newWordsPerDay - p.introducedToday.words);
-    const newWords = cards.filter((c) => c.state === 0 && !c.suspended && c.facet === 'word.recog');
-    const bridge = newWords.filter((c) => c.origin === 'bridge').sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
-    const curriculum = newWords.filter((c) => c.origin !== 'bridge').sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
+    const newWords = cards.filter((c) => isNew(c) && c.facet === 'word.recog');
+    const byPriority = (a: FSRSCardState, b: FSRSCardState) => (b.priority ?? 0) - (a.priority ?? 0);
+    const bridge = newWords.filter((c) => c.origin === 'bridge').sort(byPriority);
+    const curriculum = newWords.filter((c) => c.origin !== 'bridge').sort(byPriority);
     const bridgeTake = bridge.slice(0, Math.min(MAX_BRIDGE_PER_DAY, budget));
     budget -= bridgeTake.length;
-    fresh.push(...bridgeTake, ...curriculum.slice(0, budget));
+    for (const c of [...bridgeTake, ...curriculum.slice(0, budget)]) fresh.push({ cardId: c.id, mode: 'new', exercise: 'recognition' });
+
+    // Look-alike characters.
     const charBudget = Math.max(0, MAX_NEW_CHARS_PER_DAY - p.introducedToday.chars);
-    fresh.push(...cards.filter((c) => c.state === 0 && !c.suspended && c.facet === 'char.form').slice(0, charBudget));
+    for (const c of cards.filter((x) => isNew(x) && x.facet === 'char.form').slice(0, charBudget)) {
+      fresh.push({ cardId: c.id, mode: 'new', exercise: 'lookalike' });
+    }
+
+    // Foundation grammar (HSK 1–2 clusters the diagnostic flagged).
+    const bridgeG = Math.max(0, MAX_BRIDGE_GRAMMAR_PER_DAY - p.introducedToday.bridgeGrammar);
+    const clusters = cards.filter((c) => isNew(c) && c.facet === 'gram.form' && c.itemId.startsWith('G12-')).sort(byPriority);
+    for (const c of clusters.slice(0, bridgeG)) fresh.push({ cardId: c.id, mode: 'review', exercise: 'grammar' });
+
+    // New HSK 3 grammar points: in syllabus order, prerequisites met, playable now.
+    const gBudget = Math.max(0, settings.newGrammarPerDay - p.introducedToday.grammar);
+    const forms = cards
+      .filter((c) => isNew(c) && c.facet === 'gram.form' && !c.itemId.startsWith('G12-'))
+      .filter((c) => requiresMet(c.itemId, byId, content) && playable(c))
+      .sort((a, b) => patternOrder(a.itemId) - patternOrder(b.itemId));
+    for (const c of forms.slice(0, gBudget)) fresh.push({ cardId: c.id, mode: 'new', exercise: 'grammar' });
+
+    // gram.use unlocks once the form is in Review.
+    const uBudget = Math.max(0, MAX_NEW_USE_PER_DAY - p.introducedToday.grammarUse);
+    const uses = cards
+      .filter((c) => isNew(c) && c.facet === 'gram.use' && byId.get(`gram.form:${c.itemId}`)?.state === 2 && playable(c))
+      .sort((a, b) => patternOrder(a.itemId) - patternOrder(b.itemId));
+    for (const c of uses.slice(0, uBudget)) fresh.push({ cardId: c.id, mode: 'review', exercise: 'grammar' });
   }
 
   const reviews: QueueItem[] = due.map((c) => ({ cardId: c.id, mode: 'review', exercise: exerciseFor(c)! }));
-  const news: QueueItem[] = fresh.map((c) => ({ cardId: c.id, mode: 'new', exercise: exerciseFor(c)! }));
   return {
-    items: separateConfusables(interleave(reviews, news, 3), p),
+    items: separate(interleave(reviews, fresh, 3), content),
     dueCount: due.length,
-    newCount: news.length,
+    newCount: fresh.length,
     withheldNew: !!withheldReason,
     withheldReason,
+    deferred,
   };
 }
 
@@ -91,40 +138,70 @@ export function interleave<T>(reviews: T[], news: T[], every: number): T[] {
   return out;
 }
 
-/** Never two look-alike drills on the same confusable set back to back (spec 1.5.2). */
-function separateConfusables(items: QueueItem[], p: PlanInput): QueueItem[] {
-  const setOf = (q: QueueItem) =>
-    q.exercise === 'lookalike' ? p.content.confusableSetOf(q.cardId.split(':')[1])?.id : undefined;
+/** Spacing key: same grammar pattern / same look-alike set must not be adjacent (spec 1.5.2). */
+export function spacingKey(q: QueueItem, content: Content): string | undefined {
+  const itemId = q.cardId.slice(q.cardId.indexOf(':') + 1);
+  if (q.exercise === 'grammar') return `g:${itemId}`;
+  if (q.exercise === 'lookalike') return content.confusableSetOf(itemId)?.id;
+  return undefined;
+}
+
+function separate(items: QueueItem[], content: Content): QueueItem[] {
   const out = [...items];
   for (let i = 1; i < out.length; i++) {
-    const s = setOf(out[i]);
-    if (!s || s !== setOf(out[i - 1])) continue;
-    const j = out.findIndex((q, k) => k > i && setOf(q) !== s);
+    const k = spacingKey(out[i], content);
+    if (!k || k !== spacingKey(out[i - 1], content)) continue;
+    const j = out.findIndex((q, n) => n > i && spacingKey(q, content) !== k);
     if (j > 0) [out[i], out[j]] = [out[j], out[i]];
   }
   return out;
 }
 
 /**
+ * Units unlocked for new items (spec 2.1): unit 1 always; unit n+1 once unit n has >= 80 % of its
+ * grammar forms in Review and >= 70 % of its words in the exposure pool.
+ */
+export function unlockedUnits(cards: FSRSCardState[], content: Content, pool: ReadonlySet<string>): number[] {
+  const byId = new Map(cards.map((c) => [c.id, c]));
+  const units = content.bundle.syllabus.units.filter((u) => u.available).map((u) => u.unit).sort((a, b) => a - b);
+  const out: number[] = [];
+  for (const u of units) {
+    out.push(u);
+    const patterns = content.unitPatterns(u);
+    const words = content.unitWords(u);
+    const gDone = patterns.length ? patterns.filter((g) => byId.get(`gram.form:${g.id}`)?.state === 2).length / patterns.length : 1;
+    const wDone = words.length ? words.filter((w) => pool.has(w.id)).length / words.length : 1;
+    if (gDone < 0.8 || wDone < 0.7) break;
+  }
+  return out;
+}
+
+/**
  * Cards that should exist but don't yet:
- *  - word.recog for every word of `unit` (curriculum), priority = how many unit sentences use it
+ *  - word.recog for every word of each unlocked unit (lower units first)
+ *  - gram.form (+ gram.use where use items exist) for each unlocked unit's patterns
  *  - char.form for look-alike characters once a word containing them is known
  */
 export function missingCards(
-  cards: FSRSCardState[], content: Content, unit: number, pool: ReadonlySet<string>, now: number,
+  cards: FSRSCardState[], content: Content, units: number[], pool: ReadonlySet<string>, now: number,
+  hasUse: (patternId: string) => boolean,
 ): FSRSCardState[] {
   const have = new Set(cards.map((c) => c.id));
   const out: FSRSCardState[] = [];
-  for (const w of content.unitWords(unit)) {
-    const id = `word.recog:${w.id}`;
-    if (!have.has(id)) out.push(newCard('word.recog', w.id, 'curriculum', now, content.unitDemand(w.id, unit)));
+  const push = (c: FSRSCardState) => { if (!have.has(c.id)) { have.add(c.id); out.push(c); } };
+  for (const unit of units) {
+    for (const w of content.unitWords(unit)) {
+      push(newCard('word.recog', w.id, 'curriculum', now, (100 - unit) * 100 + content.unitDemand(w.id, unit)));
+    }
+    for (const g of content.unitPatterns(unit)) {
+      push(newCard('gram.form', g.id, 'curriculum', now));
+      if (hasUse(g.id)) push(newCard('gram.use', g.id, 'curriculum', now));
+    }
   }
   for (const set of content.confusables) {
     for (const ch of set.chars) {
-      const id = `char.form:${ch}`;
-      if (have.has(id) || out.some((c) => c.id === id)) continue;
       const knownWord = (content.wordsByChar.get(ch) ?? []).some((w) => pool.has(w.id));
-      if (knownWord) out.push(newCard('char.form', ch, 'curriculum', now));
+      if (knownWord) push(newCard('char.form', ch, 'curriculum', now));
     }
   }
   return out;

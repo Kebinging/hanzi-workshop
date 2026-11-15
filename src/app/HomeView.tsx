@@ -16,8 +16,8 @@ export function HomeView({ go }: { go: (r: Route) => void }) {
   if (!data) return null;
   const { stats, settings } = data;
   const backupStale = data.hasCards && (!settings.lastBackupAt || Date.now() - settings.lastBackupAt > settings.backupReminderDays * DAY);
-  const unit = stats.unitProgress[0];
-  const unitInfo = content.bundle.syllabus.units[0];
+  const unit = stats.unitProgress[stats.unitProgress.length - 1];
+  const unitInfo = content.bundle.syllabus.units.find((u) => u.unit === unit?.unit);
 
   return (
     <Page>
@@ -44,7 +44,7 @@ export function HomeView({ go }: { go: (r: Route) => void }) {
         </div>
         <p className="mt-1 text-sm text-ink-3">
           {stats.newWaiting + stats.bridgeWaiting > 0
-            ? `${stats.newWaiting} new Unit 1 items and ${stats.bridgeWaiting} foundation gaps waiting (up to ${settings.newWordsPerDay} new a day).`
+            ? `${stats.newWaiting} new items and ${stats.bridgeWaiting} foundation gaps waiting (up to ${settings.newWordsPerDay} words + ${settings.newGrammarPerDay} grammar point a day).`
             : 'No new items waiting.'}
         </p>
         <div className="mt-4 grid grid-cols-[1fr_auto] gap-2">
@@ -59,7 +59,7 @@ export function HomeView({ go }: { go: (r: Route) => void }) {
         <Metric label="grammar" value={stats.grammarMastered} max={stats.grammarTarget} />
       </div>
 
-      {unit && (
+      {unit && unitInfo && (
         <Card className="mb-4">
           <div className="flex items-baseline justify-between">
             <span className="font-semibold">Unit {unit.unit} · <span className="han">{unitInfo.titleZh}</span></span>
@@ -72,7 +72,7 @@ export function HomeView({ go }: { go: (r: Route) => void }) {
 
       <div className="grid grid-cols-2 gap-2">
         <Button variant="secondary" onClick={() => go('progress')}>Progress</Button>
-        <Button variant="secondary" onClick={() => go('grammar')}>Grammar notes</Button>
+        <Button variant="secondary" onClick={() => go('grammar')}>Grammar</Button>
       </div>
     </Page>
   );

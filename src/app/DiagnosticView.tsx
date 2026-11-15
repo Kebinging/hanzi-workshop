@@ -71,7 +71,7 @@ export function DiagnosticView({ onDone }: { onDone: () => void }) {
               <h2 className="font-semibold">Grammar</h2>
               {weak.length ? (
                 <>
-                  <p className="text-ink-2">To shore up (drills arrive with the grammar exercises in the next update):</p>
+                  <p className="text-ink-2">To shore up — one of these is slipped into your sessions each day:</p>
                   <ul className="mt-1 list-disc pl-5 text-sm text-ink-2">{weak.map((w) => <li key={w}>{w}</li>)}</ul>
                 </>
               ) : <p className="text-ink-2">All 12 foundation grammar areas look solid.</p>}
