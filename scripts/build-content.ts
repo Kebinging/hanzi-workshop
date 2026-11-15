@@ -7,7 +7,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type {
   VocabItem, CharItem, GrammarPattern, AnnotatedSentence, Token, POS, HskLevel, ContentBundle, SlotCode,
-  ClozeItem, MinimalPairItem, TransformItem, Decoy,
+  ClozeItem, MinimalPairItem, TransformItem, Decoy, ReadingPassage, ChunkAnnotation, TokenRange,
 } from '../src/content/types';
 import { toNumbered, syllabify } from '../src/content/pinyin';
 import { patternsU01 } from '../content/src/grammar-u01';
@@ -16,6 +16,10 @@ import { patternsU03 } from '../content/src/grammar-u03';
 import { pairs as pairSources } from '../content/src/pairs';
 import { errors as errorInfos } from '../content/src/errors';
 import { generators } from '../content/src/generators';
+import { patternsU04 } from '../content/src/grammar-u04';
+import { patternsU05 } from '../content/src/grammar-u05';
+import { patternsU06 } from '../content/src/grammar-u06';
+import { passages as passageSources } from '../content/src/passages';
 import { examplesU01 } from '../content/src/examples-u01';
 import { clusters } from '../content/src/clusters';
 import { confusables } from '../content/src/confusables';
@@ -171,9 +175,14 @@ function resolve(t: string, explicit: string | undefined, where: string, text: s
     return id;
   }
   const cands = byHanzi.get(t) ?? [];
-  if (cands.length === 0) errors.push(`${where}: unknown word "${t}" in "${text}"`);
-  else if (cands.length > 1) errors.push(`${where}: ambiguous "${t}" (${cands.map((c) => c.id).join(', ')}) — use @id`);
-  return cands[0]?.id;
+  if (cands.length === 0) { errors.push(`${where}: unknown word "${t}" in "${text}"`); return undefined; }
+  // Homographs: default to the earliest-taught reading; later readings need an explicit @id.
+  const rank = (w: VocabItem) => w.hsk * 100 + (w.unit ?? 0);
+  const sorted = [...cands].sort((x, y) => rank(x) - rank(y));
+  if (sorted.length > 1 && rank(sorted[0]) === rank(sorted[1])) {
+    errors.push(`${where}: ambiguous "${t}" (${cands.map((c) => c.id).join(', ')}) — use @id`);
+  }
+  return sorted[0].id;
 }
 
 function parseSentence(text: string, en: string, id: string, patternIds: string[], alts?: string[]): AnnotatedSentence {
@@ -193,13 +202,15 @@ function parseSentence(text: string, en: string, id: string, patternIds: string[
     } else if (raw.startsWith('%')) tok = { t: raw.slice(1), kind: 'num' };
     else if (raw.startsWith('#') || raw.startsWith('~')) {
       const [t, pinyin, glossEn] = raw.slice(1).split('=');
-      tok = { t, kind: raw.startsWith('#') ? 'name' : 'gloss', pinyin, glossEn };
+      tok = { t, kind: raw.startsWith('#') ? 'name' : 'gloss', pinyin, glossEn: glossEn?.replace(/_/g, ' ') };
     } else {
       let kind: Token['kind'] = 'word';
       let body = raw;
       if (body.startsWith('*') && body.endsWith('*') && body.length > 2) { kind = 'target'; body = body.slice(1, -1); }
-      const [t, explicit] = body.split('@');
-      tok = { t, ref: resolve(t, explicit, id, text), kind };
+      const [t, rest] = body.split('@');
+      const [explicit, pinOverride] = (rest ?? '').split('=');
+      tok = { t, ref: resolve(t, explicit || undefined, id, text), kind };
+      if (pinOverride) tok.pinyin = pinOverride.replace(/_/g, ' ');
     }
     if (hasSlots) {
       if (slot) { chunk++; tok.slot = slot; }
@@ -268,7 +279,7 @@ function buildPattern(p: PatternSource): GrammarPattern {
   };
 }
 
-const grammar = [...patternsU01, ...patternsU02, ...patternsU03].map(buildPattern);
+const grammar = [...patternsU01, ...patternsU02, ...patternsU03, ...patternsU04, ...patternsU05, ...patternsU06].map(buildPattern);
 const grammarById = new Map(grammar.map((g) => [g.id, g]));
 const vocabExamples = examplesU01.map(([zh, en], i) => parseSentence(zh, en, `V1:${i + 1}`, ['VOCAB']));
 
@@ -321,7 +332,86 @@ for (const g of generators) {
   report.push(`## ${g.id} → ${g.patternId} (${out.length})`, '', ...out.map((s) => `- ${plain(s)} — ${s.en}`), '');
 }
 
+// ---------- Reading passages ----------
+const CHUNK_TYPES: Record<string, ChunkAnnotation['type']> = {
+  sub: 'subordinate', topic: 'topic', comp: 'complement', time: 'time', place: 'place', mod: 'modifier', ba: 'ba', bei: 'bei',
+};
+const CLAUSE_END = /^[，。！？；：]$/;
+
+function parseParagraph(text: string, id: string) {
+  const chunks: ChunkAnnotation[] = [];
+  const stack: { type: ChunkAnnotation['type']; start: number }[] = [];
+  const raw: string[] = [];
+  const pairMarks: { index: number; pairId: string }[] = [];
+  for (const piece of text.trim().split(/\s+/)) {
+    if (piece.startsWith('{')) {
+      const type = CHUNK_TYPES[piece.slice(1)];
+      if (!type) errors.push(`${id}: unknown chunk marker ${piece}`);
+      else stack.push({ type, start: raw.length });
+      continue;
+    }
+    if (piece === '}') {
+      const open = stack.pop();
+      if (!open) errors.push(`${id}: unbalanced }`);
+      else chunks.push({ type: open.type, start: open.start, end: raw.length });
+      continue;
+    }
+    const m = /\^(\d+)$/.exec(piece);
+    if (m) pairMarks.push({ index: raw.length, pairId: m[1] });
+    raw.push(m ? piece.slice(0, -m[0].length) : piece);
+  }
+  if (stack.length) errors.push(`${id}: ${stack.length} unclosed chunk(s)`);
+  const s = parseSentence(raw.join(' '), '', id, []);
+  for (const pm of pairMarks) chunks.push({ type: 'pair', start: pm.index, end: pm.index + 1, pairId: pm.pairId });
+  // Clause spans from punctuation.
+  let start = 0;
+  s.tokens.forEach((t, i) => {
+    if (t.kind === 'punct' && CLAUSE_END.test(t.t)) { chunks.push({ type: 'clause', start, end: i + 1 }); start = i + 1; }
+  });
+  if (start < s.tokens.length) chunks.push({ type: 'clause', start, end: s.tokens.length });
+  return { tokens: s.tokens, chunks };
+}
+
+function findSpan(paragraphs: { tokens: Token[] }[], span: string, where: string): TokenRange | undefined {
+  for (let p = 0; p < paragraphs.length; p++) {
+    const toks = paragraphs[p].tokens;
+    for (let i = 0; i < toks.length; i++) {
+      let acc = '';
+      for (let j = i; j < toks.length && acc.length < span.length; j++) {
+        acc += toks[j].t;
+        if (acc === span) return { paragraph: p, start: i, end: j + 1 };
+      }
+    }
+  }
+  errors.push(`${where}: evidence "${span}" not found on token boundaries`);
+  return undefined;
+}
+
+const passages: ReadingPassage[] = passageSources.map((src) => {
+  const paragraphs = src.paragraphs.map((t, i) => parseParagraph(t, `${src.id}:p${i + 1}`));
+  const charCount = paragraphs.flatMap((p) => p.tokens).filter((t) => t.kind !== 'punct').reduce((n, t) => n + [...t.t].length, 0);
+  for (const pid of src.patternIds) if (!grammarById.has(pid)) errors.push(`${src.id}: unknown pattern ${pid}`);
+  const questions = src.questions.map((q, qi) => {
+    const qid = `${src.id}:q${qi + 1}`;
+    const answer = Array.isArray(q.answer) ? q.answer : [q.answer];
+    if (q.type === 'sequence' ? answer.length !== q.options.length : answer.length !== 1 || answer[0] >= q.options.length) {
+      errors.push(`${qid}: bad answer`);
+    }
+    return {
+      id: qid, type: q.type, why: q.why, answer,
+      stem: parseSentence(q.stem, '', `${qid}:stem`, []).tokens,
+      options: q.options.map((o, oi) => parseSentence(o, '', `${qid}:o${oi + 1}`, []).tokens),
+      evidence: q.evidence.map((e) => findSpan(paragraphs, e, qid)).filter((x): x is TokenRange => !!x),
+    };
+  });
+  return {
+    id: src.id, unit: src.unit, review: !!src.review, title: src.title, titleEn: src.titleEn, genre: src.genre,
+    charCount, paragraphs, patternIds: src.patternIds, questions,
+  };
+});
+
 const bundle: ContentBundle = {
+  passages,
   syllabus, vocab, chars, grammar, vocabExamples, cloze, pairs, transforms,
   errors: errorInfos, generators, clusters, confusables,
 };
@@ -337,4 +427,4 @@ writeFileSync(join(root, 'reports', 'gen-samples.md'), report.join('\n'));
 const pool12 = vocab.filter((w) => w.hsk <= 2).length;
 console.log(`✓ bundle: ${vocab.length} words (${pool12} HSK 1–2), ${chars.length} chars, ${grammar.length} patterns, ` +
   `${cloze.length} cloze, ${pairs.length} pairs, ${transforms.length} transforms, ` +
-  `${grammar.reduce((n, g) => n + (g.generated?.length ?? 0), 0)} generated, ${clusters.length} clusters`);
+  `${grammar.reduce((n, g) => n + (g.generated?.length ?? 0), 0)} generated, ${clusters.length} clusters, ${passages.length} passages`);

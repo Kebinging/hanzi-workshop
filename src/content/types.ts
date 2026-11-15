@@ -182,7 +182,37 @@ export interface Syllabus {
   units: UnitInfo[];
 }
 
+export type QuestionType = 'referent' | 'inference' | 'sequence' | 'truth' | 'function' | 'gist';
+
+export interface TokenRange { paragraph: number; start: number; end: number }
+
+export interface PassageQuestion {
+  id: string;
+  type: QuestionType;
+  stem: Token[];
+  options: Token[][];
+  /** Index of the correct option; for 'sequence', the correct order of option indices. */
+  answer: number[];
+  why: string;
+  evidence: TokenRange[];
+}
+
+/** Micro-reading passage (spec 3.5). */
+export interface ReadingPassage {
+  id: string;
+  unit: number;
+  review: boolean;      // cumulative review passage
+  title: string;
+  titleEn: string;
+  genre: 'diary' | 'chat' | 'notice' | 'story' | 'dialogue' | 'explanation';
+  charCount: number;
+  paragraphs: { tokens: Token[]; chunks: ChunkAnnotation[] }[];
+  patternIds: string[];
+  questions: PassageQuestion[];
+}
+
 export interface ContentBundle {
+  passages: ReadingPassage[];
   syllabus: Syllabus;
   vocab: VocabItem[];
   chars: CharItem[];

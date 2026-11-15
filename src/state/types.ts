@@ -107,6 +107,27 @@ export interface SessionRecord {
   again: number;
 }
 
+/** One completed read of a passage (spec 3.5). */
+export interface ReadingRecord {
+  id?: number;
+  passageId: string;
+  ts: number;
+  correct: number;
+  total: number;
+  usedXray: boolean;
+}
+
+/** A remedial micro-drill or "try a twin" result (spec 4.4). `relief` is subtracted from the code's weakness score, decaying over time. */
+export interface DrillRecord {
+  id?: number;
+  code: string;
+  ts: number;
+  kind: 'drill' | 'twin';
+  correct: number;
+  total: number;
+  relief: number;
+}
+
 export interface Snapshot {
   id?: number;
   ts: number;

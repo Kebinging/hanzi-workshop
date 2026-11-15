@@ -1,0 +1,45 @@
+# HSK 3 · Unit 4 · 怎么样？ How well? (provisional)
+@U4
+跑|pǎo|v|run
+流利|liú lì|adj|fluent
+厉害|lì hai|adj|impressive, awesome; severe
+不得了|bù dé liǎo|adj|extremely; terrible
+多么|duō me|adv|how (exclamation)
+表演|biǎo yǎn|v|perform
+动作|dòng zuò|n|movement, action
+唱|chàng|v|sing
+画儿|huàr|n|painting, picture
+帅|shuài|adj|handsome, cool
+笨|bèn|adj|stupid, clumsy
+仔细|zǐ xì|adj|careful, thorough
+轻松|qīng sōng|adj|relaxed, easy
+紧张|jǐn zhāng|adj|nervous, tense
+激动|jī dòng|adj|excited, moved
+愉快|yú kuài|adj|happy, pleasant
+伤心|shāng xīn|adj|sad, heartbroken
+吃惊|chī jīng|v|be surprised
+发音|fā yīn|n|pronunciation
+考|kǎo|v|take (an exam)
+起|qǐ|v|get up, rise
+睡|shuì|v|sleep
+长|zhǎng|v|grow@w_zhang3
+收拾|shōu shi|v|tidy up
+整齐|zhěng qí|adj|neat, tidy
+鼻子|bí zi|n|nose
+耳朵|ěr duo|n|ear
+嘴|zuǐ|n|mouth
+腿|tuǐ|n|leg
+脚|jiǎo|n|foot
+头|tóu|n|head
+篮球|lán qiú|n|basketball
+足球|zú qiú|n|football
+跳|tiào|v|jump
+味道|wèi dao|n|taste, flavour
+香|xiāng|adj|fragrant, smells good
+辣|là|adj|spicy
+咸|xián|adj|salty
+酸|suān|adj|sour
+苦|kǔ|adj|bitter
+客气|kè qi|adj|polite
+帮|bāng|v|help
+地|de|part|adverbial particle (Adj + 地 + V)@w_de_adv

@@ -1,7 +1,7 @@
 import Dexie, { type EntityTable } from 'dexie';
 import type {
   FSRSCardState, ReviewLog, ErrorLog, PeekEvent, WeaknessState, DiagnosticResult,
-  Settings, SessionRecord, Snapshot,
+  Settings, SessionRecord, Snapshot, ReadingRecord, DrillRecord,
 } from '../state/types';
 import { DEFAULT_SETTINGS } from '../state/types';
 
@@ -15,6 +15,8 @@ export class WorkshopDB extends Dexie {
   settings!: EntityTable<Settings, 'id'>;
   sessions!: EntityTable<SessionRecord, 'id'>;
   snapshots!: EntityTable<Snapshot, 'id'>;
+  reading!: EntityTable<ReadingRecord, 'id'>;
+  drills!: EntityTable<DrillRecord, 'id'>;
 
   constructor(name = 'hanzi-workshop') {
     super(name);
@@ -28,6 +30,11 @@ export class WorkshopDB extends Dexie {
       settings: 'id',
       sessions: '++id, startedAt',
       snapshots: '++id, ts',
+    });
+    // v2 (M3): reading results and remedial drills.
+    this.version(2).stores({
+      reading: '++id, passageId, ts',
+      drills: '++id, code, ts',
     });
   }
 }

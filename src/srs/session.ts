@@ -9,6 +9,10 @@ export interface QueueItem {
   cardId: string;
   mode: 'review' | 'new';
   exercise: ExerciseFor;
+  /** Prebuilt, unscored exercise (remedial drill item or twin), looked up in LiveSession.extras. */
+  extraKey?: string;
+  drill?: { code: string; index: number; total: number };
+  twinCode?: string;
 }
 
 export interface SessionPlan {

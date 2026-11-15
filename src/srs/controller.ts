@@ -11,6 +11,8 @@ import {
   buildLookalike, buildRecognition, lookalikeErrorCode, type LookalikeExercise, type RecognitionExercise,
 } from '../exercises/build';
 import { buildGrammar, grammarPlayable, hasUseItems, type GrammarExercise } from '../exercises/grammar';
+import { buildDrill, buildTwin } from '../errors/drill';
+import { drillRelief, triggeredCodes, weaknessAt, TWIN_RELIEF } from '../errors/weakness';
 
 export type Exercise = RecognitionExercise | LookalikeExercise | GrammarExercise;
 
@@ -38,6 +40,10 @@ export interface LiveSession {
   stats: { reviewed: number; introduced: number; again: number; correct: number };
   strengthened: string[];
   weakened: string[];
+  /** Prebuilt drill / twin exercises keyed by QueueItem.extraKey. */
+  extras: Map<string, Exercise>;
+  drillScores: Map<string, { correct: number; total: number }>;
+  twinSeq: number;
 }
 
 export interface PeekRecord { wordId: string; level: DisplayLevel }
@@ -109,11 +115,31 @@ export async function startSession(content: Content, mode: 'normal' | 'flight', 
     const recent = week.filter((r) => r.exerciseKind === kind).slice(-50).map((r) => r.latencyMs);
     bounds[kind] = adaptiveBounds(kind, recent);
   }
+  // Remedial micro-drills (spec 4.4): up to 2 triggered error codes, 5 items each, at the start.
+  const cardMap = new Map(cards.map((c) => [c.id, c]));
+  const [errorsAll, reviewsAll, drillsAll] = await Promise.all([d.errors.toArray(), d.reviews.toArray(), d.drills.toArray()]);
+  const extras = new Map<string, Exercise>();
+  const drillItems: QueueItem[] = [];
+  for (const w of triggeredCodes(weaknessAt(errorsAll, reviewsAll, drillsAll, content, now), drillsAll, now)) {
+    const avoid = new Set(errorsAll.filter((e) => e.codes.includes(w.code)).map((e) => e.instanceId));
+    const exs = buildDrill(w.code, w.itemIds, avoid, content, pool, cardMap, rng(`drill:${w.code}:${now}`), now);
+    if (exs.length < 3) continue;
+    exs.forEach((ex, i) => {
+      const key = `drill:${w.code}:${i}`;
+      extras.set(key, ex);
+      drillItems.push({
+        cardId: ex.cardId, mode: 'review', exercise: ex.kind === 'lookalike' ? 'lookalike' : 'grammar',
+        extraKey: key, drill: { code: w.code, index: i, total: exs.length },
+      });
+    });
+  }
+
   const sessionId = (await d.sessions.add({ startedAt: now, mode, reviewed: 0, introduced: 0, again: 0 })) as number;
   return {
-    sessionId, mode, startedAt: now, plan, queue: [...plan.items], index: 0, pool,
-    cards: new Map(cards.map((c) => [c.id, c])), settings, bounds,
+    sessionId, mode, startedAt: now, plan, queue: [...drillItems, ...plan.items], index: 0, pool,
+    cards: cardMap, settings, bounds,
     stats: { reviewed: 0, introduced: 0, again: 0, correct: 0 }, strengthened: [], weakened: [],
+    extras, drillScores: new Map(), twinSeq: 0,
   };
 }
 
@@ -125,6 +151,12 @@ export function currentItem(s: LiveSession): QueueItem | undefined {
 export function buildCurrent(s: LiveSession, content: Content): Exercise | null {
   while (s.index < s.queue.length) {
     const item = s.queue[s.index];
+    if (item.extraKey) {
+      const ex = s.extras.get(item.extraKey);
+      if (ex) return ex;
+      s.index++;
+      continue;
+    }
     const card = s.cards.get(item.cardId);
     // Flight mode: stop introducing new items after 30 minutes (spec 1.5.1).
     if (item.mode === 'new' && s.mode === 'flight' && Date.now() - s.startedAt > 30 * 60_000) { s.index++; continue; }
@@ -255,6 +287,51 @@ export async function submitGrammar(
   (rating === 1 ? s.weakened : s.strengthened).push(label);
   await handlePeeks(s, peeks, now, d);
   return { correct: a.correct, rating, codes: a.codes };
+}
+
+/**
+ * Unscored attempt on a drill item or twin (spec 4.2 / 4.4): logs errors, tracks the drill score,
+ * and records relief for the weakness engine. No FSRS rating.
+ */
+export async function submitExtra(
+  s: LiveSession, ex: Exercise, content: Content, a: { correct: boolean; codes: string[]; learnerAnswer: string; expected: string },
+  now = Date.now(), d: WorkshopDB = db,
+): Promise<Outcome> {
+  const item = s.queue[s.index];
+  if (a.codes.length) {
+    await logError({
+      attemptId: `${s.sessionId}:${s.index}`, exerciseKind: kindOf(ex), instanceId: ex.instanceId, codes: a.codes,
+      itemIds: [ex.cardId.slice(ex.cardId.indexOf(':') + 1)], learnerAnswer: a.learnerAnswer, expected: a.expected,
+    }, now, d);
+  }
+  s.stats.reviewed++;
+  if (a.correct) s.stats.correct++;
+  else s.stats.again++;
+  if (item?.drill) {
+    const { code, index, total } = item.drill;
+    const p = s.drillScores.get(code) ?? { correct: 0, total: 0 };
+    p.total++;
+    if (a.correct) p.correct++;
+    s.drillScores.set(code, p);
+    if (index === total - 1) {
+      const [errs, revs, drs] = await Promise.all([d.errors.toArray(), d.reviews.toArray(), d.drills.toArray()]);
+      const score = weaknessAt(errs, revs, drs, content, now).get(code)?.score ?? 0;
+      await d.drills.add({ code, ts: now, kind: 'drill', correct: p.correct, total: p.total, relief: drillRelief(score, p.correct, p.total) });
+    }
+  } else if (item?.twinCode) {
+    await d.drills.add({ code: item.twinCode, ts: now, kind: 'twin', correct: a.correct ? 1 : 0, total: 1, relief: a.correct ? TWIN_RELIEF : 0 });
+  }
+  return { correct: a.correct, rating: a.correct ? 3 : 1, codes: a.codes };
+}
+
+/** Queue an unscored "twin" right after the current item (spec 4.2). Returns false when none is available. */
+export function addTwin(s: LiveSession, ex: GrammarExercise, code: string, content: Content): boolean {
+  const twin = buildTwin(ex, content, s.pool, s.cards, rng(`twin:${ex.instanceId}:${s.twinSeq}`));
+  if (!twin) return false;
+  const key = `twin:${++s.twinSeq}`;
+  s.extras.set(key, twin);
+  s.queue.splice(s.index + 1, 0, { cardId: twin.cardId, mode: 'review', exercise: 'grammar', extraKey: key, twinCode: code });
+  return true;
 }
 
 /** Peek rule 1 (spec 1.3.3): peeking a bare word whose card is due within 3 days rates it Again now. */

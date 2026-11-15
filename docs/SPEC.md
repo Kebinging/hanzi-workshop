@@ -595,7 +595,7 @@ When `ORTHO.*` errors occur, the involved characters get `char.form` cards (§1.
 - Maintain per-code **weakness score** `w(code) = Σ e^(−Δt/τ) · weight(error)` with τ = 10 days; correct attempts *on items that can trigger the code* subtract 0.5 × the same decay.
 - **Trigger:** `w(code) ≥ 3.0` **and** ≥ 3 distinct items involved (so one hard sentence doesn't trigger a drill) → schedule a **micro-drill** for the next session start.
 - **Micro-drill:** 5 items, generated from `remedialTemplateIds` for that code, using *different* lexical content than the failed items, ≥ 2 exercise types (e.g. 2 Slot Builder isolating the constraint, 2 Minimal-Pair, 1 Cloze). Completing ≥ 4/5 reduces `w` by 50%; ≤ 2/5 keeps it and schedules another in 2 days, plus pins the rule card in the session summary.
-- At most 2 micro-drills per session; FSRS cards for involved patterns are rated as usual inside the drill.
+- At most 2 micro-drills per session. *(As built in M3: drill items are not FSRS-rated — see the decisions log.)*
 - The **Weakness map** (progress page) lists codes by `w` with a 30-day sparkline.
 
 ---
@@ -1080,4 +1080,8 @@ Same as M5 for HSK 5; longer passages (250–500 chars) and multi-paragraph X-ra
 | 2026-11-15 | M1 shipped; M2 approved. |
 | 2026-11-15 | M2: Slot Builder is tap-only (no drag); one retry after a hinted wrong check. |
 | 2026-11-15 | M2: generators expand at build time from explicit lexicons (no on-device generation). |
+| 2026-11-15 | M2 shipped; M3 approved. |
+| 2026-11-15 | M3: drill and twin items are **not FSRS-rated** (they log errors and feed the weakness score only), so a remedial burst can't distort scheduling. |
+| 2026-11-15 | M3: passage questions are single-choice or tap-to-order (sequence); options are shuffled each visit. Peeks while reading are logged but never rate a card on the spot (peek rule 2 still applies at the next session). |
+| 2026-11-15 | M3: homographs in content default to the earliest-taught reading (还 = hái, 长 = cháng, 过去 = the past); later readings are written with an explicit id. |
 | 2026-11-15 | M2: `gram.use` cards exist only for patterns with minimal-pair or cloze items (G3-14 and G3-18 are form-only for now). HSK 1–2 weak clusters are drilled with the sentence-judgement items, one per day. |

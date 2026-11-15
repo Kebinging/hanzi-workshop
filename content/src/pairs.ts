@@ -4,6 +4,208 @@ import type { PairSrc } from './authoring';
 // Only contexts where exactly one option is acceptable are included.
 export const pairs: PairSrc[] = [
   {
+    contrast: '的 / 得 / 地', patternIds: ['G3-25', 'G3-31'],
+    items: [
+      { context: '他 跑 ___ 很 快 。', en: 'He runs fast.', options: [
+        ['得', true, 'Verb + 得 + description of how it’s done.'],
+        ['的', false, '的 links a modifier to a noun, not a verb to its description.', 'COMP.DE_WRONG'],
+      ] },
+      { context: '这 是 我 ___ 书 。', en: 'This is my book.', options: [
+        ['的', true, 'Possession before a noun → 的.'],
+        ['得', false, '得 follows a verb; before a noun use 的.', 'COMP.DE_WRONG'],
+      ] },
+      { context: '他 认真 ___ 写 作业 。', en: 'He does his homework conscientiously.', options: [
+        ['地', true, 'An adverbial before the verb → 地.'],
+        ['得', false, '得 comes after the verb; before it, use 地.', 'COMP.DE_WRONG'],
+      ] },
+      { context: '她 唱 ___ 很 好听 。', en: 'She sings beautifully.', options: [
+        ['得', true, 'Verb + 得 + how well.'],
+        ['地', false, '地 goes before a verb, not after it.', 'COMP.DE_WRONG'],
+      ] },
+      { context: '孩子 高兴 ___ 回 家 了 。', en: 'The child went home happily.', options: [
+        ['地', true, '"Happily" describes the going → Adj + 地 + verb.'],
+        ['的', false, '的 would need a noun after it.', 'COMP.DE_WRONG'],
+      ] },
+    ],
+  },
+  {
+    contrast: '太…了 vs 非常', patternIds: ['G3-29'],
+    items: [
+      { context: '这 件 衣服 ___ 贵 了 ， 我 不 买 。', en: "This is too expensive — I won't buy it.", options: [
+        ['太', true, '"Too …" with 了 → 太…了.'],
+        ['非常', false, '非常 doesn’t pair with 了 to mean "too".', 'LEX.NEAR_SYNONYM'],
+      ] },
+      { context: '他 ___ 喜欢 音乐 。', en: 'He likes music very much.', options: [
+        ['非常', true, 'A plain statement of degree → 非常.'],
+        ['太', false, '太 needs 了 here (太喜欢了), and it sounds like an exclamation.', 'LEX.NEAR_SYNONYM'],
+      ] },
+      { context: '今天 ___ 热 了 ！', en: "It's so hot today!", options: [
+        ['太', true, '太…了 — an exclamation.'],
+        ['很', false, '很 doesn’t take 了 to exclaim; use 太…了.', 'LEX.NEAR_SYNONYM'],
+      ] },
+    ],
+  },
+  {
+    contrast: 'Negating a 得-description', patternIds: ['G3-27'],
+    items: [
+      { context: '他 跑 得 ___ 快 。', en: "He doesn't run fast.", options: [
+        ['不', true, 'The description after 得 is negated with 不.'],
+        ['没', false, '没 can’t negate a 得-description.', 'ASPECT.NEG_BU_MEI'],
+      ] },
+      { context: '我 写 得 ___ 好 ， 你 别 看 。', en: "I don't write well — don't look.", options: [
+        ['不', true, '不 after 得.'],
+        ['没', false, 'Use 不, after 得.', 'ASPECT.NEG_BU_MEI'],
+      ] },
+      { context: '你 睡 得 好 ___ 好 ？', en: 'Did you sleep well?', options: [
+        ['不', true, 'A-not-A after 得: 好不好.'],
+        ['没', false, 'The question form is 好不好.', 'ASPECT.NEG_BU_MEI'],
+      ] },
+    ],
+  },
+  {
+    contrast: 'Which result complement?', patternIds: ['G3-33', 'G3-34', 'G3-35'],
+    items: [
+      { context: '老师 说 得 很 慢 ， 我 都 听 ___ 了 。', en: 'The teacher spoke slowly, so I understood everything.', options: [
+        ['懂', true, 'Understanding by listening → 听懂.'],
+        ['会', false, '会 as a result is for skills you learn (学会).', 'COMP.RESULT_CHOICE'],
+      ] },
+      { context: '我 找 了 半天 ， 才 找 ___ 钥匙 。', en: 'I searched for ages before I found the key.', options: [
+        ['到', true, 'Succeeding in finding → 找到.'],
+        ['完', false, '找完 = finished searching, not found.', 'COMP.RESULT_CHOICE'],
+      ] },
+      { context: '我 学 了 一 个 月 ， 学 ___ 了 游泳 。', en: 'After a month I had learned to swim.', options: [
+        ['会', true, 'Mastering a skill → 学会.'],
+        ['懂', false, '懂 is understanding, not being able to do it.', 'COMP.RESULT_CHOICE'],
+      ] },
+      { context: '这 个 字 你 写 ___ 了 ， 再 写 一 遍 吧 。', en: "You've written this character wrong — write it again.", options: [
+        ['错', true, 'Asked to rewrite it → it was wrong: 写错.'],
+        ['完', false, '写完 = finished; that doesn’t explain rewriting.', 'COMP.RESULT_CHOICE'],
+      ] },
+      { context: '饭 做 ___ 了 ， 快 来 吃 吧 。', en: "Dinner's ready — come and eat.", options: [
+        ['好', true, 'Ready / done properly → 做好.'],
+        ['到', false, '做到 means "achieve"; ready food is 做好.', 'COMP.RESULT_CHOICE'],
+      ] },
+    ],
+  },
+  {
+    contrast: '在 / 到 / 给 after the verb', patternIds: ['G3-37'],
+    items: [
+      { context: '我 现在 住 ___ 北京 。', en: 'I live in Beijing now.', options: [
+        ['在', true, 'Staying at a place → V在.'],
+        ['给', false, '给 hands something to a person.', 'LEX.COLLOCATION'],
+      ] },
+      { context: '这 本 书 我 想 送 ___ 你 。', en: "I'd like to give you this book.", options: [
+        ['给', true, 'Giving to a person → 送给.'],
+        ['在', false, '在 marks a place, not a recipient.', 'LEX.COLLOCATION'],
+      ] },
+      { context: '他 跑 ___ 门口 ， 又 跑 回来 了 。', en: 'He ran to the door and ran back again.', options: [
+        ['到', true, 'Reaching a point → V到.'],
+        ['给', false, '给 needs a person.', 'LEX.COLLOCATION'],
+      ] },
+      { context: '书 放 ___ 桌子 上 了 。', en: 'The book has been put on the table.', options: [
+        ['在', true, 'Where it ends up → 放在.'],
+        ['给', false, '给 needs a person.', 'LEX.COLLOCATION'],
+      ] },
+    ],
+  },
+  {
+    contrast: '来 vs 去', patternIds: ['G3-41', 'G3-42'],
+    items: [
+      { context: '我 在 楼上 ， 你 上 ___ 吧 。', en: "I'm upstairs — come on up.", options: [
+        ['来', true, 'Towards the speaker (upstairs) → 来.'],
+        ['去', false, '去 is away from the speaker.', 'COMP.DIRECTION'],
+      ] },
+      { context: '他 不 在 家 ， 出 ___ 了 。', en: "He's not home — he's gone out.", options: [
+        ['去', true, 'Away from here → 去.'],
+        ['来', false, '来 would mean coming towards us.', 'COMP.DIRECTION'],
+      ] },
+      { context: '外面 很 冷 ， 快 进 ___ ！', en: "It's cold out — come in, quick!", options: [
+        ['来', true, 'Into where the speaker is → 来.'],
+        ['去', false, '去 is away from the speaker.', 'COMP.DIRECTION'],
+      ] },
+      { context: '你 先 回 ___ 吧 ， 我 还 要 工作 。', en: "You go back first — I still have work.", options: [
+        ['去', true, 'Away from the speaker → 去.'],
+        ['来', false, '来 is towards the speaker.', 'COMP.DIRECTION'],
+      ] },
+    ],
+  },
+  {
+    contrast: 'Place before 来/去', patternIds: ['G3-43'],
+    items: [
+      { context: '她 回 ___ 了 。', en: "She's gone home.", options: [
+        ['家去', true, 'A place goes before 来/去.'],
+        ['去家', false, 'A place never follows 来/去.', 'COMP.DIRECTIONAL_OBJECT'],
+      ] },
+      { context: '老师 走 进 ___ 了 。', en: 'The teacher walked into the classroom.', options: [
+        ['教室来', true, 'Place, then 来.'],
+        ['来教室', false, 'A place never follows 来/去.', 'COMP.DIRECTIONAL_OBJECT'],
+      ] },
+      { context: '我 下 ___ 吧 。', en: "I'll go downstairs.", options: [
+        ['楼去', true, 'Place, then 去.'],
+        ['去楼', false, 'A place never follows 来/去.', 'COMP.DIRECTIONAL_OBJECT'],
+      ] },
+    ],
+  },
+  {
+    contrast: '起来 / 下去 / 出来', patternIds: ['G3-44', 'G3-45'],
+    items: [
+      { context: '这 件 衣服 看 ___ 很 新 。', en: 'This piece of clothing looks new.', options: [
+        ['起来', true, '"Looks …" → 看起来.'],
+        ['出来', false, '看出来 means "make out, notice".', 'COMP.DIRECTION'],
+      ] },
+      { context: '你 说 得 很 好 ， 请 说 ___ 。', en: "You're doing well — please go on.", options: [
+        ['下去', true, '"Carry on" → 下去.'],
+        ['起来', false, '说起来 = start talking / speaking of.', 'COMP.DIRECTION'],
+      ] },
+      { context: '我 一 听 就 听 ___ 是 你 了 。', en: 'I knew it was you the moment I heard you.', options: [
+        ['出来', true, 'Recognising by sound → 听出来.'],
+        ['起来', false, '听起来 = "sounds (like)".', 'COMP.DIRECTION'],
+      ] },
+      { context: '他 听 了 这 个 故事 ， 突然 笑 ___ 了 。', en: 'Hearing the story, he suddenly burst out laughing.', options: [
+        ['起来', true, 'Starting to laugh → 笑起来.'],
+        ['下去', false, '下去 would mean he kept on laughing.', 'COMP.DIRECTION'],
+      ] },
+      { context: '这 个 办法 听 ___ 不错 。', en: 'That idea sounds good.', options: [
+        ['起来', true, '"Sounds …" → 听起来.'],
+        ['出来', false, '听出来 = recognise by ear.', 'COMP.DIRECTION'],
+      ] },
+    ],
+  },
+  {
+    contrast: 'Existential word order', patternIds: ['G3-46', 'G3-47'],
+    items: [
+      { context: '___ 。', en: "There's a book on the table.", options: [
+        ['桌子上放着一本书', true, 'Place, then V着, then the thing.'],
+        ['一本书放着在桌子上', false, 'In "there is" sentences the place comes first and the thing last.', 'ORDER.EXISTENTIAL'],
+      ] },
+      { context: '___ 。', en: 'Guests have come to our home.', options: [
+        ['家里来了客人', true, 'Place + V了 + newcomer.'],
+        ['客人来了家里', false, 'The newcomer goes last: 家里来了客人.', 'ORDER.EXISTENTIAL'],
+      ] },
+      { context: '___ 。', en: 'Two children are sitting on the sofa.', options: [
+        ['沙发上坐着两个孩子', true, 'Place + V着 + who.'],
+        ['两个孩子坐着沙发上', false, 'Place first; 坐着 can’t take a place after it.', 'ORDER.EXISTENTIAL'],
+      ] },
+    ],
+  },
+  {
+    contrast: 'Localisers', patternIds: ['G3-48'],
+    items: [
+      { context: '鱼 在 水 ___ 。', en: 'The fish are in the water.', options: [
+        ['里', true, 'Inside → 里.'],
+        ['上', false, '上 is on top of / on the surface.', 'LEX.COLLOCATION'],
+      ] },
+      { context: '在 学习 ___ ， 他 很 认真 。', en: "When it comes to studying, he's diligent.", options: [
+        ['上', true, '在…上 = "in terms of".'],
+        ['里', false, '在…里 is physically inside.', 'LEX.COLLOCATION'],
+      ] },
+      { context: '照片 挂 在 墙 ___ 。', en: 'The photo is hanging on the wall.', options: [
+        ['上', true, 'On a surface → 上.'],
+        ['里', false, '里 is inside.', 'LEX.COLLOCATION'],
+      ] },
+    ],
+  },
+  {
     contrast: '就 vs 才', patternIds: ['G3-08'],
     items: [
       { context: '我 等 了 一 个 小时 ， 他 ___ 来 。', en: 'I waited an hour before he came.', options: [

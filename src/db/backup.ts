@@ -1,11 +1,11 @@
 /** JSON backup / restore (spec 5.6). */
 import { db, type WorkshopDB } from './db';
 import type {
-  DiagnosticResult, ErrorLog, FSRSCardState, PeekEvent, ReviewLog, SessionRecord, Settings, WeaknessState,
+  DiagnosticResult, DrillRecord, ErrorLog, FSRSCardState, PeekEvent, ReadingRecord, ReviewLog, SessionRecord, Settings, WeaknessState,
 } from '../state/types';
 
 export const BACKUP_FORMAT = 'hsk3-workshop-backup';
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 export interface BackupTables {
   cards: FSRSCardState[];
@@ -16,6 +16,8 @@ export interface BackupTables {
   diagnostic: DiagnosticResult[];
   settings: Settings[];
   sessions: SessionRecord[];
+  reading: ReadingRecord[];
+  drills: DrillRecord[];
 }
 
 export interface BackupFile {
@@ -27,7 +29,9 @@ export interface BackupFile {
   checksum: string;
 }
 
-const TABLES: (keyof BackupTables)[] = ['cards', 'reviews', 'errors', 'peeks', 'weakness', 'diagnostic', 'settings', 'sessions'];
+const TABLES: (keyof BackupTables)[] = ['cards', 'reviews', 'errors', 'peeks', 'weakness', 'diagnostic', 'settings', 'sessions', 'reading', 'drills'];
+/** Tables added after schema v1; an older backup simply has none of these rows. */
+const V2_TABLES: (keyof BackupTables)[] = ['reading', 'drills'];
 
 export async function sha256(text: string): Promise<string> {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
@@ -56,11 +60,17 @@ export async function validateBackup(raw: unknown): Promise<{ ok: true; file: Ba
   if (typeof f.schemaVersion !== 'number' || f.schemaVersion > SCHEMA_VERSION) {
     return { ok: false, error: 'This backup was made by a newer version of the app.' };
   }
-  if (!f.tables || TABLES.some((t) => !Array.isArray((f.tables as unknown as Record<string, unknown>)[t]))) {
+  const required = f.schemaVersion >= 2 ? TABLES : TABLES.filter((t) => !V2_TABLES.includes(t));
+  if (!f.tables || required.some((t) => !Array.isArray((f.tables as unknown as Record<string, unknown>)[t]))) {
     return { ok: false, error: 'The backup is missing data tables.' };
   }
   if ((await sha256(JSON.stringify(f.tables))) !== f.checksum) {
     return { ok: false, error: 'Checksum mismatch — the file is damaged or was edited.' };
+  }
+  // Migrate v1 backups: add the tables that didn't exist yet.
+  for (const t of V2_TABLES) {
+    const tables = f.tables as unknown as Record<string, unknown[]>;
+    if (!Array.isArray(tables[t])) tables[t] = [];
   }
   const reviews = f.tables.reviews;
   return {
@@ -83,7 +93,7 @@ export async function restoreBackup(file: BackupFile, d: WorkshopDB = db, now = 
     for (const s of old.slice(0, Math.max(0, old.length - 3))) await d.snapshots.delete(s.id!);
     for (const t of TABLES) {
       await d.table(t).clear();
-      await d.table(t).bulkPut((file.tables as unknown as Record<string, unknown[]>)[t]);
+      await d.table(t).bulkPut((file.tables as unknown as Record<string, unknown[]>)[t] ?? []);
     }
   });
 }

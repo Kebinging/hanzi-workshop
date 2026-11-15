@@ -2,12 +2,12 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { content } from '../content';
 import type { GrammarPattern, VocabItem } from '../content/types';
 import {
-  advance, buildCurrent, endSession, logFreePeek, presented, startSession, submitGrammar, submitLookalike, submitRecognition,
+  addTwin, advance, buildCurrent, endSession, logFreePeek, presented, startSession, submitExtra, submitGrammar, submitLookalike, submitRecognition,
   type Exercise, type GrammarAttempt, type LiveSession, type Outcome, type PeekRecord,
 } from '../srs/controller';
-import type { LookalikeExercise, RecognitionExercise } from '../exercises/build';
+import { lookalikeErrorCode, type LookalikeExercise, type RecognitionExercise } from '../exercises/build';
 import { GrammarExerciseView } from './GrammarExerciseView';
-import { RuleCard, RuleSheet } from '../ui/grammarKit';
+import { RuleCard, RuleSheet, errorInfo } from '../ui/grammarKit';
 import { PeekSheet, WordDetail, CharBreakdown } from '../ui/PeekSheet';
 import { PinyinText, SentenceView, type TokenTap } from '../ui/Hanzi';
 import { Bar, Button, Card, Page, TopBar } from '../ui/kit';
@@ -81,15 +81,31 @@ export function SessionView({ mode, onExit }: Props) {
   const answerLookalike = async (choice: number) => {
     if (outcome || ex.kind !== 'lookalike') return;
     const latency = performance.now() - shownAt.current;
-    const res = await submitLookalike(s, ex, choice, latency);
+    const res = item?.extraKey
+      ? await submitExtra(s, ex, content, {
+          correct: choice === ex.answer, codes: choice === ex.answer ? [] : [lookalikeErrorCode(ex.set)],
+          learnerAnswer: ex.options[choice], expected: ex.char,
+        })
+      : await submitLookalike(s, ex, choice, latency);
     setOutcome({ ...res, choice });
   };
 
   const answerGrammar = async (a: Omit<GrammarAttempt, 'latencyMs'>) => {
     if (outcome || ex.kind === 'recognition' || ex.kind === 'lookalike') return;
     const latency = performance.now() - shownAt.current;
-    const res = await submitGrammar(s, ex, { ...a, latencyMs: latency }, peeks.current);
+    const res = item?.extraKey
+      ? await submitExtra(s, ex, content, a)
+      : await submitGrammar(s, ex, { ...a, latencyMs: latency }, peeks.current);
     setOutcome({ ...res, choice: 0 });
+  };
+
+  const canTwin = !!outcome && !outcome.correct && !item?.extraKey && !isPresentation &&
+    (ex.kind === 'slot' || ex.kind === 'transform' || ex.kind === 'pair' || ex.kind === 'cloze');
+  const tryTwin = () => {
+    if (ex.kind === 'slot' || ex.kind === 'transform' || ex.kind === 'pair' || ex.kind === 'cloze') {
+      addTwin(s, ex, outcome?.codes[0] ?? 'ORDER.GENERAL', content);
+    }
+    next();
   };
 
   const total = s.queue.length;
@@ -102,6 +118,8 @@ export function SessionView({ mode, onExit }: Props) {
       />
       <Bar value={s.index} max={total} className="rounded-none" />
       <Page>
+        {item?.drill && <DrillBanner code={item.drill.code} index={item.drill.index} total={item.drill.total} />}
+        {item?.twinCode && <p className="mb-3 text-xs font-medium text-ink-3">Twin — same pattern, another sentence. Not scored.</p>}
         {isPresentation
           ? <Presentation ex={ex} s={s} now={now} onTap={onTap} />
           : ex.kind === 'recognition'
@@ -114,7 +132,14 @@ export function SessionView({ mode, onExit }: Props) {
       {(isPresentation || outcome) && (
         <div className="fixed inset-x-0 bottom-0 border-t border-line bg-bg/95 p-4 backdrop-blur">
           <div className="mx-auto max-w-xl">
-            <Button className="w-full" onClick={next}>{isPresentation ? 'Got it' : 'Continue'}</Button>
+            {canTwin ? (
+              <div className="grid grid-cols-2 gap-2">
+                <Button variant="secondary" onClick={tryTwin}>Try a twin</Button>
+                <Button onClick={next}>Continue</Button>
+              </div>
+            ) : (
+              <Button className="w-full" onClick={next}>{isPresentation ? 'Got it' : 'Continue'}</Button>
+            )}
           </div>
         </div>
       )}
@@ -123,6 +148,17 @@ export function SessionView({ mode, onExit }: Props) {
         <PeekSheet word={peek.word} name={peek.name} card={peek.word ? s.cards.get(`word.recog:${peek.word.id}`) : undefined}
           now={now} onClose={() => setPeek(null)} />
       )}
+    </div>
+  );
+}
+
+function DrillBanner({ code, index, total }: { code: string; index: number; total: number }) {
+  const info = errorInfo(code);
+  return (
+    <div className="mb-4 rounded-xl bg-warn-soft p-3 text-warn">
+      <div className="text-xs font-semibold uppercase tracking-wide">Focus drill · {index + 1}/{total}</div>
+      <div className="font-semibold">{info?.title ?? code}</div>
+      {index === 0 && info && <div className="text-sm">{info.explanation} You’ve tripped on this a few times lately, so here are five targeted items.</div>}
     </div>
   );
 }

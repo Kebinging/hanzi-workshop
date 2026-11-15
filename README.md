@@ -4,7 +4,15 @@ A personal, fully offline PWA for learning Mandarin from HSK 3 onward — readin
 
 The full design lives in [docs/SPEC.md](docs/SPEC.md).
 
-## Status — Milestone 2
+## Status — Milestone 3
+
+- Reading: 14 graded passages (two per unit for Units 1–6 plus reviews after Units 3 and 6), each locked until you know 95% of its words, with a one-tap "queue the missing words" button
+- X-ray mode: clause shading, subordinate clauses, time/place/complement underlines, topic and modifier marks, colour-linked connective pairs
+- Inference-style questions (who/why/order/what it means) with evidence highlighted in the passage
+- Error engine: weakness scores per mistake type, automatic 5-item focus drills, "Try a twin" after a wrong answer, and a weakness map with 30-day trends
+- Units 4–6 (127 words, 24 patterns: 得 complements, results, directions, existentials)
+
+## Milestone 2
 
 - Grammar track live for Units 1–3 (24 HSK 3 patterns): Slot Builder, transformations, minimal pairs, cloze, plus sentence-judgement drills for weak HSK 1–2 grammar
 - Constraint-based order grader that names the mistake (time word after verb, adverb position, 了 placement, 比 order, …)

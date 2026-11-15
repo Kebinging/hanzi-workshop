@@ -201,3 +201,18 @@ rt {
   border: 1.5px dashed color-mix(in srgb, var(--slot) 55%, transparent);
   background: color-mix(in srgb, var(--slot) 6%, transparent);
 }
+
+/* ---- Reader X-ray (spec 3.5) ---- */
+.xr-clause-odd { background: color-mix(in srgb, var(--ink) 5%, transparent); border-radius: 4px; }
+.xr-ul-complement { box-shadow: inset 0 -2px 0 color-mix(in srgb, #2f8a4e 75%, transparent); }
+.xr-ul-time { box-shadow: inset 0 -2px 0 color-mix(in srgb, #7c4dbd 75%, transparent); }
+.xr-ul-place { box-shadow: inset 0 -2px 0 color-mix(in srgb, #138a83 75%, transparent); }
+.xr-ul-ba, .xr-ul-bei { box-shadow: inset 0 -2px 0 color-mix(in srgb, #c0395b 75%, transparent); }
+.xr-sub { border-bottom: 1.5px dashed var(--ink-3); }
+.xr-topic { color: color-mix(in srgb, #4a5568 70%, var(--ink)); }
+.xr-head { font-weight: 700; }
+.xr-pair-1 { color: var(--accent); font-weight: 700; }
+.xr-pair-2 { color: var(--tone4); font-weight: 700; }
+.xr-pair-3 { color: var(--tone3); font-weight: 700; }
+.xr-evidence { background: color-mix(in srgb, #e8b453 45%, transparent); border-radius: 3px; }
+.xr-mark { color: var(--ink-3); font-size: 0.7em; vertical-align: 0.35em; }

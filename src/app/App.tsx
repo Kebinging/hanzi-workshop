@@ -9,12 +9,14 @@ import { DiagnosticView } from './DiagnosticView';
 import { ProgressView } from './ProgressView';
 import { SettingsView } from './SettingsView';
 import { GrammarView } from './GrammarView';
+import { ReaderView, ReadingListView } from './ReadingView';
 
-export type Route = 'home' | 'session' | 'flight' | 'diagnostic' | 'progress' | 'settings' | 'grammar';
-const ROUTES: Route[] = ['home', 'session', 'flight', 'diagnostic', 'progress', 'settings', 'grammar'];
+export type Route = 'home' | 'session' | 'flight' | 'diagnostic' | 'progress' | 'settings' | 'grammar' | 'reading' | `read/${string}`;
+const ROUTES: Route[] = ['home', 'session', 'flight', 'diagnostic', 'progress', 'settings', 'grammar', 'reading'];
 
 function readHash(): Route {
   const r = location.hash.replace(/^#\/?/, '') as Route;
+  if (r.startsWith('read/')) return r;
   return ROUTES.includes(r) ? r : 'home';
 }
 
@@ -49,6 +51,7 @@ export function App() {
   if (needsCalibration === undefined) return null;
   if (needsCalibration && route !== 'diagnostic') return null;
 
+  if (route.startsWith('read/')) return <ReaderView key={route} passageId={route.slice(5)} onBack={() => go('reading')} />;
   switch (route) {
     case 'session': return <SessionView key="normal" mode="normal" onExit={home} />;
     case 'flight': return <SessionView key="flight" mode="flight" onExit={home} />;
@@ -56,6 +59,7 @@ export function App() {
     case 'progress': return <ProgressView onBack={home} />;
     case 'settings': return <SettingsView onBack={home} onRecalibrate={() => go('diagnostic')} />;
     case 'grammar': return <GrammarView onBack={home} />;
+    case 'reading': return <ReadingListView onBack={home} onOpen={(id) => go(`read/${id}`)} />;
     default: return <HomeView go={go} />;
   }
 }

@@ -5,27 +5,30 @@ import { computeStats } from './stats';
 import { DAY } from '../srs/fsrs';
 import { Bar, Card, Page, TopBar } from '../ui/kit';
 import { errorInfo } from '../ui/grammarKit';
-
-const CODE_LABEL: Record<string, string> = {
-  'ORTHO.LOOKALIKE': 'Look-alike characters',
-  'ORTHO.HOMOPHONE': 'Same-sound characters',
-  'ORTHO.ANTONYM_FORM': 'Paired forms (买/卖)',
-  'LEX.MEANING': 'Word meaning',
-  'META.DONT_KNOW': '"I don\'t know"',
-};
+import { TRIGGER_ITEMS, TRIGGER_SCORE, triggeredCodes, weaknessAt, weaknessSeries } from '../errors/weakness';
 
 export function ProgressView({ onBack }: { onBack: () => void }) {
   const data = useLiveQuery(async () => {
     const now = Date.now();
-    const [cards, reviews, errors, diag] = await Promise.all([
-      db.cards.toArray(), db.reviews.toArray(), db.errors.where('ts').above(now - 30 * DAY).toArray(), db.diagnostic.get('latest'),
+    const [cards, reviews, errors, drills, reading, diag] = await Promise.all([
+      db.cards.toArray(), db.reviews.toArray(), db.errors.toArray(), db.drills.toArray(), db.reading.toArray(), db.diagnostic.get('latest'),
     ]);
-    return { stats: computeStats(cards, reviews, content, now), errors, diag, reviews30: reviews.filter((r) => r.ts > now - 30 * DAY).length };
+    const all = weaknessAt(errors, reviews, drills, content, now);
+    const dueDrills = new Set(triggeredCodes(all, drills, now).map((w) => w.code));
+    const scores = [...all.values()]
+      .filter((w) => w.score >= 0.3)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 8)
+      .map((w) => ({ ...w, due: dueDrills.has(w.code), series: weaknessSeries(w.code, errors, reviews, drills, content, now) }));
+    const passagesRead = new Set(reading.map((r) => r.passageId)).size;
+    const clean = new Set(reading.filter((r) => !r.usedXray).map((r) => r.passageId)).size;
+    return {
+      stats: computeStats(cards, reviews, content, now), scores, diag, passagesRead, clean,
+      reviews30: reviews.filter((r) => r.ts > now - 30 * DAY).length,
+    };
   }, []);
   if (!data) return null;
-  const { stats, errors, diag } = data;
-  const counts = new Map<string, number>();
-  for (const e of errors) for (const c of e.codes) counts.set(c, (counts.get(c) ?? 0) + 1);
+  const { stats, scores, diag } = data;
   const pct = (x: number | null) => (x === null ? '—' : `${Math.round(x * 100)}%`);
 
   return (
@@ -37,8 +40,38 @@ export function ProgressView({ onBack }: { onBack: () => void }) {
             <Row label="Words known" value={stats.wordsKnown} max={stats.wordsTarget} />
             <Row label="Characters recognised" value={stats.charsRecognised} max={stats.charsTarget} />
             <Row label="Grammar points mastered" value={stats.grammarMastered} max={stats.grammarTarget} />
-            <p className="mt-2 text-xs text-ink-3">Counts only what your review history says you'd recall today. Grammar mastery needs both building (form) and choosing (use) stable for 21+ days.</p>
+            <Row label="Passages read" value={data.passagesRead} max={content.bundle.passages.length} />
+            <p className="mt-2 text-xs text-ink-3">
+              Counts only what your review history says you'd recall today. Grammar mastery needs building and choosing stable for 21+ days.
+              {data.clean > 0 && ` ${data.clean} passage${data.clean === 1 ? '' : 's'} read without X-ray.`}
+            </p>
           </Card>
+
+          <Card>
+            <h2 className="mb-1 font-semibold">Weakness map</h2>
+            <p className="mb-3 text-xs text-ink-3">Recent mistakes by type, fading over about 10 days. A focus drill starts when a type reaches {TRIGGER_SCORE} across {TRIGGER_ITEMS}+ different sentences.</p>
+            {scores.length === 0 ? <p className="text-sm text-ink-3">Nothing stands out right now.</p> : (
+              <ul className="space-y-3">
+                {scores.map((w) => {
+                  const due = w.due;
+                  return (
+                    <li key={w.code}>
+                      <div className="flex items-center justify-between gap-2 text-sm">
+                        <span className="min-w-0 truncate">{errorInfo(w.code)?.title ?? w.code}</span>
+                        <span className="flex shrink-0 items-center gap-2">
+                          {due && <span className="rounded-full bg-warn-soft px-2 py-0.5 text-[11px] text-warn">drill next session</span>}
+                          <Sparkline values={w.series} />
+                          <span className="w-8 text-right tabular-nums text-ink-3">{w.score.toFixed(1)}</span>
+                        </span>
+                      </div>
+                      <Bar value={Math.min(w.score, 5)} max={5} className="mt-1" />
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </Card>
+
           <Card>
             <h2 className="mb-2 font-semibold">True retention (30 days)</h2>
             <div className="grid grid-cols-2 gap-2 text-center">
@@ -47,16 +80,7 @@ export function ProgressView({ onBack }: { onBack: () => void }) {
             </div>
             <p className="mt-2 text-xs text-ink-3">{data.reviews30} answers in the last 30 days. Shown once there are 10+ mature reviews.</p>
           </Card>
-          <Card>
-            <h2 className="mb-2 font-semibold">Mistake types (30 days)</h2>
-            {counts.size === 0 ? <p className="text-sm text-ink-3">No mistakes logged yet.</p> : (
-              <ul className="space-y-1">
-                {[...counts.entries()].sort((a, b) => b[1] - a[1]).map(([code, n]) => (
-                  <li key={code} className="flex justify-between text-sm"><span>{CODE_LABEL[code] ?? errorInfo(code)?.title ?? code}</span><span className="tabular-nums text-ink-3">{n}</span></li>
-                ))}
-              </ul>
-            )}
-          </Card>
+
           {diag && (
             <Card>
               <h2 className="font-semibold">Calibration</h2>
@@ -75,5 +99,18 @@ function Row({ label, value, max }: { label: string; value: number; max: number 
       <div className="flex justify-between text-sm"><span>{label}</span><span className="tabular-nums text-ink-3">{value} / {max}</span></div>
       <Bar value={value} max={max} className="mt-1" />
     </div>
+  );
+}
+
+/** 30-day trend of a weakness score. */
+function Sparkline({ values }: { values: number[] }) {
+  const w = 60;
+  const h = 18;
+  const max = Math.max(1, ...values);
+  const pts = values.map((v, i) => `${(i / Math.max(1, values.length - 1)) * w},${h - (v / max) * (h - 2) - 1}`).join(' ');
+  return (
+    <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} aria-label="30-day trend" className="text-ink-3">
+      <polyline points={pts} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
+    </svg>
   );
 }

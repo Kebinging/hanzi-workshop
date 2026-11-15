@@ -49,6 +49,31 @@ export interface PatternSource {
   transforms?: TransformSrc[];
 }
 
+/**
+ * Reading passage source (spec 3.5). Paragraph tokens use the sentence syntax plus X-ray markers:
+ *   {sub {topic {comp {time {place {mod {ba {bei  open a chunk, } closes the latest one
+ *   x^1  marks a connective as half of pair 1 (both halves get the same colour)
+ * Clause boundaries are derived from punctuation automatically.
+ */
+export interface PassageSrc {
+  id: string;
+  unit: number;
+  review?: boolean;
+  title: string;
+  titleEn: string;
+  genre: 'diary' | 'chat' | 'notice' | 'story' | 'dialogue' | 'explanation';
+  patternIds: string[];
+  paragraphs: string[];
+  questions: {
+    type: 'referent' | 'inference' | 'sequence' | 'truth' | 'function' | 'gist';
+    stem: string;
+    options: string[];
+    answer: number | number[];
+    why: string;
+    evidence: string[];   // text spans (no spaces) to highlight in the passage
+  }[];
+}
+
 /** Minimal-pair source: "___" marks each gap; option parts are joined with "|". */
 export interface PairSrc {
   contrast: string;

@@ -87,6 +87,29 @@ for (const t of bundle.transforms) {
   const pool = unitPool(unitOf(t.patternId));
   for (const s of [t.answer, ...t.inputs]) if (!sentencePasses(s.tokens, pool)) errors.push(`${s.id}: fails coverage gate`);
 }
+// ---- Reading passages (spec 3.5): coverage >= 95 % at the passage's unit, length, gated questions ----
+for (const p of bundle.passages) {
+  const pool = unitPool(p.unit);
+  const tokens = p.paragraphs.flatMap((x) => x.tokens);
+  const counted = tokens.filter((t) => !['punct', 'name', 'num', 'target', 'gap'].includes(t.kind));
+  const known = counted.filter((t) => t.kind === 'gloss' || (t.ref && pool.has(t.ref)));
+  const ratio = counted.length ? known.length / counted.length : 1;
+  if (ratio < 0.95) errors.push(`${p.id}: coverage ${(ratio * 100).toFixed(1)}% < 95% at unit ${p.unit}`);
+  const glosses = tokens.filter((t) => t.kind === 'gloss').length;
+  if (glosses > Math.ceil(p.charCount / 100)) errors.push(`${p.id}: too many glossed words (${glosses})`);
+  const isB = p.id.endsWith('-B') || p.review;
+  const [lo, hi] = isB ? [180, 250] : [100, 150];
+  if (p.charCount < lo || p.charCount > hi) warnings.push(`${p.id}: ${p.charCount} chars (target ${lo}–${hi})`);
+  if (p.questions.length < 4) errors.push(`${p.id}: needs >= 4 questions`);
+  for (const q of p.questions) {
+    for (const toks of [q.stem, ...q.options]) {
+      if (!sentencePasses(toks, pool)) errors.push(`${q.id}: question text uses words beyond unit ${p.unit}`);
+    }
+    if (!q.evidence.length) warnings.push(`${q.id}: no evidence span`);
+  }
+  for (const pid of p.patternIds) if (!bundle.grammar.some((g) => g.id === pid && (g.unit ?? 0) <= p.unit)) errors.push(`${p.id}: pattern ${pid} is beyond its unit`);
+}
+
 const patternsWithUse = new Set([...bundle.pairs.flatMap((p) => p.patternIds), ...bundle.cloze.map((c) => c.patternId)]);
 for (const g of bundle.grammar) if (!patternsWithUse.has(g.id)) warnings.push(`${g.id}: no minimal-pair or cloze items (form-only for now)`);
 

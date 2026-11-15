@@ -92,7 +92,7 @@
 认识|rèn shi|v|know (a person), recognise
 三|sān|num|three
 商店|shāng diàn|n|shop
-上|shàng|loc|on, above; previous
+上|shàng|loc|on, above; previous; go up
 上午|shàng wǔ|n|morning (before noon)
 少|shǎo|adj|few, little
 谁|shéi|pron|who
@@ -119,7 +119,7 @@
 我们|wǒ men|pron|we, us
 五|wǔ|num|five
 喜欢|xǐ huan|v|like
-下|xià|loc|below; next
+下|xià|loc|below; next; go down
 下午|xià wǔ|n|afternoon
 下雨|xià yǔ|v|rain
 先生|xiān sheng|n|Mr; husband

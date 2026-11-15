@@ -70,9 +70,10 @@ export function HomeView({ go }: { go: (r: Route) => void }) {
         </Card>
       )}
 
-      <div className="grid grid-cols-2 gap-2">
-        <Button variant="secondary" onClick={() => go('progress')}>Progress</Button>
+      <div className="grid grid-cols-3 gap-2">
+        <Button variant="secondary" onClick={() => go('reading')}>Reading</Button>
         <Button variant="secondary" onClick={() => go('grammar')}>Grammar</Button>
+        <Button variant="secondary" onClick={() => go('progress')}>Progress</Button>
       </div>
     </Page>
   );
