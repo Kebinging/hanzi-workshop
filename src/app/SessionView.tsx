@@ -130,7 +130,7 @@ export function SessionView({ mode, onExit }: Props) {
                   onTap={onTap} onDone={(a) => void answerGrammar(a)} onRule={setRule} resolved={!!outcome} />}
       </Page>
       {(isPresentation || outcome) && (
-        <div className="fixed inset-x-0 bottom-0 border-t border-line bg-bg/95 p-4 backdrop-blur">
+        <div role="region" aria-label="Next" className="fixed inset-x-0 bottom-0 border-t border-line bg-bg/95 p-4 backdrop-blur">
           <div className="mx-auto max-w-xl">
             {canTwin ? (
               <div className="grid grid-cols-2 gap-2">
@@ -219,7 +219,7 @@ function Recognition({ ex, s, now, outcome, onAnswer, onTap }: {
         {card?.origin === 'bridge' && <Tag tone="bridge">Foundation</Tag>}
       </div>
       <div className="py-2 text-center">
-        <div className="han text-6xl leading-tight no-select">{ex.word.hanzi}</div>
+        <div lang="zh-CN" className="han text-6xl leading-tight no-select">{ex.word.hanzi}</div>
         {outcome && <PinyinText pinyin={ex.word.pinyin} className="mt-1 block text-xl" />}
       </div>
       {ex.context && (

@@ -1,13 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { getSettings, updateSettings } from '../db/db';
-import { createBackup, deliverBackup, restoreBackup, validateBackup, type BackupFile, type BackupSummary } from '../db/backup';
+import {
+  createBackup, deliverBackup, listSnapshots, mergeBackup, restoreBackup, restoreSnapshot, validateBackup,
+  type BackupFile, type BackupSummary,
+} from '../db/backup';
 import { content } from '../content';
 import { Button, Card, Page, TopBar } from '../ui/kit';
 import type { Settings } from '../state/types';
 
 export function SettingsView({ onBack, onRecalibrate }: { onBack: () => void; onRecalibrate: () => void }) {
   const settings = useLiveQuery(() => getSettings(), []);
+  const snapshots = useLiveQuery(() => listSnapshots(), []);
   const [persisted, setPersisted] = useState<boolean | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
   const [pending, setPending] = useState<{ file: BackupFile; summary: BackupSummary } | null>(null);
@@ -40,11 +44,19 @@ export function SettingsView({ onBack, onRecalibrate }: { onBack: () => void; on
     }
   };
 
-  const doImport = async () => {
+  const doImport = async (mode: 'merge' | 'replace') => {
     if (!pending) return;
-    await restoreBackup(pending.file);
+    if (mode === 'merge') await mergeBackup(pending.file);
+    else await restoreBackup(pending.file);
     setPending(null);
-    setMsg('Backup restored. Your previous state was kept as a snapshot.');
+    setMsg(mode === 'merge'
+      ? 'Backup merged — for each item the most recent progress was kept. You can undo this below.'
+      : 'Backup restored. You can undo this below.');
+  };
+
+  const undo = async (id: number) => {
+    await restoreSnapshot(id);
+    setMsg('Restored the data from before that import.');
   };
 
   return (
@@ -85,12 +97,27 @@ export function SettingsView({ onBack, onRecalibrate }: { onBack: () => void; on
             <input ref={fileInput} type="file" accept="application/json,.json" className="hidden" onChange={(e) => { void onPick(e.target.files?.[0]); e.target.value = ''; }} />
             {pending && (
               <div className="mt-3 rounded-xl bg-warn-soft p-3 text-sm text-warn">
-                <p>Replace all current progress with this backup?</p>
+                <p className="font-medium">Import this backup?</p>
                 <p className="mt-1">{pending.summary.cards} cards · {pending.summary.reviews} reviews · exported {new Date(pending.summary.exportedAt).toLocaleString()}</p>
-                <div className="mt-2 grid grid-cols-2 gap-2">
+                <p className="mt-1 text-xs">Merge keeps the most recent progress from both; Replace swaps everything for the backup.</p>
+                <div className="mt-2 grid grid-cols-3 gap-2">
                   <Button variant="secondary" onClick={() => setPending(null)}>Cancel</Button>
-                  <Button variant="danger" onClick={() => void doImport()}>Replace</Button>
+                  <Button onClick={() => void doImport('merge')}>Merge</Button>
+                  <Button variant="danger" onClick={() => void doImport('replace')}>Replace</Button>
                 </div>
+              </div>
+            )}
+            {snapshots && snapshots.length > 0 && (
+              <div className="mt-4 border-t border-line pt-3">
+                <h3 className="mb-1 text-sm font-semibold">Undo an import</h3>
+                <ul className="space-y-2">
+                  {snapshots.map((s) => (
+                    <li key={s.id} className="flex items-center justify-between gap-2 text-sm">
+                      <span className="text-ink-2">Before import on {new Date(s.ts).toLocaleString()} · {s.cards} cards</span>
+                      <Button variant="secondary" className="!min-h-10 !px-3 !py-1 text-sm" onClick={() => void undo(s.id)}>Restore</Button>
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
             {msg && <p className="mt-3 text-sm text-ink-2" role="status">{msg}</p>}

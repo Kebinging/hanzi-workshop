@@ -98,6 +98,66 @@ export async function restoreBackup(file: BackupFile, d: WorkshopDB = db, now = 
   });
 }
 
+/**
+ * Pure merge of two table sets (spec 5.6): per card keep the one reviewed most recently;
+ * logs are unioned by their natural key; the current device's settings are kept.
+ */
+export function mergeTables(current: BackupTables, incoming: BackupTables): BackupTables {
+  const cards = new Map(current.cards.map((c) => [c.id, c]));
+  for (const c of incoming.cards) {
+    const mine = cards.get(c.id);
+    if (!mine || (c.last_review ?? 0) > (mine.last_review ?? 0)) cards.set(c.id, c);
+  }
+  const union = <T extends { id?: number }>(a: T[], b: T[], key: (x: T) => string): T[] => {
+    const seen = new Set(a.map(key));
+    const added = b.filter((x) => !seen.has(key(x))).map((x) => { const { id: _id, ...rest } = x; return rest as T; });
+    return [...a, ...added];
+  };
+  const diag = [...current.diagnostic, ...incoming.diagnostic].sort((x, y) => y.ts - x.ts).slice(0, 1);
+  const weakness = new Map(current.weakness.map((w) => [w.code, w]));
+  for (const w of incoming.weakness) if (!weakness.has(w.code)) weakness.set(w.code, w);
+  const settings = current.settings.length ? current.settings.map((s) => ({
+    ...s, lastBackupAt: Math.max(s.lastBackupAt ?? 0, incoming.settings[0]?.lastBackupAt ?? 0) || undefined,
+  })) : incoming.settings;
+  return {
+    cards: [...cards.values()],
+    reviews: union(current.reviews, incoming.reviews, (r) => `${r.cardId}|${r.ts}`),
+    errors: union(current.errors, incoming.errors, (e) => `${e.instanceId}|${e.ts}`),
+    peeks: union(current.peeks, incoming.peeks, (p) => `${p.wordId}|${p.ts}`),
+    weakness: [...weakness.values()],
+    diagnostic: diag,
+    settings,
+    sessions: union(current.sessions, incoming.sessions, (s) => String(s.startedAt)),
+    reading: union(current.reading, incoming.reading, (r) => `${r.passageId}|${r.ts}`),
+    drills: union(current.drills, incoming.drills, (r) => `${r.code}|${r.ts}|${r.kind}`),
+  };
+}
+
+/** Merge a backup into the current data (keeps a snapshot first, like replace). */
+export async function mergeBackup(file: BackupFile, d: WorkshopDB = db, now = Date.now()): Promise<void> {
+  const current = await createBackup(file.contentVersion, d, now);
+  const merged = mergeTables(current.tables, file.tables);
+  await restoreBackup({ ...file, tables: merged }, d, now);
+}
+
+/** Snapshots taken before each import (newest first). */
+export async function listSnapshots(d: WorkshopDB = db): Promise<{ id: number; ts: number; cards: number; reviews: number }[]> {
+  const rows = await d.snapshots.orderBy('ts').reverse().toArray();
+  return rows.map((s) => {
+    const f = JSON.parse(s.payload) as BackupFile;
+    return { id: s.id!, ts: s.ts, cards: f.tables.cards.length, reviews: f.tables.reviews.length };
+  });
+}
+
+/** Put the data back to how it was before an import. The current state is itself snapshotted, so this can be undone too. */
+export async function restoreSnapshot(id: number, d: WorkshopDB = db, now = Date.now()): Promise<void> {
+  const s = await d.snapshots.get(id);
+  if (!s) throw new Error('Snapshot not found');
+  const file = JSON.parse(s.payload) as BackupFile;
+  await restoreBackup(file, d, now);
+  await d.snapshots.delete(id);
+}
+
 export function backupFilename(now = Date.now()): string {
   const d = new Date(now);
   const p = (n: number) => String(n).padStart(2, '0');

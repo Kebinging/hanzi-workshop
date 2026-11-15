@@ -1081,6 +1081,10 @@ Same as M5 for HSK 5; longer passages (250–500 chars) and multi-paragraph X-ra
 | 2026-11-15 | M2: Slot Builder is tap-only (no drag); one retry after a hinted wrong check. |
 | 2026-11-15 | M2: generators expand at build time from explicit lexicons (no on-device generation). |
 | 2026-11-15 | M2 shipped; M3 approved. |
+| 2026-11-16 | M3 shipped; M4 approved. |
+| 2026-11-16 | M4: all 12 HSK 3 units shipped (497 new words, 96 patterns, 28 passages). Coverage against the §5.4 #7 targets is written to `reports/coverage.md` on every build; the 15-sentences-per-pattern and 3-uses-per-word targets are **not yet met** (bulk sentence top-up still to do). |
+| 2026-11-16 | M4: import offers **Merge** (per card keep the most recently reviewed; logs unioned) or **Replace**; every import is snapshotted and can be undone from Settings. |
+| 2026-11-16 | M4: no font subsetting — Android ships Noto Sans CJK. The content bundle stays inside the app chunk (≈390 KB gzip), served from the offline cache. |
 | 2026-11-15 | M3: drill and twin items are **not FSRS-rated** (they log errors and feed the weakness score only), so a remedial burst can't distort scheduling. |
 | 2026-11-15 | M3: passage questions are single-choice or tap-to-order (sequence); options are shuffled each visit. Peeks while reading are logged but never rate a card on the spot (peek rule 2 still applies at the next session). |
 | 2026-11-15 | M3: homographs in content default to the earliest-taught reading (还 = hái, 长 = cháng, 过去 = the past); later readings are written with an explicit id. |

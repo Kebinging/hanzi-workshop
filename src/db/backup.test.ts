@@ -36,3 +36,37 @@ describe('backup round-trip (spec 5.6)', () => {
     expect((await validateBackup({ hello: 1 })).ok).toBe(false);
   });
 });
+
+describe('merge and undo (spec 5.6)', () => {
+  it('merge keeps the most recently reviewed card and unions logs', async () => {
+    const { mergeTables } = await import('./backup');
+    const d = new WorkshopDB('test-merge');
+    const older = { ...seededReviewCard('word.recog', 'w_ai', 'diagnostic', NOW - 1000, 30, 10) };
+    const newer = { ...seededReviewCard('word.recog', 'w_ai', 'diagnostic', NOW, 40, 20) };
+    const onlyThere = newCard('word.recog', 'w_gang', 'curriculum', NOW);
+    await d.cards.put(older);
+    await d.reviews.add({ cardId: older.id, ts: NOW - 1000, rating: 3, stateBefore: 2, stabilityBefore: 1, difficultyBefore: 5, elapsedDays: 1, exerciseKind: 'recognition', instanceId: 'a', latencyMs: 1, peeks: 0 });
+    const mine = (await createBackup('v', d, NOW)).tables;
+    const theirs = { ...mine, cards: [newer, onlyThere], reviews: [
+      { ...mine.reviews[0] },
+      { cardId: newer.id, ts: NOW, rating: 4 as const, stateBefore: 2 as const, stabilityBefore: 30, difficultyBefore: 4, elapsedDays: 1, exerciseKind: 'recognition' as const, instanceId: 'b', latencyMs: 1, peeks: 0 },
+    ] };
+    const merged = mergeTables(mine, theirs);
+    expect(merged.cards.find((c) => c.id === older.id)!.stability).toBe(40);
+    expect(merged.cards).toHaveLength(2);
+    expect(merged.reviews).toHaveLength(2);
+  });
+
+  it('an import can be undone from its snapshot', async () => {
+    const { listSnapshots, restoreSnapshot } = await import('./backup');
+    const d = new WorkshopDB('test-undo');
+    await d.cards.put(newCard('word.recog', 'w_keep', 'curriculum', NOW));
+    const other = new WorkshopDB('test-undo-src');
+    await other.cards.put(newCard('word.recog', 'w_other', 'curriculum', NOW));
+    await restoreBackup(await createBackup('v', other, NOW), d, NOW + 1);
+    expect((await d.cards.toArray()).map((c) => c.itemId)).toEqual(['w_other']);
+    const [snap] = await listSnapshots(d);
+    await restoreSnapshot(snap.id, d, NOW + 2);
+    expect((await d.cards.toArray()).map((c) => c.itemId)).toEqual(['w_keep']);
+  });
+});

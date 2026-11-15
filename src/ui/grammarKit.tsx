@@ -34,7 +34,7 @@ export function TileChip({ tile, showLabel = true, state, onClick, disabled }: {
   const coloured = showLabel;
   return (
     <button
-      type="button" disabled={disabled} onClick={onClick}
+      type="button" lang="zh-CN" disabled={disabled} onClick={onClick}
       className={`han no-select flex min-h-12 min-w-11 flex-col items-center justify-center rounded-xl px-3 py-1.5 text-xl leading-tight
         ${coloured ? `slot-chip slot-${tile.slot}` : 'border-[1.5px] border-line bg-surface'}
         ${state === 'bad' ? 'ring-2 ring-bad ring-offset-1 ring-offset-bg' : ''} ${onClick ? 'active:scale-95' : ''} transition`}

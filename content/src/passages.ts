@@ -66,7 +66,7 @@ export const passages: PassageSrc[] = [
   // ---------------- Unit 2 ----------------
   {
     id: 'U02-A', unit: 2, title: '我的一周', titleEn: 'My week', genre: 'diary',
-    patternIds: ['G3-09', 'G3-10', 'G3-12', 'G3-13', 'G3-14', 'G3-15', 'G3-16'],
+    patternIds: ['G3-11', 'G3-09', 'G3-10', 'G3-12', 'G3-13', 'G3-14', 'G3-15', 'G3-16'],
     paragraphs: [
       '我 家 {place 离 公司 } 很 远 ， 坐 地铁 要 {comp 一 个 小时 } 。 所以 我 {time 每 天 六 点 } 就 起床 。 我 一^1 起床 就^1 刷牙 、 洗脸 ， 然后 吃 早饭 。',
       '{time 从 星期 一 到 星期 五 } ， 我 总是 很 忙 。 {time 晚上 } 我 一般 先^2 做 饭 ， 再^2 学习 {comp 一 个 小时 } 汉语 。',
@@ -204,7 +204,7 @@ export const passages: PassageSrc[] = [
   },
   {
     id: 'U04-B', unit: 4, title: '那个饭店怎么样？', titleEn: 'How was that restaurant?', genre: 'dialogue',
-    patternIds: ['G3-25', 'G3-26', 'G3-27', 'G3-28', 'G3-29', 'G3-32'],
+    patternIds: ['G3-24', 'G3-25', 'G3-26', 'G3-27', 'G3-28', 'G3-29', 'G3-32'],
     paragraphs: [
       `${WANG} ： {mod 昨天 你 去 的 } 那 个 饭店 怎么样 ？`,
       `${LI} ： 菜 做 {comp 得 特别 好吃 } ！ 我 吃 了 一 条 鱼 ， 有点儿 酸 ， 也 有点儿 甜 ， 香 极 了 。`,

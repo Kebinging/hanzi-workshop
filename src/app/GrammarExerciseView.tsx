@@ -165,6 +165,7 @@ function SlotBuilder({ ex, onDone, onRule, resolved, cards, pool, now, onTap }: 
 
       {result && (
         <Card className={result === 'correct' ? 'border-good' : 'border-bad'}>
+          <span className="sr-only" role="status">{result === 'correct' ? 'Correct' : 'Incorrect'}</span>
           <p className={`mb-2 font-semibold ${result === 'correct' ? 'text-good' : 'text-bad'}`}>
             {result === 'correct' ? (tries ? 'Right on the second try.' : 'Correct.') : 'Here’s the natural order:'}
           </p>

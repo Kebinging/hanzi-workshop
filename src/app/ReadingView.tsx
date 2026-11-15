@@ -196,11 +196,11 @@ export function ReaderView({ passageId, onBack }: { passageId: string; onBack: (
         {xray && (
           <div className="mb-3 flex flex-wrap gap-x-3 gap-y-1 text-xs text-ink-3">
             <span className="xr-clause-odd px-1">clause</span><span className="xr-sub">subordinate</span>
-            <span className="xr-ul-time">time</span><span className="xr-ul-place">place/compare</span><span className="xr-ul-complement">complement</span>
+            <span className="xr-ul-time">time</span><span className="xr-ul-place">place/compare</span><span className="xr-ul-complement">complement</span><span className="xr-ul-ba">把 / 被</span>
             <span className="xr-topic">topic ▸</span><span>⌜modifier⌝ <b>head</b></span><span className="xr-pair-1">paired words</span>
           </div>
         )}
-        <article className="hz space-y-3 leading-[2.3]">
+        <article lang="zh-CN" className="hz space-y-3 leading-[2.3]">
           {passage.paragraphs.map((para, pi) => {
             const lay = xrayLayout(para.tokens, para.chunks);
             return (

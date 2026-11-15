@@ -19,8 +19,17 @@ import { generators } from '../content/src/generators';
 import { patternsU04 } from '../content/src/grammar-u04';
 import { patternsU05 } from '../content/src/grammar-u05';
 import { patternsU06 } from '../content/src/grammar-u06';
-import { passages as passageSources } from '../content/src/passages';
+import { patternsU07 } from '../content/src/grammar-u07';
+import { patternsU08 } from '../content/src/grammar-u08';
+import { patternsU09 } from '../content/src/grammar-u09';
+import { patternsU10 } from '../content/src/grammar-u10';
+import { patternsU11 } from '../content/src/grammar-u11';
+import { patternsU12 } from '../content/src/grammar-u12';
+import { passages as passagesU01to06 } from '../content/src/passages';
+import { passagesU07to12 } from '../content/src/passages-u07-12';
+import { pairsU07to12 } from '../content/src/pairs-u07-12';
 import { examplesU01 } from '../content/src/examples-u01';
+import { examplesByUnit } from '../content/src/examples-u02-12';
 import { clusters } from '../content/src/clusters';
 import { confusables } from '../content/src/confusables';
 import { syllabus } from '../content/src/syllabus';
@@ -279,13 +288,17 @@ function buildPattern(p: PatternSource): GrammarPattern {
   };
 }
 
-const grammar = [...patternsU01, ...patternsU02, ...patternsU03, ...patternsU04, ...patternsU05, ...patternsU06].map(buildPattern);
+const grammar = [...patternsU01, ...patternsU02, ...patternsU03, ...patternsU04, ...patternsU05, ...patternsU06,
+  ...patternsU07, ...patternsU08, ...patternsU09, ...patternsU10, ...patternsU11, ...patternsU12].map(buildPattern);
 const grammarById = new Map(grammar.map((g) => [g.id, g]));
-const vocabExamples = examplesU01.map(([zh, en], i) => parseSentence(zh, en, `V1:${i + 1}`, ['VOCAB']));
+const vocabExamples = [
+  ...examplesU01.map(([zh, en], i) => parseSentence(zh, en, `V1:${i + 1}`, ['VOCAB'])),
+  ...Object.entries(examplesByUnit).flatMap(([u, list]) => list.map(([zh, en], i) => parseSentence(zh, en, `V${u}:${i + 1}`, ['VOCAB']))),
+];
 
 // ---------- Minimal pairs ----------
 const pairs: MinimalPairItem[] = [];
-pairSources.forEach((set, si) => {
+[...pairSources, ...pairsU07to12].forEach((set, si) => {
   set.items.forEach((it, ii) => {
     const id = `MP${si + 1}-${ii + 1}`;
     const context = parseSentence(it.context, it.en, id, set.patternIds);
@@ -387,6 +400,7 @@ function findSpan(paragraphs: { tokens: Token[] }[], span: string, where: string
   return undefined;
 }
 
+const passageSources = [...passagesU01to06, ...passagesU07to12];
 const passages: ReadingPassage[] = passageSources.map((src) => {
   const paragraphs = src.paragraphs.map((t, i) => parseParagraph(t, `${src.id}:p${i + 1}`));
   const charCount = paragraphs.flatMap((p) => p.tokens).filter((t) => t.kind !== 'punct').reduce((n, t) => n + [...t.t].length, 0);

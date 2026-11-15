@@ -48,7 +48,7 @@ interface SentenceProps {
 /** A tokenised sentence with pinyin fading (spec 1.3) and tap-to-peek. */
 export function SentenceView({ sentence, cards, pool, now, testedWordId, highlightWordId, onTap, className = '' }: SentenceProps) {
   return (
-    <p className={`han hz leading-[2.4] no-select ${className}`}>
+    <p lang="zh-CN" className={`han hz leading-[2.4] no-select ${className}`}>
       {sentence.tokens.map((t, i) => {
         const word = t.ref ? content.vocabById.get(t.ref) : undefined;
         const card = word ? cards.get(`word.recog:${word.id}`) : undefined;

@@ -4,7 +4,15 @@ A personal, fully offline PWA for learning Mandarin from HSK 3 onward — readin
 
 The full design lives in [docs/SPEC.md](docs/SPEC.md).
 
-## Status — Milestone 3
+## Status — Milestone 4
+
+- The full HSK 3 course: 12 units, 497 new words on top of the 500-word HSK 1–2 base, all 96 grammar patterns (potential complements, 把, 被, 是…的, 连…都, conditionals, the conjunction pairs, narrative connectives, separable verbs)
+- 28 reading passages (two per unit plus four cumulative reviews), every pattern appearing in at least one
+- 155 contrast drills, 392 fill-in-the-gap items, 33 transformations
+- Backup import can **merge** or **replace**, and any import can be undone from Settings
+- `reports/coverage.md` tracks content coverage against the spec targets
+
+## Milestone 3
 
 - Reading: 14 graded passages (two per unit for Units 1–6 plus reviews after Units 3 and 6), each locked until you know 95% of its words, with a one-tap "queue the missing words" button
 - X-ray mode: clause shading, subordinate clauses, time/place/complement underlines, topic and modifier marks, colour-linked connective pairs
