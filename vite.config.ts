@@ -9,7 +9,7 @@ const base = process.env.BASE_PATH ?? '/';
 export default defineConfig({
   base,
   // The content bundle (~2 MB raw, ~390 KB gzip) ships inside the app chunk; it is served from the offline cache.
-  build: { chunkSizeWarningLimit: 2600 },
+  build: { chunkSizeWarningLimit: 3200 },
   plugins: [
     react(),
     tailwindcss(),

@@ -30,6 +30,8 @@ import { passagesU07to12 } from '../content/src/passages-u07-12';
 import { pairsU07to12 } from '../content/src/pairs-u07-12';
 import { examplesU01 } from '../content/src/examples-u01';
 import { examplesByUnit } from '../content/src/examples-u02-12';
+import { extraInstances } from '../content/src/extras';
+import { topupByUnit } from '../content/src/examples-topup';
 import { clusters } from '../content/src/clusters';
 import { confusables } from '../content/src/confusables';
 import { syllabus } from '../content/src/syllabus';
@@ -253,7 +255,8 @@ function buildPattern(p: PatternSource): GrammarPattern {
       return { s, src };
     });
   const ex = mk(p.examples, 'ex');
-  const inst = mk(p.instances, 'in');
+  // Extra practice sentences live in content/src/extras-*.ts, appended after the originals.
+  const inst = mk([...p.instances, ...(extraInstances[p.id] ?? [])], 'in');
   for (const code of p.errorCodes) checkCode(p.id, code);
   for (const c of p.constraints) checkCode(p.id, c.code);
 
@@ -294,6 +297,7 @@ const grammarById = new Map(grammar.map((g) => [g.id, g]));
 const vocabExamples = [
   ...examplesU01.map(([zh, en], i) => parseSentence(zh, en, `V1:${i + 1}`, ['VOCAB'])),
   ...Object.entries(examplesByUnit).flatMap(([u, list]) => list.map(([zh, en], i) => parseSentence(zh, en, `V${u}:${i + 1}`, ['VOCAB']))),
+  ...Object.entries(topupByUnit).flatMap(([u, list]) => list.map(([zh, en], i) => parseSentence(zh, en, `V${u}:t${i + 1}`, ['VOCAB']))),
 ];
 
 // ---------- Minimal pairs ----------

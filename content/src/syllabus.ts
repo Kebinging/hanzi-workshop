@@ -1,7 +1,7 @@
 import type { Syllabus } from '../../src/content/types';
 
 export const syllabus: Syllabus = {
-  version: '0.4.0-m4',
+  version: '0.4.1',
   levels: [
     { level: 2, cumulativeWords: 500, cumulativeChars: 300, grammarPoints: 0 },
     { level: 3, cumulativeWords: 1000, cumulativeChars: 587, grammarPoints: 96 },

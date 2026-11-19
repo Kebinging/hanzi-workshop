@@ -11,6 +11,7 @@ The full design lives in [docs/SPEC.md](docs/SPEC.md).
 - 155 contrast drills, 392 fill-in-the-gap items, 33 transformations
 - Backup import can **merge** or **replace**, and any import can be undone from Settings
 - `reports/coverage.md` tracks content coverage against the spec targets
+- Content top-up (v0.4.1): every pattern now has at least 15 practice sentences and every HSK 3 word appears in at least 3 sentences or passages
 
 ## Milestone 3
 
