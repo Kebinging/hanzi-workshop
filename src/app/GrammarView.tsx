@@ -22,7 +22,7 @@ export function GrammarView({ onBack }: { onBack: () => void }) {
         <div className="space-y-6">
           {units.map((u) => (
             <section key={u.unit}>
-              <h2 className="mb-2 text-sm font-semibold text-ink-3">Unit {u.unit} · <span className="han">{u.titleZh}</span> · {u.theme}</h2>
+              <h2 className="mb-2 text-sm font-semibold text-ink-3">{content.unitLabel(u.unit)} · <span className="han">{u.titleZh}</span> · {u.theme}</h2>
               <div className="space-y-2">
                 {content.unitPatterns(u.unit).map((g) => {
                   const c = byId.get(g.id);

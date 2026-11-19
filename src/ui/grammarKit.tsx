@@ -71,7 +71,7 @@ export function RuleCard({ pattern }: { pattern: GrammarPattern }) {
   return (
     <div className="space-y-3">
       <div>
-        <div className="text-xs text-ink-3">{pattern.id} · Unit {pattern.unit}</div>
+        <div className="text-xs text-ink-3">{pattern.id} · {pattern.unit ? content.unitLabel(pattern.unit) : `HSK ${pattern.hsk}`}</div>
         <h2 className="text-lg font-semibold">{pattern.title}</h2>
         <div className="han text-ink-3">{pattern.titleZh}</div>
       </div>

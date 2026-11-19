@@ -48,6 +48,15 @@ export class Content {
   /** HSK 1–2 foundation pool. */
   get foundation(): VocabItem[] { return this.vocab.filter((w) => w.hsk <= 2); }
 
+  /** "Unit 5" for HSK 3, "HSK 4 · Unit 1" for unit 13 (units are numbered globally). */
+  unitLabel(unit: number): string {
+    const units = this.bundle.syllabus.units;
+    const info = units.find((u) => u.unit === unit);
+    if (!info || info.hsk === 3) return `Unit ${unit}`;
+    const first = Math.min(...units.filter((u) => u.hsk === info.hsk).map((u) => u.unit));
+    return `HSK ${info.hsk} · Unit ${unit - first + 1}`;
+  }
+
   unitWords(unit: number): VocabItem[] { return this.vocab.filter((w) => w.unit === unit); }
 
   unitPatterns(unit: number): GrammarPattern[] { return this.bundle.grammar.filter((g) => g.unit === unit); }

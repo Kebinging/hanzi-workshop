@@ -384,6 +384,38 @@ Requires G3-33…G3-50 (result & directional complements).
 
 ---
 
+### 2.4 HSK 4 course (Milestone 5)
+
+**Targets (provisional, decided 2026-11-20).** The learner's HSK 1–3 figures (1,000 words, 587 characters) don't follow the official New HSK 3.0 counts, so HSK 4 keeps the same scale and adds **600 new words (cumulative 1,600)**, about **345 new characters** and **72 grammar points (G4-01 … G4-72)**. Every item is `provisional: true`, like HSK 3.
+
+**Structure.** Same machinery, no schema changes:
+- **12 units × 6 patterns = 72**, **50 new words per unit = 600**. Units are numbered globally **13–24** so gating, unlocking and the exposure pool work unchanged (a unit's pool = HSK 1–2 + every unit ≤ it). The UI shows them as *HSK 4 · Unit 1–12*.
+- Unit 13 unlocks from Unit 12 by the usual rule (§2.1).
+- Each pattern ships with 3 examples and ≥ 15 slot-annotated practice sentences. Every new word appears in ≥ 3 sentences or passages.
+- Passages: two per unit — **A 150–220 characters, B 220–320** — plus review passages after units 15, 18, 21 and 24 (**250–350 characters**). Coverage gate stays at 95%.
+- HSK 4 grammar is mostly connectives and adverbs, so drills lean on minimal pairs and cloze (e.g. 即使 vs 既然, 不如 vs 没有, 竟然 vs 果然).
+
+**Unit map.**
+
+| Unit | Theme | Syntactic milestone | Patterns |
+|---|---|---|---|
+| 13 · 职场 *At work* | jobs, offices, colleagues | Attitude & time adverbs | G4-01 竟然 / 居然 (unexpectedly) · G4-02 难道…吗 (rhetorical) · G4-03 到底 / 究竟 (on earth; in the end) · G4-04 并 + 不/没 (actually not) · G4-05 往往 vs 常常 · G4-06 曾经 / 从来 (once; never) |
+| 14 · 人际 *People* | friendship, family, getting along | Concession & condition II | G4-07 即使…也 · G4-08 无论 / 不管…都 · G4-09 既然…就 · G4-10 尽管…还是 / 可是 · G4-11 否则 / 要不然 · G4-12 除非…才 / 否则 |
+| 15 · 选择 *Choices* | decisions, preferences, prices | Preference & comparison II | G4-13 与其…不如 · G4-14 宁可…也不 · G4-15 A 不如 B · G4-16 跟…相比 / 比起…来 · G4-17 一 M 比一 M · G4-18 A 比 B 还 + Adj |
+| 16 · 学习方法 *How to learn* | study methods, exams, skills | Means, cause & sequence | G4-19 通过 (by means of) · G4-20 由于…因此 · G4-21 于是 (so then) · G4-22 既…又 / 也 · G4-23 一方面…另一方面 · G4-24 首先…其次…最后 |
+| 17 · 健康 *Health* | illness, sport, diet, sleep | Degree & extent | G4-25 Adj/V + 得 + clause (累得站不起来) · G4-26 稍微 + Adj + 一点儿 · G4-27 尤其 / 特别是 · G4-28 相当 / 挺 / 格外 · G4-29 差点儿 (nearly) · G4-30 简直 (simply) |
+| 18 · 出行 *On the move* | travel, transport, directions | Extended complements & 随着 | G4-31 V下来 (stop; keep; note down) · G4-32 V出来 vs V起来 (recognise vs recall) · G4-33 V过来 / V过去 (come round; pass out; turn over) · G4-34 Adj + 着呢 (早着呢) · G4-35 直到 / 一直到 · G4-36 随着 |
+| 19 · 社会 *Society* | news, rules, public life | Formal prepositions & passives | G4-37 受到 + N (受到欢迎) · G4-38 由 (responsibility; by) · G4-39 被…给 / 给 (spoken passive) · G4-40 对于 / 至于 · G4-41 根据 / 按照 · G4-42 作为 (as) |
+| 20 · 心情 *Feelings* | emotions, reactions, luck | Modal stance | G4-43 嘛 (obviously) · G4-44 不得不 · G4-45 非…不可 · G4-46 难怪 (no wonder) · G4-47 幸亏 / 好在 (luckily) · G4-48 何况 (let alone) |
+| 21 · 消费 *Spending* | shopping, money, numbers | Quantity & indefinites | G4-49 Approximation: 左右 / 多 / 来 · G4-50 百分之 / 倍 / 分之 · G4-51 各 / 每…都 · G4-52 所有 / 全部 / 一切 · G4-53 什么的 / 等等 · G4-54 谁…谁 / 哪儿…哪儿 (whoever…) |
+| 22 · 环境 *Environment* | nature, weather, cities | Change & alternation | G4-55 变得 + Adj / 成为 · G4-56 V满 / V遍 · G4-57 有的…有的 · G4-58 一会儿…一会儿 · G4-59 不是…而是 · G4-60 不是…就是 |
+| 23 · 文化 *Culture* | festivals, customs, arts | Emphasis | G4-61 是 + Adj + 的 (assertion) · G4-62 Double negatives: 不…不 / 没有…不 · G4-63 连 V 都没 V · G4-64 一点儿也/都不 + Adj · G4-65 再…也 (however …) · G4-66 就 (emphatic: 就是他) |
+| 24 · 展望 *Looking ahead* | plans, the future, opinions | Discourse markers | G4-67 据说 / 听说 · G4-68 可见 · G4-69 总之 / 总的来说 · G4-70 另外 / 此外 · G4-71 甚至 · G4-72 并且 / 而 (and; whereas) |
+
+**Vocabulary allocation.** As §2.3, with HSK 4 words in `content/src/vocab-hsk4-u13.txt … u24.txt` (header `@U13` … `@U24`). A word is placed in the unit whose theme or grammar needs it first; function words that a pattern teaches (竟然, 即使, 随着 …) sit in that pattern's unit.
+
+---
+
 ## 3. Exercise mechanics
 
 All five types share: an `ExerciseTemplate` (§5.3), a gated instance, a grader returning `GradeResult { correct, rating, errors: ErrorCode[], details }`, and a feedback panel (§4.2). Answers are never free-typed by default (no IME dependency, deterministic grading); a **type-it mode** is available for Transformation (§3.3) and graded against an accepted-answer set after normalisation.
@@ -1061,7 +1093,10 @@ Each milestone ends with a working, installable, offline build and passing tests
 - Export → wipe → import round-trip restores identical state (deep-equal test).
 
 ### Milestone 5 — HSK 4 course
-Unit map for HSK 4 (specified in this document before work starts), vocabulary and grammar bundles, passages. No new engine work expected beyond tuning.
+Unit map in §2.4: 12 units (13–24), 600 new words, 72 patterns (G4-01 … G4-72), 28 passages. Engine changes limited to level-aware labels, passage lengths and coverage reporting.
+**Acceptance**
+- `validate-content` passes; every HSK 4 word in ≥ 3 sentences/passages, every G4 pattern with ≥ 15 practice sentences and ≥ 1 passage.
+- All existing tests still pass; HSK 3 progress in an existing backup is untouched.
 
 ### Milestone 6 — HSK 5 course
 Same as M5 for HSK 5; longer passages (250–500 chars) and multi-paragraph X-ray.
@@ -1082,6 +1117,7 @@ Same as M5 for HSK 5; longer passages (250–500 chars) and multi-paragraph X-ra
 | 2026-11-15 | M2: generators expand at build time from explicit lexicons (no on-device generation). |
 | 2026-11-15 | M2 shipped; M3 approved. |
 | 2026-11-16 | M3 shipped; M4 approved. |
+| 2026-11-20 | M5 approved. HSK 4 = units 13–24, +600 words (cumulative 1,600), ≈ +300 characters, 72 patterns (6 per unit); passages A 150–220 / B 220–320 / review 250–350 characters (§2.4). |
 | 2026-11-19 | Content top-up (v0.4.1): 7 extra slot-annotated sentences for each of the 93 patterns without a generator (`content/src/extras-*.ts`) and 138 extra vocabulary examples (`content/src/examples-topup.ts`). Both §5.4 #7 targets are now met: every pattern has ≥ 15 practice sentences and every HSK 3 word appears in ≥ 3 sentences or passages. |
 | 2026-11-16 | M4: all 12 HSK 3 units shipped (497 new words, 96 patterns, 28 passages). Coverage against the §5.4 #7 targets is written to `reports/coverage.md` on every build; the 15-sentences-per-pattern and 3-uses-per-word targets are **not yet met** (bulk sentence top-up still to do). |
 | 2026-11-16 | M4: import offers **Merge** (per card keep the most recently reviewed; logs unioned) or **Replace**; every import is snapshotted and can be undone from Settings. |

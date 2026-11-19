@@ -35,10 +35,13 @@ import { topupByUnit } from '../content/src/examples-topup';
 import { clusters } from '../content/src/clusters';
 import { confusables } from '../content/src/confusables';
 import { syllabus } from '../content/src/syllabus';
+import { hsk4 } from '../content/src/hsk4';
 import type { PatternSource, SentenceSrc, Distractor } from '../content/src/authoring';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const src = (f: string) => join(root, 'content', 'src', f);
+/** HSK level of a (globally numbered) unit, from the syllabus. */
+const hskOfUnit = (unit: number): HskLevel => syllabus.units.find((u) => u.unit === unit)?.hsk ?? 3;
 const errors: string[] = [];
 
 // ---------- Vocabulary ----------
@@ -91,7 +94,7 @@ for (const w of rawWords) {
   const sylls = syllabify(w.pinyin, w.hanzi);
   if (!sylls) errors.push(`pinyin/char count mismatch: ${w.hanzi} ${w.pinyin}`);
   const unitMatch = /^U(\d+)$/.exec(w.tier);
-  const hsk: HskLevel = unitMatch ? 3 : w.tier === 'T1' ? 1 : 2;
+  const hsk: HskLevel = unitMatch ? hskOfUnit(Number(unitMatch[1])) : w.tier === 'T1' ? 1 : 2;
   const item: VocabItem = {
     id,
     hanzi: w.hanzi,
@@ -256,7 +259,7 @@ function buildPattern(p: PatternSource): GrammarPattern {
     });
   const ex = mk(p.examples, 'ex');
   // Extra practice sentences live in content/src/extras-*.ts, appended after the originals.
-  const inst = mk([...p.instances, ...(extraInstances[p.id] ?? [])], 'in');
+  const inst = mk([...p.instances, ...(extraInstances[p.id] ?? []), ...(hsk4.extras[p.id] ?? [])], 'in');
   for (const code of p.errorCodes) checkCode(p.id, code);
   for (const c of p.constraints) checkCode(p.id, c.code);
 
@@ -283,7 +286,7 @@ function buildPattern(p: PatternSource): GrammarPattern {
     });
   });
   return {
-    id: p.id, hsk: 3, unit: p.unit, title: p.title, titleZh: p.titleZh, summary: p.summary,
+    id: p.id, hsk: hskOfUnit(p.unit), unit: p.unit, title: p.title, titleZh: p.titleZh, summary: p.summary,
     explanationMd: p.explanationMd.trim(), formula: p.formula, constraints: p.constraints,
     requires: p.requires, contrasts: p.contrasts, errorCodes: p.errorCodes,
     examples: ex.map((x) => x.s), instanceBank: inst.map((x) => x.s),
@@ -292,17 +295,18 @@ function buildPattern(p: PatternSource): GrammarPattern {
 }
 
 const grammar = [...patternsU01, ...patternsU02, ...patternsU03, ...patternsU04, ...patternsU05, ...patternsU06,
-  ...patternsU07, ...patternsU08, ...patternsU09, ...patternsU10, ...patternsU11, ...patternsU12].map(buildPattern);
+  ...patternsU07, ...patternsU08, ...patternsU09, ...patternsU10, ...patternsU11, ...patternsU12, ...hsk4.patterns].map(buildPattern);
 const grammarById = new Map(grammar.map((g) => [g.id, g]));
 const vocabExamples = [
   ...examplesU01.map(([zh, en], i) => parseSentence(zh, en, `V1:${i + 1}`, ['VOCAB'])),
   ...Object.entries(examplesByUnit).flatMap(([u, list]) => list.map(([zh, en], i) => parseSentence(zh, en, `V${u}:${i + 1}`, ['VOCAB']))),
   ...Object.entries(topupByUnit).flatMap(([u, list]) => list.map(([zh, en], i) => parseSentence(zh, en, `V${u}:t${i + 1}`, ['VOCAB']))),
+  ...Object.entries(hsk4.examples).flatMap(([u, list]) => list.map(([zh, en], i) => parseSentence(zh, en, `V${u}:${i + 1}`, ['VOCAB']))),
 ];
 
 // ---------- Minimal pairs ----------
 const pairs: MinimalPairItem[] = [];
-[...pairSources, ...pairsU07to12].forEach((set, si) => {
+[...pairSources, ...pairsU07to12, ...hsk4.pairs].forEach((set, si) => {
   set.items.forEach((it, ii) => {
     const id = `MP${si + 1}-${ii + 1}`;
     const context = parseSentence(it.context, it.en, id, set.patternIds);
@@ -404,7 +408,7 @@ function findSpan(paragraphs: { tokens: Token[] }[], span: string, where: string
   return undefined;
 }
 
-const passageSources = [...passagesU01to06, ...passagesU07to12];
+const passageSources = [...passagesU01to06, ...passagesU07to12, ...hsk4.passages];
 const passages: ReadingPassage[] = passageSources.map((src) => {
   const paragraphs = src.paragraphs.map((t, i) => parseParagraph(t, `${src.id}:p${i + 1}`));
   const charCount = paragraphs.flatMap((p) => p.tokens).filter((t) => t.kind !== 'punct').reduce((n, t) => n + [...t.t].length, 0);
@@ -443,6 +447,7 @@ writeFileSync(join(root, 'content', 'dist', 'bundle.json'), JSON.stringify(bundl
 mkdirSync(join(root, 'reports'), { recursive: true });
 writeFileSync(join(root, 'reports', 'gen-samples.md'), report.join('\n'));
 const pool12 = vocab.filter((w) => w.hsk <= 2).length;
-console.log(`✓ bundle: ${vocab.length} words (${pool12} HSK 1–2), ${chars.length} chars, ${grammar.length} patterns, ` +
+const perLevel = [3, 4].map((l) => `HSK ${l}: ${vocab.filter((w) => w.hsk === l).length}`).join(', ');
+console.log(`✓ bundle: ${vocab.length} words (${pool12} HSK 1–2, ${perLevel}), ${chars.length} chars, ${grammar.length} patterns, ` +
   `${cloze.length} cloze, ${pairs.length} pairs, ${transforms.length} transforms, ` +
   `${grammar.reduce((n, g) => n + (g.generated?.length ?? 0), 0)} generated, ${clusters.length} clusters, ${passages.length} passages`);

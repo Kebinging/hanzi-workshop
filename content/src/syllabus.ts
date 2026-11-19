@@ -1,10 +1,11 @@
 import type { Syllabus } from '../../src/content/types';
 
 export const syllabus: Syllabus = {
-  version: '0.4.1',
+  version: '0.5.0-m5',
   levels: [
     { level: 2, cumulativeWords: 500, cumulativeChars: 300, grammarPoints: 0 },
     { level: 3, cumulativeWords: 1000, cumulativeChars: 587, grammarPoints: 96 },
+    { level: 4, cumulativeWords: 1600, cumulativeChars: 900, grammarPoints: 72 },
   ],
   units: [
     { unit: 1, hsk: 3, title: 'Daily rhythm', titleZh: '生活节奏', theme: 'Aspect & time adverbs', patternIds: ['G3-01','G3-02','G3-03','G3-04','G3-05','G3-06','G3-07','G3-08'], available: true },
@@ -19,5 +20,17 @@ export const syllabus: Syllabus = {
     { unit: 10, hsk: 3, title: 'Conditions & choices', titleZh: '要是…就好了', theme: 'Conditionals, totality', patternIds: ['G3-73','G3-74','G3-75','G3-76','G3-77','G3-78','G3-79','G3-80'], available: true },
     { unit: 11, hsk: 3, title: 'Weighing things up', titleZh: '虽然…但是', theme: 'Concession, addition, cause, purpose', patternIds: ['G3-81','G3-82','G3-83','G3-84','G3-85','G3-86','G3-87','G3-88'], available: true },
     { unit: 12, hsk: 3, title: 'Telling a story', titleZh: '讲故事', theme: 'Narrative cohesion & separable verbs II', patternIds: ['G3-89','G3-90','G3-91','G3-92','G3-93','G3-94','G3-95','G3-96'], available: true },
+    { unit: 13, hsk: 4, title: 'At work', titleZh: '职场', theme: 'Attitude & time adverbs', patternIds: ['G4-01','G4-02','G4-03','G4-04','G4-05','G4-06'], available: true },
+    { unit: 14, hsk: 4, title: 'People', titleZh: '人际', theme: 'Concession & condition II', patternIds: ['G4-07','G4-08','G4-09','G4-10','G4-11','G4-12'], available: true },
+    { unit: 15, hsk: 4, title: 'Choices', titleZh: '选择', theme: 'Preference & comparison II', patternIds: ['G4-13','G4-14','G4-15','G4-16','G4-17','G4-18'], available: true },
+    { unit: 16, hsk: 4, title: 'How to learn', titleZh: '学习方法', theme: 'Means, cause & sequence', patternIds: ['G4-19','G4-20','G4-21','G4-22','G4-23','G4-24'], available: true },
+    { unit: 17, hsk: 4, title: 'Health', titleZh: '健康', theme: 'Degree & extent', patternIds: ['G4-25','G4-26','G4-27','G4-28','G4-29','G4-30'], available: false },
+    { unit: 18, hsk: 4, title: 'On the move', titleZh: '出行', theme: 'Extended complements & 随着', patternIds: ['G4-31','G4-32','G4-33','G4-34','G4-35','G4-36'], available: false },
+    { unit: 19, hsk: 4, title: 'Society', titleZh: '社会', theme: 'Formal prepositions & passives', patternIds: ['G4-37','G4-38','G4-39','G4-40','G4-41','G4-42'], available: false },
+    { unit: 20, hsk: 4, title: 'Feelings', titleZh: '心情', theme: 'Modal stance', patternIds: ['G4-43','G4-44','G4-45','G4-46','G4-47','G4-48'], available: false },
+    { unit: 21, hsk: 4, title: 'Spending', titleZh: '消费', theme: 'Quantity & indefinites', patternIds: ['G4-49','G4-50','G4-51','G4-52','G4-53','G4-54'], available: false },
+    { unit: 22, hsk: 4, title: 'Environment', titleZh: '环境', theme: 'Change & alternation', patternIds: ['G4-55','G4-56','G4-57','G4-58','G4-59','G4-60'], available: false },
+    { unit: 23, hsk: 4, title: 'Culture', titleZh: '文化', theme: 'Emphasis', patternIds: ['G4-61','G4-62','G4-63','G4-64','G4-65','G4-66'], available: false },
+    { unit: 24, hsk: 4, title: 'Looking ahead', titleZh: '展望', theme: 'Discourse markers', patternIds: ['G4-67','G4-68','G4-69','G4-70','G4-71','G4-72'], available: false },
   ],
 };

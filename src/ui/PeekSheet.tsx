@@ -64,7 +64,7 @@ export function WordDetail({ word, card, now }: { word: VocabItem; card?: FSRSCa
           <PinyinText pinyin={word.pinyin} className="text-xl" />
         </div>
         <div className="flex flex-col items-end gap-1 text-xs text-ink-3">
-          <span className="rounded-full bg-surface-2 px-2 py-0.5">HSK {word.hsk}{word.unit ? ` · Unit ${word.unit}` : ''}</span>
+          <span className="rounded-full bg-surface-2 px-2 py-0.5">{word.unit ? content.unitLabel(word.unit).replace(/^Unit/, `HSK ${word.hsk} · Unit`) : `HSK ${word.hsk}`}</span>
           {card && card.state === 2 && <MasteryRing value={r} />}
         </div>
       </div>

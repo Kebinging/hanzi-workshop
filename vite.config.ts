@@ -8,8 +8,10 @@ const base = process.env.BASE_PATH ?? '/';
 
 export default defineConfig({
   base,
-  // The content bundle (~2 MB raw, ~390 KB gzip) ships inside the app chunk; it is served from the offline cache.
-  build: { chunkSizeWarningLimit: 3200 },
+  // The content bundle (HSK 1–4, several MB raw) ships inside the app chunk and is served from the offline cache.
+  // json.stringify emits JSON.parse("…"), which parses much faster than an equivalent object literal.
+  json: { stringify: true },
+  build: { chunkSizeWarningLimit: 8000 },
   plugins: [
     react(),
     tailwindcss(),
@@ -18,9 +20,9 @@ export default defineConfig({
       injectRegister: 'script',
       includeAssets: ['icons/*.png'],
       manifest: {
-        name: 'Hanzi Workshop — HSK 3 Reading & Grammar',
+        name: 'Hanzi Workshop — HSK Reading & Grammar',
         short_name: 'Hanzi Workshop',
-        description: 'Offline Mandarin reading & grammar trainer (HSK 3).',
+        description: 'Offline Mandarin reading & grammar trainer (HSK 3–5).',
         lang: 'en',
         start_url: base,
         scope: base,

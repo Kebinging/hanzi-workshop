@@ -38,7 +38,7 @@ export function ReadingListView({ onBack, onOpen }: { onBack: () => void; onOpen
         <div className="space-y-5">
           {units.map((u) => (
             <section key={u}>
-              <h2 className="mb-2 text-sm font-semibold text-ink-3">Unit {u}</h2>
+              <h2 className="mb-2 text-sm font-semibold text-ink-3">{content.unitLabel(u)}</h2>
               <div className="space-y-2">
                 {content.bundle.passages.filter((p) => p.unit === u).map((p) => {
                   const st = passageStatus(p, data.pool);
