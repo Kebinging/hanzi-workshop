@@ -50,3 +50,4 @@
 恭喜|gōng xǐ|v|congratulations
 忍不住|rěn bu zhù|v|can't help (doing)
 打扰|dǎ rǎo|v|disturb
+不可|bù kě|aux|(非…不可) must; must not

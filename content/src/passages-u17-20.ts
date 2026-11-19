@@ -1,0 +1,221 @@
+import type { PassageSrc } from './authoring';
+
+// Reading passages, HSK 4 units 17–20 (spec 2.4): A 150–220 chars, B 220–320, review 250–350.
+
+const LILI = '#丽丽=Lìlì=Lili';
+const DAVID = '#大卫=Dàwèi=David';
+
+export const passagesU17to20: PassageSrc[] = [
+  // ---------------- Unit 17 ----------------
+  {
+    id: 'U17-A', unit: 17, title: '感冒了', titleEn: 'Down with a cold', genre: 'diary',
+    patternIds: ['G4-25', 'G4-26', 'G4-29', 'G4-30'],
+    paragraphs: [
+      '{time 上 个 星期 } 我 感冒 了 。 开始 只@zhi3 是 稍微 有点儿 咳嗽 ， 后来 发烧 了 ， 头 疼 {comp 得 什么 都 不 想 做 } 。',
+      '我 觉得 {mod 自己 的 } 身体 很 强 ， 不 用 去 医院 。 可是 {time 第二天 } ， 我 难受 {comp 得 站 不 起来 } ， 差点儿 没 能 去 上班 ， 只好 去 了 医院 。',
+      '医生 说 ： “ {mod 你 的 } 病 不 严重 ， 可是 要 多 喝 水 ， 多 休息 。 {mod 你 的 } 呼吸 也 不 太 正常 ， 千万 别 抽烟 。 ” 我 说 ： “ 我 从来 不 抽烟 ！ ”',
+      '现在 {mod 我 的 } 身体 慢慢@man=màn_màn 恢复 了 。 我 感觉 好 {comp 多 了 } ， 简直 像 换 了 一 个 人 。',
+      '医生 还 让 我 戴 上 眼镜 ， 少 看 手机 ， 因为 {mod 我 的 } 眼睛 也 不 太 好 。',
+    ],
+    questions: [
+      { type: 'truth', stem: '“ 我 ” 开始 有 什么 问题 ？', options: ['稍微 有点儿 咳嗽', '发烧', '肚子 疼'], answer: 0,
+        why: '开始只是稍微有点儿咳嗽.', evidence: ['开始只是稍微有点儿咳嗽'] },
+      { type: 'inference', stem: '“ 我 ” 为什么 去 了 医院 ？', options: ['难受 得 站 不 起来', '医生 让 他 去', '他 想 看 朋友'], answer: 0,
+        why: '我难受得站不起来，只好去了医院.', evidence: ['我难受得站不起来'] },
+      { type: 'truth', stem: '医生 说 不 要 做 什么 ？', options: ['抽烟', '喝 水', '休息'], answer: 0,
+        why: '千万别抽烟.', evidence: ['千万别抽烟'] },
+      { type: 'function', stem: '“ 简直 像 换 了 一 个 人 ” 的 意思 是 ：', options: ['身体 好 多 了', '“ 我 ” 换 了 医生', '“ 我 ” 不 认识 自己'], answer: 0,
+        why: '简直 exaggerates how much better I feel.', evidence: ['简直像换了一个人'] },
+    ],
+  },
+  {
+    id: 'U17-B', unit: 17, title: '运动和健康', titleEn: 'Exercise and health', genre: 'explanation',
+    patternIds: ['G4-25', 'G4-26', 'G4-27', 'G4-28'],
+    paragraphs: [
+      '现在 很 多 人 工作 压力 大 ， 每 天 坐 {place 在 办公室 里 } ， 身体 越来越 弱 。 医生 说 ， 保持 健康 {mod 最 好 的 } 方法 是 运动 。',
+      '运动 的 方式 很 多 ， 比如 跑步 、 游泳 、 打 网球 。 我 尤其 喜欢 打 羽毛球 和 乒乓球 ， 每 次 都 打 {comp 得 出 很 多 汗 } 。 出 了 汗 以后 ， 我 感觉 格外 舒服 。',
+      '可是 运动 也 要 注意 方法 。 第一 ， 运动 以前 要 先 喝 一点儿 矿泉水 ， 不 要 吃 {comp 得 太 饱 } 。 %第二 ， 运动 的 时间 不 要 太 长 ， 要不然 {time 第二天 } 胳膊 和 腰 会 疼 {comp 得 动 不 了@liao3 } 。',
+      '吃 的 东西 也 很 重要 。 少 吃 饼干 和 巧克力 ， 多 吃 {mod 有 营养 的 } 食物 。 晚上 要 早 一点儿 睡觉 ， 睡 好 了 ， {time 第二天 } 精神 挺 好 的 。',
+      '我 觉得 ， 健康 是 {mod 最 重要 的 } 。 有 了 健康 ， 才 能 好好@hao=hǎo_hǎo 工作 和 生活 。',
+      '{mod 我 以前 的 } 毛病 是 晚上 不 想 睡 。 现在 我 每 天 都 按时 睡觉 ， 也 不 做梦 了 。',
+    ],
+    questions: [
+      { type: 'gist', stem: '这 篇 文章 主要 讲 什么 ？', options: ['运动 和 健康', '工作 压力', '怎么 做 饭'], answer: 0,
+        why: 'The text is about staying healthy through exercise.', evidence: ['保持健康最好的方法是运动'] },
+      { type: 'truth', stem: '“ 我 ” 尤其 喜欢 什么 运动 ？', options: ['羽毛球 和 乒乓球', '跑步', '游泳'], answer: 0,
+        why: '我尤其喜欢打羽毛球和乒乓球.', evidence: ['我尤其喜欢打羽毛球和乒乓球'] },
+      { type: 'inference', stem: '运动 时间 太 长 ， 会 怎么样 ？', options: ['胳膊 和 腰 会 疼', '会 很 饿', '会 很 高兴'], answer: 0,
+        why: '要不然第二天胳膊和腰会疼得动不了.', evidence: ['胳膊和腰会疼得动不了'] },
+      { type: 'truth', stem: '文章 说 应该 少 吃 什么 ？', options: ['饼干 和 巧克力', '有 营养 的 食物', '水果'], answer: 0,
+        why: '少吃饼干和巧克力.', evidence: ['少吃饼干和巧克力'] },
+    ],
+  },
+
+  // ---------------- Unit 18 ----------------
+  {
+    id: 'U18-A', unit: 18, title: '迷路了', titleEn: 'Lost', genre: 'diary',
+    patternIds: ['G4-31', 'G4-32', 'G4-33', 'G4-34', 'G4-35'],
+    paragraphs: [
+      '{time 上 个 月 } 我 去 {mod 一 个 陌生 的 } 城市 出差 。 {time 到 的 那 天 } ， 我 想 自己 走 到 宾馆 ， 结果 迷路 了 。',
+      '我 {place 在 街 上 } 走 了 很 久 ， 周围 都 是 高 楼 ， 我 一点儿 也 不 熟悉 。 天 慢慢@man=màn_màn 黑 {comp 下来 } 了 ， 我 越来越 着急 。',
+      '后来 我 遇到 了 一 位 司机 。 他 一 听 就 听 {comp 出来 } 我 不 是 当地 人 。 他 说 ： “ 宾馆 离 这儿 远 着 呢 ， 我 送 你 去 吧 。 ”',
+      '直到 到达 宾馆 ， 我 才 放松 {comp 下来 } 。 我 把 {mod 他 的 } 电话 号码 写 {comp 下来 } 了 ， 想 以后 好好@hao=hǎo_hǎo 谢谢 他 。',
+      '他 把 车 开 {comp 过来 } ， 让 我 上 车 。 在 一 个 路口 ， 他 转 {comp 过去@guoqu_v } ， 很 快 就 到 了 。',
+    ],
+    questions: [
+      { type: 'truth', stem: '“ 我 ” 为什么 去 那 个 城市 ？', options: ['出差', '旅游', '看 朋友'], answer: 0,
+        why: '我去一个陌生的城市出差.', evidence: ['我去一个陌生的城市出差'] },
+      { type: 'inference', stem: '司机 怎么 知道 “ 我 ” 不 是 当地 人 ？', options: ['听 “ 我 ” 说话', '看 “ 我 ” 的 护照', '“ 我 ” 告诉 他'], answer: 0,
+        why: '他一听就听出来.', evidence: ['他一听就听出来我不是当地人'] },
+      { type: 'function', stem: '“ 远 着 呢 ” 的 意思 是 ：', options: ['很 远', '不 远', '有点儿 近'], answer: 0,
+        why: 'Adj + 着呢 = really Adj.', evidence: ['宾馆离这儿远着呢'] },
+      { type: 'truth', stem: '“ 我 ” 什么 时候 才 放松 下来 ？', options: ['到达 宾馆 以后', '遇到 司机 以后', '天 黑 以后'], answer: 0,
+        why: '直到到达宾馆，我才放松下来.', evidence: ['直到到达宾馆'] },
+    ],
+  },
+  {
+    id: 'U18-B', unit: 18, title: '去首都旅行', titleEn: 'A trip to the capital', genre: 'dialogue',
+    patternIds: ['G4-31', 'G4-34', 'G4-35', 'G4-36'],
+    paragraphs: [
+      `${LILI} ： ${DAVID} ， {time 下 个 月 } 我们 去 首都 旅行 吧 ！ 我 已经 {place 在 网上 } 预订 了 宾馆 。`,
+      `${DAVID} ： 好 啊 。 我们 坐 飞机 还是 坐 火车 ？`,
+      `${LILI} ： 随着 交通 的 发展 ， 坐 火车 也 很 快 了 。 不过 机票 现在 打折 ， 往返 只@zhi3 要 一 千 块 。`,
+      `${DAVID} ： 那 就 坐 飞机 吧 ！ 去 机场 要 先 拿 登机牌 ， 我们 得@dei3 早 一点儿 出门 。`,
+      `${LILI} ： 放心 吧 ， 时间 还 早 着 呢 。 我们 先 坐 地铁 到 火车站 ， 再 乘坐 出租车 去 机场 。`,
+      `${DAVID} ： 好 。 到 了 以后 ， 我 想 去 {mod 城市 中心 的 } 广场 拍 照片 ， 还 想 去 郊区 看 风景 。`,
+      `${LILI} ： 没 问题 。 我们 可以 一直 玩 到 晚上 ， 直到 累 {comp 得 走 不 动 } 才 回 宾馆 ！`,
+      `${DAVID} ： 太 好 了 ， 我 现在 就 很 兴奋 ！ 希望 我们 的 旅行 顺利 。`,
+      `${DAVID} ： 对 了 ， 你 别 忘 了 带 行李箱 的 钥匙 ， 上 次 你 就 忘 了 ， 多 麻烦 啊 。`,
+    ],
+    questions: [
+      { type: 'truth', stem: `${LILI} 已经 做 了 什么 ？`, options: ['预订 了 宾馆', '买 了 机票', '拿 了 登机牌'], answer: 0,
+        why: '我已经在网上预订了宾馆.', evidence: ['我已经在网上预订了宾馆'] },
+      { type: 'inference', stem: '他们 为什么 决定 坐 飞机 ？', options: ['机票 打折', '火车 太 慢', `${LILI} 不 喜欢 火车`], answer: 0,
+        why: '不过机票现在打折.', evidence: ['不过机票现在打折'] },
+      { type: 'truth', stem: '往返 机票 多少 钱 ？', options: ['一 千 块', '两 千 块', '五 百 块'], answer: 0,
+        why: '往返只要一千块.', evidence: ['往返只要一千块'] },
+      { type: 'sequence', stem: '他们 去 机场 ， 先 怎么 走 ， 然后 怎么 走 ？', options: ['坐 地铁', '乘坐 出租车'], answer: [0, 1],
+        why: '先坐地铁到火车站，再乘坐出租车.', evidence: ['我们先坐地铁到火车站'] },
+      { type: 'function', stem: '“ 时间 还 早 着 呢 ” 是 什么 意思 ？', options: ['时间 很 多', '时间 不 够', '已经 晚 了'], answer: 0,
+        why: 'Adj + 着呢: there is plenty of time.', evidence: ['时间还早着呢'] },
+    ],
+  },
+  {
+    id: 'R18', unit: 18, review: true, title: '一次意外', titleEn: 'An unexpected trip', genre: 'story',
+    patternIds: ['G4-19', 'G4-21', 'G4-25', 'G4-29', 'G4-31', 'G4-34', 'G4-35', 'G4-36'],
+    paragraphs: [
+      '{time 去年 夏天 } ， 我 和 朋友 开车 去 郊区 玩 。 随着 城市 越来越 大 ， {time 周末 } 去 郊区 的 人 也 越来越 多 ， {place 高速公路 上 } 的 车 多 着 呢 。',
+      '开 了 两 个 小时 ， 车 突然 停 {comp 下来 } 了 ： 没有 油 了 ！ 我们 出发 以前 忘 了 加油 。 附近 也 没有 加油站 ， 我们 着急 {comp 得 不 知道 怎么 办 } 。',
+      '{time 这 时候 } ， 一 位 司机 停 了 车 ， 问 我们 遇到 了 什么 麻烦 。 他 说 ： “ 前面 五 公里 有 一 个 加油站 ， 我 带 你们 去 吧 。 ” 于是 我们 坐 {mod 他 的 } 车 去 了 加油站 。',
+      '{time 回来 的 路 上 } ， 我们 一直 在 聊天 。 原来 他 也 是 {mod 那 个 城市 的 } 人 ， 每 个 周末 都 去 郊区 拍 风景 。 通过 这 次 意外 ， 我们 成 了 朋友 。',
+      '后来 ， 我们 常常 一起 出门 旅行 。 直到 现在 ， 我 每 次 开车 以前 都 会 先 检查 一下 油 。',
+      '那 次 意外 让 我 明白 ， 出门 以前 一定 要 做 好 准备 。 遇到 麻烦 的 时候 ， 别 太 着急 ， 一定 会 有 办法 。',
+    ],
+    questions: [
+      { type: 'inference', stem: '高速公路 上 为什么 车 很 多 ？', options: ['周末 去 郊区 的 人 越来越 多', '有 人 迷路 了', '加油站 关 了'], answer: 0,
+        why: '周末去郊区的人也越来越多.', evidence: ['周末去郊区的人也越来越多'] },
+      { type: 'truth', stem: '车 为什么 停 下来 了 ？', options: ['没有 油 了', '车 坏 了', '迷路 了'], answer: 0,
+        why: '没有油了.', evidence: ['没有油了'] },
+      { type: 'referent', stem: '“ 我 带 你们 去 吧 ” 的 “ 我 ” 是 谁 ？', options: ['一 位 司机', '朋友', '“ 我 ”'], answer: 0,
+        why: 'A driver who stopped to help.', evidence: ['一位司机停了车'] },
+      { type: 'truth', stem: '那 位 司机 周末 常常 做 什么 ？', options: ['去 郊区 拍 风景', '去 加油站 工作', '在 家 休息'], answer: 0,
+        why: '每个周末都去郊区拍风景.', evidence: ['每个周末都去郊区拍风景'] },
+      { type: 'inference', stem: '现在 “ 我 ” 开车 以前 会 做 什么 ？', options: ['检查 一下 油', '给 司机 打 电话', '看 地图'], answer: 0,
+        why: '都会先检查一下油.', evidence: ['都会先检查一下油'] },
+    ],
+  },
+
+  // ---------------- Unit 19 ----------------
+  {
+    id: 'U19-A', unit: 19, title: '公园打扫活动', titleEn: 'Park clean-up day', genre: 'notice',
+    patternIds: ['G4-37', 'G4-38', 'G4-41', 'G4-42'],
+    paragraphs: [
+      '{time 下 个 星期 六 } ， {mod 我们 这儿 的 } 公园 要 举行 一 次 打扫 活动 。 这 次 活动 由 居民 和 志愿者 一起 组织 。',
+      '根据 规定 ， 公园 里 禁止 扔 垃圾 。 可是 最近 {mod 公园 里 的 } 垃圾 越来越 多 ， 这 个 现象 引起 了 大家 的 注意 。',
+      '作为 这儿 的 居民 ， 我们 应该 保护 公共 的 环境 。 欢迎 大家 积极 参加 ！ {mod 活动 的 } 时间 和 地点 ， 我们 会 用 短信 通知 大家 。',
+      '{mod 上 次 的 } 活动 受到 了 很 多 人 的 支持 ， 电视台 还 报道 了 。 希望 这 次 也 一样 成功 ！',
+      '参加 的 人 请 遵守 {mod 公园 的 } 管理 规定 。',
+    ],
+    questions: [
+      { type: 'truth', stem: '这 次 活动 由 谁 组织 ？', options: ['居民 和 志愿者', '电视台', '警察'], answer: 0,
+        why: '这次活动由居民和志愿者一起组织.', evidence: ['这次活动由居民和志愿者一起组织'] },
+      { type: 'inference', stem: '为什么 要 举行 这 次 活动 ？', options: ['公园 里 的 垃圾 越来越 多', '公园 太 小', '大家 想 运动'], answer: 0,
+        why: '最近公园里的垃圾越来越多.', evidence: ['可是最近公园里的垃圾越来越多'] },
+      { type: 'truth', stem: '活动 的 时间 和 地点 ， 怎么 通知 大家 ？', options: ['用 短信', '打 电话', '在 电视 上'], answer: 0,
+        why: '我们会用短信通知大家.', evidence: ['我们会用短信通知大家'] },
+      { type: 'truth', stem: '上 次 的 活动 怎么样 ？', options: ['受到 了 很 多 人 的 支持', '没有 人 参加', '推迟 了'], answer: 0,
+        why: '上次的活动受到了很多人的支持.', evidence: ['上次的活动受到了很多人的支持'] },
+    ],
+  },
+  {
+    id: 'U19-B', unit: 19, title: '城市的变化', titleEn: 'A changing city', genre: 'explanation',
+    patternIds: ['G4-36', 'G4-37', 'G4-39', 'G4-40', 'G4-41'],
+    paragraphs: [
+      '根据 政府 的 调查 ， {time 这 十 年 } ， {mod 我们 城市 的 } 人口 增长 了 很 多 ， 经济 也 发展 {comp 得 很 快 } 。 随着 科技 的 发展 ， 大家 的 生活 越来越 方便 。',
+      '可是 ， {mod 城市 的 } 发展 也 引起 了 一 些 问题 。 对于 交通 问题 ， 很 多 居民 有 意见 ： {place 路 上 } 的 车 太 多 ， 到处 都 堵车 。',
+      '还 有 一 个 问题 是 安全 。 有 一 个 居民 说 ： “ {time 上 个 月 } ， {mod 我 的 } 自行车 {bei 被 人 给 } 偷 走 了 。 ” 至于 这 种 事情 有 多少 ， 现在 还 没有 真实 的 数字 。',
+      '为了 解决 这 些 问题 ， 政府 按照 大家 的 意见 ， 做 了 新 的 规定 。 比如 ， 广播 和 电视台 每 天 都 提醒 大家 注意 安全 ， 也 鼓励 大家 坐 公共汽车 。',
+      '我 觉得 ， 管理 一 个 城市 并 不 容易 ， 需要 每 个 普通 居民 一起 努力 。',
+      '以前 很 少 有 人 重视 这 些 问题 ， 现在 大家 都 很 关心 了 。',
+    ],
+    questions: [
+      { type: 'truth', stem: '根据 调查 ， 这 十 年 城市 有 什么 变化 ？', options: ['人口 增长 了 很 多', '人口 减少 了', '经济 不 好'], answer: 0,
+        why: '人口增长了很多，经济也发展得很快.', evidence: ['我们城市的人口增长了很多'] },
+      { type: 'truth', stem: '居民 对 交通 有 什么 意见 ？', options: ['车 太 多 ， 到处 堵车', '公共汽车 太 贵', '地铁 太 远'], answer: 0,
+        why: '路上的车太多，到处都堵车.', evidence: ['到处都堵车'] },
+      { type: 'referent', stem: '“ 我 的 自行车 被 人 给 偷 走 了 ” 是 谁 说 的 ？', options: ['一 个 居民', '记者', '政府'], answer: 0,
+        why: '有一个居民说.', evidence: ['有一个居民说'] },
+      { type: 'inference', stem: '政府 为什么 做 了 新 的 规定 ？', options: ['为了 解决 这 些 问题', '因为 人口 减少', '因为 居民 不 喜欢 广播'], answer: 0,
+        why: '为了解决这些问题.', evidence: ['为了解决这些问题'] },
+      { type: 'function', stem: '“ 至于 这 种 事情 有 多少 ” 的 “ 至于 ” 表示 什么 ？', options: ['说 到 一 个 新 的 问题', '给 一 个 原因', '说 一 个 结果'], answer: 0,
+        why: '至于 turns to a related new point.', evidence: ['至于这种事情有多少'] },
+    ],
+  },
+
+  // ---------------- Unit 20 ----------------
+  {
+    id: 'U20-A', unit: 20, title: '倒霉的一天', titleEn: 'A bad-luck day', genre: 'diary',
+    patternIds: ['G4-43', 'G4-44', 'G4-46', 'G4-47'],
+    paragraphs: [
+      '{time 今天 } 我 真 倒霉 ！ {time 早上 出门 的 时候 } 下 大 雨 ， {mod 我 的 } 衣服 都 湿 了 。 好在 我 带 了 伞 ， 要不然 就 更 湿 了 。',
+      '到 了 公司 ， 电脑 又 坏 了 ， 我 不得不 用 {mod 同事 的 } 电脑 。 经理 还 批评 了 我 ， 因为 {mod 我 的 } 文件 晚 了 一 天 。',
+      '我 很 难过 ， 忍不住 哭 了 。 同事 安慰 我 说 ： “ 别 难过 嘛 ， 谁 都 有 运气 不 好 的 时候 。 ”',
+      '{time 晚上 } 回 家 ， 妈妈 给 我 做 了 {mod 我 最 喜欢 的 } 菜 。 我 的 心情 好 {comp 多 了 } 。 幸亏 有 家人 ， 要不然 我 会 更 痛苦 。',
+      '我 想 ， 明天 一定 会 好 起来 的 。 我 要 乐观 一点儿 ， 不 要 抱怨 。',
+    ],
+    questions: [
+      { type: 'truth', stem: '早上 出门 的 时候 怎么样 ？', options: ['下 大 雨', '很 热', '刮 大 风'], answer: 0,
+        why: '早上出门的时候下大雨.', evidence: ['早上出门的时候下大雨'] },
+      { type: 'inference', stem: '“ 我 ” 为什么 用 同事 的 电脑 ？', options: ['自己 的 电脑 坏 了', '同事 的 电脑 更 好', '经理 让 “ 我 ” 用'], answer: 0,
+        why: '电脑又坏了.', evidence: ['电脑又坏了'] },
+      { type: 'truth', stem: '经理 为什么 批评 “ 我 ” ？', options: ['文件 晚 了 一 天', '“ 我 ” 迟到 了', '“ 我 ” 哭 了'], answer: 0,
+        why: '因为我的文件晚了一天.', evidence: ['因为我的文件晚了一天'] },
+      { type: 'function', stem: '同事 说 “ 别 难过 嘛 ” ， 是 想 ：', options: ['安慰 “ 我 ”', '批评 “ 我 ”', '问 “ 我 ” 问题'], answer: 0,
+        why: '同事安慰我说.', evidence: ['别难过嘛'] },
+    ],
+  },
+  {
+    id: 'U20-B', unit: 20, title: '给丽丽的信', titleEn: 'A letter to Lili', genre: 'diary',
+    patternIds: ['G4-44', 'G4-45', 'G4-46', 'G4-48'],
+    paragraphs: [
+      `${LILI} ， 你 好 ！ 好久 不 见 ， 你 最近 怎么样 ？ 我 来 北京 已经 三 个 月 了 ， {mod 这儿 的 } 生活 很 有意思 ， 可是 有时候 也 有点儿 孤单 。`,
+      '{time 刚 来 的 时候 } ， 我 什么 都 不 习惯 。 汉语 说 {comp 得 不 好 } ， 简单 的 话 都 听 不 懂 ， 何况 是 上课 呢 ？ {time 那 时候 } 我 每 天 都 很 烦恼 ， 有时候 忍不住 想 回国 。',
+      '可是 {mod 我 的 } 老师 说 ： “ 要 学 好 汉语 ， 非 多 跟 中国 人 聊天 不可 。 别 怕 说 错 ， 要 勇敢 一点儿 。 ” 我 听 了 她 的 话 ， 每 天 都 去 公园 跟 老人 聊天 。',
+      '现在 {mod 我 的 } 汉语 进步 了 很 多 ， 也 交 了 很 多 朋友 。 难怪 大家 都 说 ， 有 {mod 一 个 乐观 的 } 态度 最 重要 。 我 很 愿意 留 在 这儿 继续 学习 。',
+      '我 现在 也 不 害怕 说 错 了 ， 别人 笑 我 的 时候 ， 我 也 会 微笑 。',
+      `你 什么 时候 来 北京 ？ 我 一定 带 你 去 玩 。 祝 你 幸福 ！ ${DAVID}`,
+    ],
+    questions: [
+      { type: 'truth', stem: `${DAVID} 来 北京 多 久 了 ？`, options: ['三 个 月', '三 年', '一 个 星期'], answer: 0,
+        why: '我来北京已经三个月了.', evidence: ['我来北京已经三个月了'] },
+      { type: 'inference', stem: `刚 来 的 时候 ， ${DAVID} 为什么 很 烦恼 ？`, options: ['什么 都 不 习惯 ， 听 不 懂 汉语', '没有 钱', '老师 不 好'], answer: 0,
+        why: '我什么都不习惯 … 简单的话都听不懂.', evidence: ['我什么都不习惯'] },
+      { type: 'truth', stem: `老师 让 ${DAVID} 做 什么 ？`, options: ['多 跟 中国 人 聊天', '多 看 书', '回国'], answer: 0,
+        why: '非多跟中国人聊天不可.', evidence: ['非多跟中国人聊天不可'] },
+      { type: 'truth', stem: `现在 ${DAVID} 怎么样 ？`, options: ['汉语 进步 了 ， 交 了 很 多 朋友', '还是 很 孤单', '想 回国'], answer: 0,
+        why: '现在我的汉语进步了很多，也交了很多朋友.', evidence: ['现在我的汉语进步了很多'] },
+      { type: 'function', stem: '“ 何况 是 上课 呢 ” 的 意思 是 ：', options: ['上课 更 听 不 懂', '上课 很 简单', '不 想 上课'], answer: 0,
+        why: '何况 adds a stronger case: class is even harder.', evidence: ['何况是上课呢'] },
+    ],
+  },
+];
