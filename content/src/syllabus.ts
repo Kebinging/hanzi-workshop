@@ -1,7 +1,7 @@
 import type { Syllabus } from '../../src/content/types';
 
 export const syllabus: Syllabus = {
-  version: '0.5.0-m5',
+  version: '0.5.0',
   levels: [
     { level: 2, cumulativeWords: 500, cumulativeChars: 300, grammarPoints: 0 },
     { level: 3, cumulativeWords: 1000, cumulativeChars: 587, grammarPoints: 96 },
@@ -28,9 +28,9 @@ export const syllabus: Syllabus = {
     { unit: 18, hsk: 4, title: 'On the move', titleZh: '出行', theme: 'Extended complements & 随着', patternIds: ['G4-31','G4-32','G4-33','G4-34','G4-35','G4-36'], available: true },
     { unit: 19, hsk: 4, title: 'Society', titleZh: '社会', theme: 'Formal prepositions & passives', patternIds: ['G4-37','G4-38','G4-39','G4-40','G4-41','G4-42'], available: true },
     { unit: 20, hsk: 4, title: 'Feelings', titleZh: '心情', theme: 'Modal stance', patternIds: ['G4-43','G4-44','G4-45','G4-46','G4-47','G4-48'], available: true },
-    { unit: 21, hsk: 4, title: 'Spending', titleZh: '消费', theme: 'Quantity & indefinites', patternIds: ['G4-49','G4-50','G4-51','G4-52','G4-53','G4-54'], available: false },
-    { unit: 22, hsk: 4, title: 'Environment', titleZh: '环境', theme: 'Change & alternation', patternIds: ['G4-55','G4-56','G4-57','G4-58','G4-59','G4-60'], available: false },
-    { unit: 23, hsk: 4, title: 'Culture', titleZh: '文化', theme: 'Emphasis', patternIds: ['G4-61','G4-62','G4-63','G4-64','G4-65','G4-66'], available: false },
-    { unit: 24, hsk: 4, title: 'Looking ahead', titleZh: '展望', theme: 'Discourse markers', patternIds: ['G4-67','G4-68','G4-69','G4-70','G4-71','G4-72'], available: false },
+    { unit: 21, hsk: 4, title: 'Spending', titleZh: '消费', theme: 'Quantity & indefinites', patternIds: ['G4-49','G4-50','G4-51','G4-52','G4-53','G4-54'], available: true },
+    { unit: 22, hsk: 4, title: 'Environment', titleZh: '环境', theme: 'Change & alternation', patternIds: ['G4-55','G4-56','G4-57','G4-58','G4-59','G4-60'], available: true },
+    { unit: 23, hsk: 4, title: 'Culture', titleZh: '文化', theme: 'Emphasis', patternIds: ['G4-61','G4-62','G4-63','G4-64','G4-65','G4-66'], available: true },
+    { unit: 24, hsk: 4, title: 'Looking ahead', titleZh: '展望', theme: 'Discourse markers', patternIds: ['G4-67','G4-68','G4-69','G4-70','G4-71','G4-72'], available: true },
   ],
 };

@@ -1117,6 +1117,7 @@ Same as M5 for HSK 5; longer passages (250–500 chars) and multi-paragraph X-ra
 | 2026-11-15 | M2: generators expand at build time from explicit lexicons (no on-device generation). |
 | 2026-11-15 | M2 shipped; M3 approved. |
 | 2026-11-16 | M3 shipped; M4 approved. |
+| 2026-11-21 | M5 shipped (v0.5.0): units 13–24, 602 HSK 4 words (常常 and 不可 added to the plan's 600), 345 new characters, 72 patterns with 18 sentences each, 28 passages, 74 contrast drills. Every HSK 4 word is used in ≥ 3 sentences or passages. |
 | 2026-11-20 | M5 approved. HSK 4 = units 13–24, +600 words (cumulative 1,600), ≈ +300 characters, 72 patterns (6 per unit); passages A 150–220 / B 220–320 / review 250–350 characters (§2.4). |
 | 2026-11-19 | Content top-up (v0.4.1): 7 extra slot-annotated sentences for each of the 93 patterns without a generator (`content/src/extras-*.ts`) and 138 extra vocabulary examples (`content/src/examples-topup.ts`). Both §5.4 #7 targets are now met: every pattern has ≥ 15 practice sentences and every HSK 3 word appears in ≥ 3 sentences or passages. |
 | 2026-11-16 | M4: all 12 HSK 3 units shipped (497 new words, 96 patterns, 28 passages). Coverage against the §5.4 #7 targets is written to `reports/coverage.md` on every build; the 15-sentences-per-pattern and 3-uses-per-word targets are **not yet met** (bulk sentence top-up still to do). |

@@ -4,7 +4,14 @@ A personal, fully offline PWA for learning Mandarin from HSK 3 onward — readin
 
 The full design lives in [docs/SPEC.md](docs/SPEC.md).
 
-## Status — Milestone 4
+## Status — Milestone 5
+
+- The HSK 4 course: 12 more units (shown as *HSK 4 · Unit 1–12*), 602 new words and 345 new characters on top of HSK 1–3
+- 72 HSK 4 grammar points (竟然, 难道, 即使, 无论, 既然, 与其…不如, 宁可, 由于…因此, 随着, 受到, 根据, 作为, 非…不可, 难怪, 幸亏, 何况, 不是…而是, 再…也, 据说, 可见, 甚至 …), each with 18 slot-annotated sentences
+- 28 HSK 4 reading passages (longer: 150–350 characters) and 74 new contrast drills
+- HSK 4 units unlock after HSK 3 Unit 12, by the same rule as before
+
+## Milestone 4
 
 - The full HSK 3 course: 12 units, 497 new words on top of the 500-word HSK 1–2 base, all 96 grammar patterns (potential complements, 把, 被, 是…的, 连…都, conditionals, the conjunction pairs, narrative connectives, separable verbs)
 - 28 reading passages (two per unit plus four cumulative reviews), every pattern appearing in at least one
