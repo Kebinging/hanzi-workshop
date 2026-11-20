@@ -4,7 +4,14 @@ A personal, fully offline PWA for learning Mandarin from HSK 3 onward — readin
 
 The full design lives in [docs/SPEC.md](docs/SPEC.md).
 
-## Status — Milestone 5
+## Status — Milestone 6
+
+- The HSK 5 course: the last 12 units (shown as *HSK 5 · Unit 1–12*), 720 new words and about 295 new characters on top of HSK 1–4 — the syllabus now runs from HSK 3 to the end of HSK 5
+- 72 HSK 5 grammar points (果然, 万一, 未必, 何必…呢, 哪怕…也, 要不是, 一旦…就, 以便, 以免, 从而, 舍不得, 恨不得, 以…为, 将, 于, 被/为…所, 对…而言, 在…看来, 况且, 自从…以来, 趁, 凭, V来V去, V着V着, 总算, 不但不…反而, 与其说…不如说, 宁愿, 要么…要么, 并非, 莫非, 何尝, 之所以…是因为, 所, 之, 其, 尽管如此, 相反, 再说, 反正, 至今, 不料 …), each with 18 slot-annotated sentences
+- 28 HSK 5 reading passages (250–500 characters, including four cumulative reviews) and 47 new contrast drills
+- Every HSK 5 word is used in at least 3 sentences or passages; HSK 5 units unlock after HSK 4 Unit 12
+
+## Milestone 5
 
 - The HSK 4 course: 12 more units (shown as *HSK 4 · Unit 1–12*), 602 new words and 345 new characters on top of HSK 1–3
 - 72 HSK 4 grammar points (竟然, 难道, 即使, 无论, 既然, 与其…不如, 宁可, 由于…因此, 随着, 受到, 根据, 作为, 非…不可, 难怪, 幸亏, 何况, 不是…而是, 再…也, 据说, 可见, 甚至 …), each with 18 slot-annotated sentences

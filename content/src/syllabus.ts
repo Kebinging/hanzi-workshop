@@ -1,7 +1,7 @@
 import type { Syllabus } from '../../src/content/types';
 
 export const syllabus: Syllabus = {
-  version: '0.6.0-m6',
+  version: '0.6.0',
   levels: [
     { level: 2, cumulativeWords: 500, cumulativeChars: 300, grammarPoints: 0 },
     { level: 3, cumulativeWords: 1000, cumulativeChars: 587, grammarPoints: 96 },
@@ -41,9 +41,9 @@ export const syllabus: Syllabus = {
     { unit: 30, hsk: 5, title: 'Media & opinion', titleZh: '媒体观点', theme: 'Perspective & reformulation', patternIds: ['G5-31','G5-32','G5-33','G5-34','G5-35','G5-36'], available: true },
     { unit: 31, hsk: 5, title: 'City life', titleZh: '城市交通', theme: 'Prepositions of time & manner', patternIds: ['G5-37','G5-38','G5-39','G5-40','G5-41','G5-42'], available: true },
     { unit: 32, hsk: 5, title: 'Lives', titleZh: '人物故事', theme: 'Narrative aspect', patternIds: ['G5-43','G5-44','G5-45','G5-46','G5-47','G5-48'], available: true },
-    { unit: 33, hsk: 5, title: 'Education', titleZh: '教育学习', theme: 'Correlatives II', patternIds: ['G5-49','G5-50','G5-51','G5-52','G5-53','G5-54'], available: false },
-    { unit: 34, hsk: 5, title: 'Nature', titleZh: '自然环境', theme: 'Rhetorical emphasis', patternIds: ['G5-55','G5-56','G5-57','G5-58','G5-59','G5-60'], available: false },
-    { unit: 35, hsk: 5, title: 'History', titleZh: '历史文化', theme: 'Written function words', patternIds: ['G5-61','G5-62','G5-63','G5-64','G5-65','G5-66'], available: false },
-    { unit: 36, hsk: 5, title: 'Society', titleZh: '社会未来', theme: 'Discourse connectives', patternIds: ['G5-67','G5-68','G5-69','G5-70','G5-71','G5-72'], available: false },
+    { unit: 33, hsk: 5, title: 'Education', titleZh: '教育学习', theme: 'Correlatives II', patternIds: ['G5-49','G5-50','G5-51','G5-52','G5-53','G5-54'], available: true },
+    { unit: 34, hsk: 5, title: 'Nature', titleZh: '自然环境', theme: 'Rhetorical emphasis', patternIds: ['G5-55','G5-56','G5-57','G5-58','G5-59','G5-60'], available: true },
+    { unit: 35, hsk: 5, title: 'History', titleZh: '历史文化', theme: 'Written function words', patternIds: ['G5-61','G5-62','G5-63','G5-64','G5-65','G5-66'], available: true },
+    { unit: 36, hsk: 5, title: 'Society', titleZh: '社会未来', theme: 'Discourse connectives', patternIds: ['G5-67','G5-68','G5-69','G5-70','G5-71','G5-72'], available: true },
   ],
 };

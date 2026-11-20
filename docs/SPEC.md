@@ -1149,6 +1149,7 @@ Unit map in §2.5: units 25–36, 720 new words, 72 patterns (G5-01 … G5-72), 
 | 2026-11-15 | M2: generators expand at build time from explicit lexicons (no on-device generation). |
 | 2026-11-15 | M2 shipped; M3 approved. |
 | 2026-11-16 | M3 shipped; M4 approved. |
+| 2026-11-20 | M6 shipped (v0.6.0): units 25–36, 720 HSK 5 words, ≈295 new characters, 72 patterns with 18 sentences each, 28 passages (reviews R27, R30, R33, R36), 47 contrast drills. Every HSK 5 word is used in ≥ 3 sentences or passages; the HSK 3 → HSK 5 syllabus is complete. |
 | 2026-11-21 | M6 approved. HSK 5 = units 25–36, +720 words, 72 patterns; passages A 250–350 / B 350–500 / review 400–500 (§2.5). |
 | 2026-11-21 | M5 shipped (v0.5.0): units 13–24, 602 HSK 4 words (常常 and 不可 added to the plan's 600), 345 new characters, 72 patterns with 18 sentences each, 28 passages, 74 contrast drills. Every HSK 4 word is used in ≥ 3 sentences or passages. |
 | 2026-11-20 | M5 approved. HSK 4 = units 13–24, +600 words (cumulative 1,600), ≈ +300 characters, 72 patterns (6 per unit); passages A 150–220 / B 220–320 / review 250–350 characters (§2.4). |
