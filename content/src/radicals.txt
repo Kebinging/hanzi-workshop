@@ -486,3 +486,5 @@
 鼓|drum
 齿|tooth
 龙|dragon
+鹿|deer
+骨|bone

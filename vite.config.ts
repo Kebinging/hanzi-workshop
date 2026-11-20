@@ -11,7 +11,7 @@ export default defineConfig({
   // The content bundle (HSK 1–4, several MB raw) ships inside the app chunk and is served from the offline cache.
   // json.stringify emits JSON.parse("…"), which parses much faster than an equivalent object literal.
   json: { stringify: true },
-  build: { chunkSizeWarningLimit: 8000 },
+  build: { chunkSizeWarningLimit: 12000 },
   plugins: [
     react(),
     tailwindcss(),
@@ -40,7 +40,7 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,png,svg,webmanifest}'],
         navigateFallback: 'index.html',
         cleanupOutdatedCaches: true,
-        maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
+        maximumFileSizeToCacheInBytes: 16 * 1024 * 1024,
         runtimeCaching: [],
       },
     }),

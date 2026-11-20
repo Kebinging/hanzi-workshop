@@ -36,6 +36,7 @@ import { clusters } from '../content/src/clusters';
 import { confusables } from '../content/src/confusables';
 import { syllabus } from '../content/src/syllabus';
 import { hsk4 } from '../content/src/hsk4';
+import { hsk5 } from '../content/src/hsk5';
 import type { PatternSource, SentenceSrc, Distractor } from '../content/src/authoring';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -259,7 +260,7 @@ function buildPattern(p: PatternSource): GrammarPattern {
     });
   const ex = mk(p.examples, 'ex');
   // Extra practice sentences live in content/src/extras-*.ts, appended after the originals.
-  const inst = mk([...p.instances, ...(extraInstances[p.id] ?? []), ...(hsk4.extras[p.id] ?? [])], 'in');
+  const inst = mk([...p.instances, ...(extraInstances[p.id] ?? []), ...(hsk4.extras[p.id] ?? []), ...(hsk5.extras[p.id] ?? [])], 'in');
   for (const code of p.errorCodes) checkCode(p.id, code);
   for (const c of p.constraints) checkCode(p.id, c.code);
 
@@ -295,18 +296,19 @@ function buildPattern(p: PatternSource): GrammarPattern {
 }
 
 const grammar = [...patternsU01, ...patternsU02, ...patternsU03, ...patternsU04, ...patternsU05, ...patternsU06,
-  ...patternsU07, ...patternsU08, ...patternsU09, ...patternsU10, ...patternsU11, ...patternsU12, ...hsk4.patterns].map(buildPattern);
+  ...patternsU07, ...patternsU08, ...patternsU09, ...patternsU10, ...patternsU11, ...patternsU12, ...hsk4.patterns, ...hsk5.patterns].map(buildPattern);
 const grammarById = new Map(grammar.map((g) => [g.id, g]));
 const vocabExamples = [
   ...examplesU01.map(([zh, en], i) => parseSentence(zh, en, `V1:${i + 1}`, ['VOCAB'])),
   ...Object.entries(examplesByUnit).flatMap(([u, list]) => list.map(([zh, en], i) => parseSentence(zh, en, `V${u}:${i + 1}`, ['VOCAB']))),
   ...Object.entries(topupByUnit).flatMap(([u, list]) => list.map(([zh, en], i) => parseSentence(zh, en, `V${u}:t${i + 1}`, ['VOCAB']))),
   ...Object.entries(hsk4.examples).flatMap(([u, list]) => list.map(([zh, en], i) => parseSentence(zh, en, `V${u}:${i + 1}`, ['VOCAB']))),
+  ...Object.entries(hsk5.examples).flatMap(([u, list]) => list.map(([zh, en], i) => parseSentence(zh, en, `V${u}:${i + 1}`, ['VOCAB']))),
 ];
 
 // ---------- Minimal pairs ----------
 const pairs: MinimalPairItem[] = [];
-[...pairSources, ...pairsU07to12, ...hsk4.pairs].forEach((set, si) => {
+[...pairSources, ...pairsU07to12, ...hsk4.pairs, ...hsk5.pairs].forEach((set, si) => {
   set.items.forEach((it, ii) => {
     const id = `MP${si + 1}-${ii + 1}`;
     const context = parseSentence(it.context, it.en, id, set.patternIds);
@@ -408,7 +410,7 @@ function findSpan(paragraphs: { tokens: Token[] }[], span: string, where: string
   return undefined;
 }
 
-const passageSources = [...passagesU01to06, ...passagesU07to12, ...hsk4.passages];
+const passageSources = [...passagesU01to06, ...passagesU07to12, ...hsk4.passages, ...hsk5.passages];
 const passages: ReadingPassage[] = passageSources.map((src) => {
   const paragraphs = src.paragraphs.map((t, i) => parseParagraph(t, `${src.id}:p${i + 1}`));
   const charCount = paragraphs.flatMap((p) => p.tokens).filter((t) => t.kind !== 'punct').reduce((n, t) => n + [...t.t].length, 0);
@@ -447,7 +449,7 @@ writeFileSync(join(root, 'content', 'dist', 'bundle.json'), JSON.stringify(bundl
 mkdirSync(join(root, 'reports'), { recursive: true });
 writeFileSync(join(root, 'reports', 'gen-samples.md'), report.join('\n'));
 const pool12 = vocab.filter((w) => w.hsk <= 2).length;
-const perLevel = [3, 4].map((l) => `HSK ${l}: ${vocab.filter((w) => w.hsk === l).length}`).join(', ');
+const perLevel = [3, 4, 5].map((l) => `HSK ${l}: ${vocab.filter((w) => w.hsk === l).length}`).join(', ');
 console.log(`✓ bundle: ${vocab.length} words (${pool12} HSK 1–2, ${perLevel}), ${chars.length} chars, ${grammar.length} patterns, ` +
   `${cloze.length} cloze, ${pairs.length} pairs, ${transforms.length} transforms, ` +
   `${grammar.reduce((n, g) => n + (g.generated?.length ?? 0), 0)} generated, ${clusters.length} clusters, ${passages.length} passages`);

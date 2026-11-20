@@ -1,11 +1,12 @@
 import type { Syllabus } from '../../src/content/types';
 
 export const syllabus: Syllabus = {
-  version: '0.5.0',
+  version: '0.6.0-m6',
   levels: [
     { level: 2, cumulativeWords: 500, cumulativeChars: 300, grammarPoints: 0 },
     { level: 3, cumulativeWords: 1000, cumulativeChars: 587, grammarPoints: 96 },
     { level: 4, cumulativeWords: 1600, cumulativeChars: 900, grammarPoints: 72 },
+    { level: 5, cumulativeWords: 2320, cumulativeChars: 1500, grammarPoints: 72 },
   ],
   units: [
     { unit: 1, hsk: 3, title: 'Daily rhythm', titleZh: '生活节奏', theme: 'Aspect & time adverbs', patternIds: ['G3-01','G3-02','G3-03','G3-04','G3-05','G3-06','G3-07','G3-08'], available: true },
@@ -32,5 +33,17 @@ export const syllabus: Syllabus = {
     { unit: 22, hsk: 4, title: 'Environment', titleZh: '环境', theme: 'Change & alternation', patternIds: ['G4-55','G4-56','G4-57','G4-58','G4-59','G4-60'], available: true },
     { unit: 23, hsk: 4, title: 'Culture', titleZh: '文化', theme: 'Emphasis', patternIds: ['G4-61','G4-62','G4-63','G4-64','G4-65','G4-66'], available: true },
     { unit: 24, hsk: 4, title: 'Looking ahead', titleZh: '展望', theme: 'Discourse markers', patternIds: ['G4-67','G4-68','G4-69','G4-70','G4-71','G4-72'], available: true },
+    { unit: 25, hsk: 5, title: 'Career', titleZh: '职业发展', theme: 'Stance adverbs II', patternIds: ['G5-01','G5-02','G5-03','G5-04','G5-05','G5-06'], available: true },
+    { unit: 26, hsk: 5, title: 'Family', titleZh: '家庭生活', theme: 'Condition & concession III', patternIds: ['G5-07','G5-08','G5-09','G5-10','G5-11','G5-12'], available: true },
+    { unit: 27, hsk: 5, title: 'Money & markets', titleZh: '经济生活', theme: 'Purpose & consequence', patternIds: ['G5-13','G5-14','G5-15','G5-16','G5-17','G5-18'], available: true },
+    { unit: 28, hsk: 5, title: 'Body & mind', titleZh: '身心健康', theme: 'Fixed potential forms', patternIds: ['G5-19','G5-20','G5-21','G5-22','G5-23','G5-24'], available: true },
+    { unit: 29, hsk: 5, title: 'Science', titleZh: '科学技术', theme: 'Formal prepositions II', patternIds: ['G5-25','G5-26','G5-27','G5-28','G5-29','G5-30'], available: false },
+    { unit: 30, hsk: 5, title: 'Media & opinion', titleZh: '媒体观点', theme: 'Perspective & reformulation', patternIds: ['G5-31','G5-32','G5-33','G5-34','G5-35','G5-36'], available: false },
+    { unit: 31, hsk: 5, title: 'City life', titleZh: '城市交通', theme: 'Prepositions of time & manner', patternIds: ['G5-37','G5-38','G5-39','G5-40','G5-41','G5-42'], available: false },
+    { unit: 32, hsk: 5, title: 'Lives', titleZh: '人物故事', theme: 'Narrative aspect', patternIds: ['G5-43','G5-44','G5-45','G5-46','G5-47','G5-48'], available: false },
+    { unit: 33, hsk: 5, title: 'Education', titleZh: '教育学习', theme: 'Correlatives II', patternIds: ['G5-49','G5-50','G5-51','G5-52','G5-53','G5-54'], available: false },
+    { unit: 34, hsk: 5, title: 'Nature', titleZh: '自然环境', theme: 'Rhetorical emphasis', patternIds: ['G5-55','G5-56','G5-57','G5-58','G5-59','G5-60'], available: false },
+    { unit: 35, hsk: 5, title: 'History', titleZh: '历史文化', theme: 'Written function words', patternIds: ['G5-61','G5-62','G5-63','G5-64','G5-65','G5-66'], available: false },
+    { unit: 36, hsk: 5, title: 'Society', titleZh: '社会未来', theme: 'Discourse connectives', patternIds: ['G5-67','G5-68','G5-69','G5-70','G5-71','G5-72'], available: false },
   ],
 };

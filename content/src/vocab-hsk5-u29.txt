@@ -1,0 +1,62 @@
+# HSK 5 · Unit 29 · 科学技术 Science (provisional)
+@U29
+以|yǐ|prep|with, by, using
+为|wéi|v|be, act as; (以…为) take as
+当作|dàng zuò|v|treat as, regard as
+看作|kàn zuò|v|look on as
+将|jiāng|prep|(written) = 把
+于|yú|prep|at, in; to; than
+组成|zǔ chéng|v|make up, consist of
+所|suǒ|part|(所 + V) what is …ed
+科学家|kē xué jiā|n|scientist
+实验|shí yàn|n|experiment
+数据|shù jù|n|data
+理论|lǐ lùn|n|theory
+原理|yuán lǐ|n|principle
+软件|ruǎn jiàn|n|software
+硬件|yìng jiàn|n|hardware
+程序|chéng xù|n|program; procedure
+人工|rén gōng|adj|artificial, man-made
+智能|zhì néng|n|intelligence (artificial)
+机器|jī qì|n|machine
+设备|shè bèi|n|equipment
+仪器|yí qì|n|instrument
+物理|wù lǐ|n|physics
+化学|huà xué|n|chemistry
+生物|shēng wù|n|biology; living thing
+地理|dì lǐ|n|geography
+宇宙|yǔ zhòu|n|universe
+太空|tài kōng|n|outer space
+星球|xīng qiú|n|planet, celestial body
+卫星|wèi xīng|n|satellite
+火箭|huǒ jiàn|n|rocket
+能源|néng yuán|n|energy (source)
+资源|zī yuán|n|resources
+金属|jīn shǔ|n|metal
+物质|wù zhì|n|matter, material
+分析|fēn xī|v|analyse
+假设|jiǎ shè|n|hypothesis
+推测|tuī cè|v|infer, speculate
+观察|guān chá|v|observe
+测量|cè liáng|v|measure
+统计|tǒng jì|v|count, compile statistics
+比例|bǐ lì|n|proportion
+精确|jīng què|adj|precise
+误差|wù chā|n|margin of error
+创新|chuàng xīn|v|innovate
+发达|fā dá|adj|developed
+先进|xiān jìn|adj|advanced
+落后|luò hòu|adj|backward, behind
+领域|lǐng yù|n|field, domain
+专家|zhuān jiā|n|expert
+学者|xué zhě|n|scholar
+规模|guī mó|n|scale
+电子|diàn zǐ|n|electronic
+信号|xìn hào|n|signal
+系统|xì tǒng|n|system
+功能|gōng néng|n|function
+操作|cāo zuò|v|operate
+密切|mì qiè|adj|close (relationship)
+显示|xiǎn shì|v|show, display
+结构|jié gòu|n|structure
+模型|mó xíng|n|model

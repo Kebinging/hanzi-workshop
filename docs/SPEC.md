@@ -414,6 +414,35 @@ Requires G3-33…G3-50 (result & directional complements).
 
 **Vocabulary allocation.** As §2.3, with HSK 4 words in `content/src/vocab-hsk4-u13.txt … u24.txt` (header `@U13` … `@U24`). A word is placed in the unit whose theme or grammar needs it first; function words that a pattern teaches (竟然, 即使, 随着 …) sit in that pattern's unit.
 
+### 2.5 HSK 5 course (Milestone 6)
+
+**Targets (provisional, decided 2026-11-21).** Same scale as HSK 4: **720 new words (60 per unit; cumulative ≈ 2,320)**, the new characters those words need, and **72 grammar points (G5-01 … G5-72)**. Every item is `provisional: true`.
+
+**Structure.** No schema changes:
+- **12 units × 6 patterns**, numbered globally **25–36** (shown as *HSK 5 · Unit 1–12*). Unit 25 unlocks from unit 24.
+- Each pattern: 3 examples + ≥ 15 slot-annotated practice sentences; every new word in ≥ 3 sentences or passages.
+- Passages: **A 250–350 characters, B 350–500**, review passages after units 27, 30, 33, 36 (**400–500**). HSK 5 passages are written as several short paragraphs, each with its own X-ray chunks, so the reader's paragraph-by-paragraph X-ray covers the longer texts without new engine work.
+- HSK 5 grammar is largely formal function words and stance adverbs; drills lean on minimal pairs between near-synonyms (果然 vs 竟然, 以便 vs 以免, 哪怕 vs 即使 vs 尽管).
+
+**Unit map.**
+
+| Unit | Theme | Syntactic milestone | Patterns |
+|---|---|---|---|
+| 25 · 职业发展 *Career* | promotion, skills, workplace | Stance adverbs II | G5-01 果然 (as expected) · G5-02 万一 (in case) · G5-03 未必 / 不见得 (not necessarily) · G5-04 何必 … 呢 (why bother) · G5-05 难免 / 不免 (bound to) · G5-06 似乎 (seemingly) |
+| 26 · 家庭生活 *Family* | generations, marriage, raising children | Condition & concession III | G5-07 哪怕 … 也 · G5-08 要不是 … (就) · G5-09 假如 / 倘若 · G5-10 一旦 … 就 · G5-11 固然 … 但(是) · G5-12 即便 … 也 |
+| 27 · 经济生活 *Money & markets* | business, investment, consumption | Purpose & consequence | G5-13 以便 (so as to) · G5-14 以免 (so as not to) · G5-15 从而 (thereby) · G5-16 因而 (hence) · G5-17 进而 (and then further) · G5-18 由此可见 |
+| 28 · 身心健康 *Body & mind* | stress, habits, emotions | Fixed potential forms | G5-19 舍不得 · G5-20 恨不得 · G5-21 免不了 / 少不了 · G5-22 说不定 · G5-23 不由得 · G5-24 巴不得 |
+| 29 · 科学技术 *Science* | research, inventions, data | Formal prepositions II | G5-25 以 … 为 … · G5-26 把 … 当作 / 看作 · G5-27 将 (= 把, written) · G5-28 于 (at; to; than) · G5-29 由 … 组成 · G5-30 被 / 为 … 所 + V |
+| 30 · 媒体观点 *Media & opinion* | news, debate, the internet | Perspective & reformulation | G5-31 对 … 而言 · G5-32 从 … 来看 · G5-33 在 … 看来 · G5-34 换句话说 / 也就是说 · G5-35 总而言之 · G5-36 况且 |
+| 31 · 城市交通 *City life* | moving around, housing, services | Prepositions of time & manner | G5-37 自从 … (以来) · G5-38 趁 · G5-39 沿着 · G5-40 朝 · G5-41 凭 · G5-42 按 |
+| 32 · 人物故事 *Lives* | biography, turning points | Narrative aspect | G5-43 V来V去 · G5-44 V着V着 · G5-45 刚 … 就 · G5-46 总算 · G5-47 偶然 · G5-48 时而 … 时而 |
+| 33 · 教育学习 *Education* | schools, exams, learning | Correlatives II | G5-49 不但不 … 反而 · G5-50 与其说 … 不如说 · G5-51 宁愿 … 也不 · G5-52 要么 … 要么 · G5-53 并非 · G5-54 不仅 … 还 |
+| 34 · 自然环境 *Nature* | climate, animals, disasters | Rhetorical emphasis | G5-55 莫非 · G5-56 何尝 · G5-57 怎么能 … 呢 · G5-58 哪里 … (呢) · G5-59 谁知道 · G5-60 倒(是) |
+| 35 · 历史文化 *History* | dynasties, heritage, customs | Written function words | G5-61 之所以 … 是因为 · G5-62 所 + V (的) · G5-63 之 (formal 的) · G5-64 其 (its, their) · G5-65 以 (with, by means of) · G5-66 为 (wéi: act as, be) |
+| 36 · 社会未来 *Society* | change, values, the future | Discourse connectives | G5-67 尽管如此 · G5-68 相反 · G5-69 再说 · G5-70 反正 · G5-71 至今 · G5-72 不料 |
+
+**Vocabulary allocation.** As §2.3: `content/src/vocab-hsk5-u25.txt … u36.txt` (`@U25` … `@U36`); function words a pattern teaches sit in that pattern's unit.
+
 ---
 
 ## 3. Exercise mechanics
@@ -1099,7 +1128,10 @@ Unit map in §2.4: 12 units (13–24), 600 new words, 72 patterns (G4-01 … G4-
 - All existing tests still pass; HSK 3 progress in an existing backup is untouched.
 
 ### Milestone 6 — HSK 5 course
-Same as M5 for HSK 5; longer passages (250–500 chars) and multi-paragraph X-ray.
+Unit map in §2.5: units 25–36, 720 new words, 72 patterns (G5-01 … G5-72), 28 passages (250–500 chars, multi-paragraph).
+**Acceptance**
+- `validate-content` passes; every HSK 5 word in ≥ 3 sentences/passages, every G5 pattern with ≥ 15 practice sentences and ≥ 1 passage.
+- HSK 3–4 content and ids unchanged; all tests pass.
 
 ---
 
@@ -1117,6 +1149,7 @@ Same as M5 for HSK 5; longer passages (250–500 chars) and multi-paragraph X-ra
 | 2026-11-15 | M2: generators expand at build time from explicit lexicons (no on-device generation). |
 | 2026-11-15 | M2 shipped; M3 approved. |
 | 2026-11-16 | M3 shipped; M4 approved. |
+| 2026-11-21 | M6 approved. HSK 5 = units 25–36, +720 words, 72 patterns; passages A 250–350 / B 350–500 / review 400–500 (§2.5). |
 | 2026-11-21 | M5 shipped (v0.5.0): units 13–24, 602 HSK 4 words (常常 and 不可 added to the plan's 600), 345 new characters, 72 patterns with 18 sentences each, 28 passages, 74 contrast drills. Every HSK 4 word is used in ≥ 3 sentences or passages. |
 | 2026-11-20 | M5 approved. HSK 4 = units 13–24, +600 words (cumulative 1,600), ≈ +300 characters, 72 patterns (6 per unit); passages A 150–220 / B 220–320 / review 250–350 characters (§2.4). |
 | 2026-11-19 | Content top-up (v0.4.1): 7 extra slot-annotated sentences for each of the 93 patterns without a generator (`content/src/extras-*.ts`) and 138 extra vocabulary examples (`content/src/examples-topup.ts`). Both §5.4 #7 targets are now met: every pattern has ≥ 15 practice sentences and every HSK 3 word appears in ≥ 3 sentences or passages. |
